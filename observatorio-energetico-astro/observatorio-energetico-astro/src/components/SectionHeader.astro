@@ -1,0 +1,11 @@
+---
+const { number, kickerEs, kickerEn, titleEs, titleEn, introEs, introEn, dark = false } = Astro.props;
+---
+<header class:list={["section-header", dark && "section-header--dark"]}>
+  <div class="section-number">{number}</div>
+  <div class="section-heading-copy">
+    <p class="section-kicker"><span class="lang-es">{kickerEs}</span><span class="lang-en">{kickerEn}</span></p>
+    <h2><span class="lang-es">{titleEs}</span><span class="lang-en">{titleEn}</span></h2>
+    {(introEs || introEn) && <p class="section-intro"><span class="lang-es">{introEs}</span><span class="lang-en">{introEn}</span></p>}
+  </div>
+</header>
