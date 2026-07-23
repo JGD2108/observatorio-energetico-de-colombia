@@ -2,7 +2,6 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeader from '../components/SectionHeader.astro';
 import CodeStudy from '../components/CodeStudy.astro';
-import MermaidDiagram from '../components/MermaidDiagram.astro';
 import MetricCard from '../components/MetricCard.astro';
 
 const ingestionCode = `bronze_table = "observatorio_dev.bronze.generacion_real"
@@ -256,51 +255,6 @@ assert agentes_sin_dimension == 0, \
 assert relaciones_sin_resolver == 0, \
     "El bridge contiene relaciones no conformadas"`;
 
-const goldDiagram = `flowchart LR
-  classDef dim fill:#dce8ed,stroke:#8da6b1,color:#0b2230,stroke-width:1.5px;
-  classDef fact fill:#f4d98e,stroke:#c79834,color:#38280a,stroke-width:2px;
-  classDef bridge fill:#b7eee9,stroke:#43c8c2,color:#0b3033,stroke-width:2px;
-  classDef ext fill:#e3d4f4,stroke:#a27fc6,color:#332040,stroke-width:1.5px,stroke-dasharray: 5 4;
-
-  subgraph D[Dimensiones conformadas]
-    DF[dim_fecha]:::dim
-    DP[dim_periodo]:::dim
-    DPL[dim_planta<br/>SCD Tipo 2]:::dim
-    DA[dim_agente<br/>SCD Tipo 2]:::dim
-    DE[dim_embalse<br/>SCD Tipo 1]:::dim
-  end
-
-  subgraph F[Constelación de hechos]
-    FG[fact_generacion_real<br/>hora + planta + agente]:::fact
-    FD[fact_disponibilidad_planta<br/>hora + planta]:::fact
-    FP[fact_precio_bolsa<br/>hora]:::fact
-    FE[fact_energia_embalsada_planta<br/>día + planta]:::fact
-    FDR[fact_demanda_real<br/>hora + agente + mercado]:::ext
-  end
-
-  B[bridge_planta_embalse<br/>relación muchos a muchos]:::bridge
-
-  DF --> FG
-  DP --> FG
-  DPL --> FG
-  DA --> FG
-
-  DF --> FD
-  DP --> FD
-  DPL --> FD
-
-  DF --> FP
-  DP --> FP
-
-  DF --> FE
-  DPL --> FE
-
-  DF --> FDR
-  DP --> FDR
-  DA --> FDR
-
-  DPL --> B
-  B --> DE`;
 ---
 <BaseLayout>
   <header class="topbar">
@@ -420,10 +374,10 @@ const goldDiagram = `flowchart LR
             <div class="callout"><strong><span class="lang-es">Objetivo funcional</span><span class="lang-en">Functional objective</span></strong><span class="lang-es">Integrar fuentes energéticas públicas en Databricks, procesarlas con arquitectura Medallion, modelarlas dimensionalmente y exponer vistas confiables para analítica.</span><span class="lang-en">Integrate public energy sources in Databricks, process them with a Medallion architecture, model them dimensionally and expose trusted analytical views.</span></div>
           </div>
           <div class="problem-cards">
-            <article class="problem-card"><span>01</span><h3><span class="lang-es">Granos diferentes</span><span class="lang-en">Different grains</span></h3><p><span class="lang-es">Generación, disponibilidad y precio son horarios; energía embalsada y maestros tienen otra frecuencia.</span><span class="lang-en">Generation, availability and price are hourly; stored energy and master data have other frequencies.</span></p></article>
-            <article class="problem-card"><span>02</span><h3><span class="lang-es">Revisiones TX</span><span class="lang-en">TX revisions</span></h3><p><span class="lang-es">Varias filas pueden representar estados sucesivos de una misma medición y no eventos distintos.</span><span class="lang-en">Several rows may represent successive states of the same measurement rather than different events.</span></p></article>
-            <article class="problem-card"><span>03</span><h3><span class="lang-es">Historia de dimensiones</span><span class="lang-en">Dimensional history</span></h3><p><span class="lang-es">Plantas y agentes cambian de atributos, nombre, clasificación o capacidad a lo largo del tiempo.</span><span class="lang-en">Plants and agents change attributes, names, classification or capacity over time.</span></p></article>
-            <article class="problem-card"><span>04</span><h3><span class="lang-es">Frescura desalineada</span><span class="lang-en">Misaligned freshness</span></h3><p><span class="lang-es">Las fuentes no terminan en la misma fecha; un KPI combinado necesita un corte común explícito.</span><span class="lang-en">Sources do not end on the same date; combined KPIs need an explicit common cutoff.</span></p></article>
+            <article class="problem-card"><span class="problem-card__number" aria-hidden="true">01</span><h3><span class="lang-es">Granos diferentes</span><span class="lang-en">Different grains</span></h3><p><span class="lang-es">Generación, disponibilidad y precio son horarios; energía embalsada y maestros tienen otra frecuencia.</span><span class="lang-en">Generation, availability and price are hourly; stored energy and master data have other frequencies.</span></p></article>
+            <article class="problem-card"><span class="problem-card__number" aria-hidden="true">02</span><h3><span class="lang-es">Revisiones TX</span><span class="lang-en">TX revisions</span></h3><p><span class="lang-es">Varias filas pueden representar estados sucesivos de una misma medición y no eventos distintos.</span><span class="lang-en">Several rows may represent successive states of the same measurement rather than different events.</span></p></article>
+            <article class="problem-card"><span class="problem-card__number" aria-hidden="true">03</span><h3><span class="lang-es">Historia de dimensiones</span><span class="lang-en">Dimensional history</span></h3><p><span class="lang-es">Plantas y agentes cambian de atributos, nombre, clasificación o capacidad a lo largo del tiempo.</span><span class="lang-en">Plants and agents change attributes, names, classification or capacity over time.</span></p></article>
+            <article class="problem-card"><span class="problem-card__number" aria-hidden="true">04</span><h3><span class="lang-es">Frescura desalineada</span><span class="lang-en">Misaligned freshness</span></h3><p><span class="lang-es">Las fuentes no terminan en la misma fecha; un KPI combinado necesita un corte común explícito.</span><span class="lang-en">Sources do not end on the same date; combined KPIs need an explicit common cutoff.</span></p></article>
           </div>
         </div>
       </section>
@@ -503,12 +457,12 @@ const goldDiagram = `flowchart LR
           <MetricCard value="Apto condicionado" labelEs="dictamen de Bronze" labelEn="Bronze verdict" noteEs="Fuerte como conservación; condicionada para análisis directo." noteEn="Strong for preservation; conditional for direct analysis." tone="amber" />
         </div>
         <div class="eda-method">
-          <article class="eda-lane reveal"><div class="eda-lane__top"><span>01</span><h3><span class="lang-es">Inventario y cobertura</span><span class="lang-en">Inventory and coverage</span></h3></div><p><span class="lang-es">Conteos, fechas mínimas y máximas, archivos, días observados y trazabilidad.</span><span class="lang-en">Counts, minimum and maximum dates, files, observed days and lineage.</span></p></article>
-          <article class="eda-lane reveal"><div class="eda-lane__top"><span>02</span><h3><span class="lang-es">Validez y dominios</span><span class="lang-en">Validity and domains</span></h3></div><p><span class="lang-es">Conversión de fechas y medidas, unidades, duración, variables, mercados y versiones permitidas.</span><span class="lang-en">Date and measure conversion, units, duration, variables, markets and allowed versions.</span></p></article>
-          <article class="eda-lane reveal"><div class="eda-lane__top"><span>03</span><h3><span class="lang-es">Unicidad y revisiones</span><span class="lang-en">Uniqueness and revisions</span></h3></div><p><span class="lang-es">Duplicados exactos, conflictos dentro de la misma versión y multiplicidad entre versiones TX.</span><span class="lang-en">Exact duplicates, conflicts within the same version and multiplicity across TX versions.</span></p></article>
-          <article class="eda-lane reveal"><div class="eda-lane__top"><span>04</span><h3><span class="lang-es">Integridad y tiempo</span><span class="lang-en">Integrity and time</span></h3></div><p><span class="lang-es">Cobertura de plantas y agentes, 24 periodos por entidad-día y fecha máxima común.</span><span class="lang-en">Plant and agent coverage, 24 periods per entity-day and common maximum date.</span></p></article>
-          <article class="eda-lane reveal"><div class="eda-lane__top"><span>05</span><h3><span class="lang-es">Coherencia operativa</span><span class="lang-en">Operational coherence</span></h3></div><p><span class="lang-es">Generación frente a disponibilidad, capacidad y demanda, sin convertir señales en errores confirmados.</span><span class="lang-en">Generation versus availability, capacity and demand, without turning signals into confirmed errors.</span></p></article>
-          <article class="eda-lane reveal"><div class="eda-lane__top"><span>06</span><h3><span class="lang-es">Implicación de modelado</span><span class="lang-en">Modeling implication</span></h3></div><p><span class="lang-es">Cada hallazgo terminó en una decisión para Silver, Gold, calidad o dashboard.</span><span class="lang-en">Each finding ended in a decision for Silver, Gold, quality or the dashboard.</span></p></article>
+          <article class="eda-lane reveal"><div class="eda-lane__top"><span class="eda-lane__number" aria-hidden="true">01</span><h3><span class="lang-es">Inventario y cobertura</span><span class="lang-en">Inventory and coverage</span></h3></div><p><span class="lang-es">Conteos, fechas mínimas y máximas, archivos, días observados y trazabilidad.</span><span class="lang-en">Counts, minimum and maximum dates, files, observed days and lineage.</span></p></article>
+          <article class="eda-lane reveal"><div class="eda-lane__top"><span class="eda-lane__number" aria-hidden="true">02</span><h3><span class="lang-es">Validez y dominios</span><span class="lang-en">Validity and domains</span></h3></div><p><span class="lang-es">Conversión de fechas y medidas, unidades, duración, variables, mercados y versiones permitidas.</span><span class="lang-en">Date and measure conversion, units, duration, variables, markets and allowed versions.</span></p></article>
+          <article class="eda-lane reveal"><div class="eda-lane__top"><span class="eda-lane__number" aria-hidden="true">03</span><h3><span class="lang-es">Unicidad y revisiones</span><span class="lang-en">Uniqueness and revisions</span></h3></div><p><span class="lang-es">Duplicados exactos, conflictos dentro de la misma versión y multiplicidad entre versiones TX.</span><span class="lang-en">Exact duplicates, conflicts within the same version and multiplicity across TX versions.</span></p></article>
+          <article class="eda-lane reveal"><div class="eda-lane__top"><span class="eda-lane__number" aria-hidden="true">04</span><h3><span class="lang-es">Integridad y tiempo</span><span class="lang-en">Integrity and time</span></h3></div><p><span class="lang-es">Cobertura de plantas y agentes, 24 periodos por entidad-día y fecha máxima común.</span><span class="lang-en">Plant and agent coverage, 24 periods per entity-day and common maximum date.</span></p></article>
+          <article class="eda-lane reveal"><div class="eda-lane__top"><span class="eda-lane__number" aria-hidden="true">05</span><h3><span class="lang-es">Coherencia operativa</span><span class="lang-en">Operational coherence</span></h3></div><p><span class="lang-es">Generación frente a disponibilidad, capacidad y demanda, sin convertir señales en errores confirmados.</span><span class="lang-en">Generation versus availability, capacity and demand, without turning signals into confirmed errors.</span></p></article>
+          <article class="eda-lane reveal"><div class="eda-lane__top"><span class="eda-lane__number" aria-hidden="true">06</span><h3><span class="lang-es">Implicación de modelado</span><span class="lang-en">Modeling implication</span></h3></div><p><span class="lang-es">Cada hallazgo terminó en una decisión para Silver, Gold, calidad o dashboard.</span><span class="lang-en">Each finding ended in a decision for Silver, Gold, quality or the dashboard.</span></p></article>
         </div>
         <div class="scorecard reveal">
           <table>
@@ -562,13 +516,30 @@ const goldDiagram = `flowchart LR
       </section>
 
       <section class="article-section article-section--gold" id="gold">
-        <SectionHeader dark number="09" kickerEs="Arquitectura Gold" kickerEn="Gold architecture" titleEs="Una constelación de hechos, no una tabla gigante." titleEn="A fact constellation, not one giant table." introEs="El diagrama se genera con Mermaid a partir del diseño documentado en Arquitectura GOLD decisiones.md. Cada hecho conserva su propio grano y comparte dimensiones conformadas." introEn="The diagram is rendered with Mermaid from the design documented in Arquitectura GOLD decisiones.md. Each fact preserves its own grain and shares conformed dimensions." />
-        <MermaidDiagram id="gold-mermaid" titleEs="Modelo dimensional del dominio de energía" titleEn="Energy-domain dimensional model" captionEs="Las dimensiones SCD2 permiten resolver el contexto vigente en la fecha del hecho. La tabla puente representa la relación potencialmente muchos a muchos entre plantas y embalses. Demanda aparece como extensión incorporada posteriormente al diseño auditado de cuatro hechos." captionEn="SCD2 dimensions resolve context effective on the fact date. The bridge represents the potentially many-to-many relationship between plants and reservoirs. Demand appears as an extension added after the audited four-fact design." diagram={goldDiagram} />
-        <div class="model-legend">
-          <article><b><span class="lang-es">Dimensiones conformadas</span><span class="lang-en">Conformed dimensions</span></b><p><span class="lang-es">Fecha, periodo, planta, agente y embalse pueden reutilizarse entre procesos.</span><span class="lang-en">Date, period, plant, agent and reservoir are reused across processes.</span></p></article>
-          <article><b><span class="lang-es">Hechos separados</span><span class="lang-en">Separate facts</span></b><p><span class="lang-es">Los procesos no comparten exactamente el mismo grano ni las mismas relaciones.</span><span class="lang-en">Processes do not share exactly the same grain or relationships.</span></p></article>
-          <article><b><span class="lang-es">Historia SCD2</span><span class="lang-en">SCD2 history</span></b><p><span class="lang-es">Plantas y agentes conservan versiones con fecha de inicio, fin y estado actual.</span><span class="lang-en">Plants and agents preserve versions with start date, end date and current flag.</span></p></article>
-          <article><b><span class="lang-es">Tabla puente</span><span class="lang-en">Bridge table</span></b><p><span class="lang-es">Evita atribuir toda la energía de una planta multirreservorio a un solo embalse.</span><span class="lang-en">Avoids assigning all energy from a multi-reservoir plant to a single reservoir.</span></p></article>
+        <SectionHeader dark number="09" kickerEs="Arquitectura Gold" kickerEn="Gold architecture" titleEs="Cada proceso conserva su propio grano y comparte un contexto común." titleEn="Each process keeps its own grain while sharing a common context." introEs="Gold organiza el dominio como una constelación de hechos. Así evita mezclar mediciones incompatibles y entrega relaciones que Power BI puede interpretar sin reconstruir la lógica del pipeline." introEn="Gold organizes the domain as a fact constellation. This avoids mixing incompatible measurements and gives Power BI relationships it can interpret without rebuilding pipeline logic." />
+        <div class="gold-explanation reveal">
+          <p class="gold-explanation__lead">
+            <span class="lang-es">La idea central es sencilla: <strong>generación, disponibilidad, precio, energía embalsada y demanda representan procesos distintos</strong>. Por eso se almacenan por separado, en el nivel exacto en que fueron observados, y se conectan mediante dimensiones compartidas.</span>
+            <span class="lang-en">The central idea is simple: <strong>generation, availability, price, stored energy and demand represent different processes</strong>. They are therefore stored separately, at the exact level at which they were observed, and connected through shared dimensions.</span>
+          </p>
+          <div class="gold-explanation__chapters">
+            <article>
+              <span class="gold-explanation__index" aria-hidden="true">01</span>
+              <div><h3><span class="lang-es">Los hechos no se fuerzan al mismo nivel</span><span class="lang-en">Facts are not forced into the same grain</span></h3><p><span class="lang-es">Generación se analiza por hora, planta y agente; disponibilidad por hora y planta; precio por hora; energía embalsada por día y planta; demanda por hora, agente y mercado. Mantenerlos separados evita duplicar medidas o llenar una tabla con columnas que no aplican.</span><span class="lang-en">Generation is analyzed by hour, plant and agent; availability by hour and plant; price by hour; stored energy by day and plant; demand by hour, agent and market. Keeping them separate prevents duplicated measures and columns that do not apply.</span></p></div>
+            </article>
+            <article>
+              <span class="gold-explanation__index" aria-hidden="true">02</span>
+              <div><h3><span class="lang-es">Las dimensiones aportan el contexto compartido</span><span class="lang-en">Dimensions provide the shared context</span></h3><p><span class="lang-es">Fecha y periodo permiten comparar procesos en el tiempo. Planta, agente y embalse agregan el contexto operativo. Estas dimensiones conformadas reutilizan las mismas definiciones en todo el modelo y hacen coherentes los filtros del dashboard.</span><span class="lang-en">Date and period support comparisons over time. Plant, agent and reservoir add operational context. These conformed dimensions reuse the same definitions across the model and keep dashboard filters consistent.</span></p></div>
+            </article>
+            <article>
+              <span class="gold-explanation__index" aria-hidden="true">03</span>
+              <div><h3><span class="lang-es">La historia se resuelve en la fecha del hecho</span><span class="lang-en">History is resolved on the fact date</span></h3><p><span class="lang-es">Plantas y agentes conservan cambios mediante SCD Tipo 2. Cuando se carga una medición, Gold busca la versión de la dimensión que estaba vigente ese día; así una capacidad o clasificación actual no se aplica incorrectamente al pasado.</span><span class="lang-en">Plants and agents preserve changes through Type 2 SCDs. When a measurement is loaded, Gold finds the dimension version effective on that date, preventing a current capacity or classification from being applied incorrectly to the past.</span></p></div>
+            </article>
+            <article>
+              <span class="gold-explanation__index" aria-hidden="true">04</span>
+              <div><h3><span class="lang-es">La relación planta–embalse se mantiene explícita</span><span class="lang-en">The plant–reservoir relationship stays explicit</span></h3><p><span class="lang-es">Una planta puede relacionarse con más de un embalse. La tabla puente conserva esa cardinalidad sin fingir una relación uno a uno y sin repartir energía entre embalses cuando no existe una regla de distribución documentada.</span><span class="lang-en">A plant may relate to more than one reservoir. The bridge table preserves that cardinality without pretending it is one-to-one or allocating energy across reservoirs when no documented distribution rule exists.</span></p></div>
+            </article>
+          </div>
         </div>
         <div class="callout callout--dark"><strong><span class="lang-es">Por qué no una sola tabla</span><span class="lang-en">Why not one table</span></strong><span class="lang-es">Una tabla única mezclaría medidas horarias y diarias, precios sin planta, generación con agente, disponibilidad sin agente y relaciones muchos a muchos. El resultado tendría columnas nulas, duplicación y un grano imposible de explicar.</span><span class="lang-en">A single table would mix hourly and daily measures, prices without plants, generation with agents, availability without agents and many-to-many relationships. The result would contain null columns, duplication and an impossible-to-explain grain.</span></div>
       </section>
@@ -666,32 +637,4 @@ const goldDiagram = `flowchart LR
     <i class="presentation-controls__progress" data-presentation-progress></i>
   </div>
 
-  <script>
-    import mermaid from 'mermaid';
-    mermaid.initialize({
-      startOnLoad: true,
-      theme: 'base',
-      securityLevel: 'loose',
-      themeVariables: {
-        background: '#06151d',
-        primaryColor: '#dce8ed',
-        primaryTextColor: '#0b2230',
-        primaryBorderColor: '#8da6b1',
-        lineColor: '#5d7c88',
-        secondaryColor: '#f4d98e',
-        tertiaryColor: '#b7eee9',
-        clusterBkg: '#0b222e',
-        clusterBorder: '#294553',
-        fontFamily: 'Manrope, sans-serif',
-        fontSize: '13px'
-      },
-      flowchart: {
-        curve: 'basis',
-        htmlLabels: true,
-        nodeSpacing: 35,
-        rankSpacing: 58,
-        useMaxWidth: false
-      }
-    });
-  </script>
 </BaseLayout>

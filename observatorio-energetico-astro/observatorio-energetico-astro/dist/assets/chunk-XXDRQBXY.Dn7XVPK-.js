@@ -1,1 +1,0 @@
-import{_ as a,d as o}from"./index.astro_astro_type_script_index_0_lang.x1WWy6pL.js";var d=a((t,e)=>{let n;return e==="sandbox"&&(n=o("#i"+t)),(e==="sandbox"?o(n.nodes()[0].contentDocument.body):o("body")).select(`[id="${t}"]`)},"getDiagramElement");export{d as g};

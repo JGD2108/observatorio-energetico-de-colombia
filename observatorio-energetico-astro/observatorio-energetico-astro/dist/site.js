@@ -212,16 +212,4 @@
     if (event.key === 'Escape') togglePresentation();
   });
 
-  document.querySelectorAll('.diagram-zoom').forEach((button) => {
-    button.addEventListener('click', () => {
-      const diagram = document.getElementById(button.dataset.diagramTarget);
-      const expanded = !diagram?.classList.contains('mermaid-card--expanded');
-      diagram?.classList.toggle('mermaid-card--expanded', expanded);
-      body.classList.toggle('diagram-open', expanded);
-      button.setAttribute('aria-expanded', String(expanded));
-      button.innerHTML = expanded
-        ? `<span aria-hidden="true">×</span> <span class="lang-es">Cerrar</span><span class="lang-en">Close</span>`
-        : `<span aria-hidden="true">⤢</span> <span class="lang-es">Ampliar</span><span class="lang-en">Expand</span>`;
-    });
-  });
 })();
