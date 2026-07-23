@@ -54,6 +54,22 @@ npm run build
 npm run preview
 ```
 
+## Deploy en GitHub Pages
+
+Este proyecto queda publicado con el workflow:
+
+`/.github/workflows/deploy-astro-pages.yml`
+
+Pasos para activarlo:
+
+1. En GitHub abre **Settings → Pages**.
+2. En **Build and deployment**, selecciona **Source: GitHub Actions**.
+3. Haz push a `main` para disparar el deploy.
+
+La URL final será:
+
+`https://jgd2108.github.io/observatorio-energetico-de-colombia/`
+
 ## Abrir la vista estática incluida
 
 La carpeta `dist/` contiene una vista portátil de respaldo. Desde la raíz del proyecto:
