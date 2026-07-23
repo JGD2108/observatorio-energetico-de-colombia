@@ -1,8 +1,0 @@
----
-const { value, labelEs, labelEn, noteEs, noteEn, tone = 'blue' } = Astro.props;
----
-<article class={`metric-card metric-card--${tone} reveal`}>
-  <strong>{value}</strong>
-  <h3><span class="lang-es">{labelEs}</span><span class="lang-en">{labelEn}</span></h3>
-  <p><span class="lang-es">{noteEs}</span><span class="lang-en">{noteEn}</span></p>
-</article>
