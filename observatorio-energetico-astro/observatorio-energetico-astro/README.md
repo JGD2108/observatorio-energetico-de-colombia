@@ -11,6 +11,10 @@ Caso de estudio técnico interactivo construido con **Astro**, **Mermaid**, CSS 
   - hallazgos, severidad, decisiones y acciones.
 - Sección 9 reconstruida con Mermaid usando el diseño de `GOLD LOAD/Arquitectura GOLD decisiones.md`.
 - Diseño responsive, bilingüe y con modo de sustentación.
+- Rediseño editorial orientado a presentación con navegación activa por capítulo.
+- Filtros interactivos por dominio, feedback de copiado y progreso de lectura.
+- Vista conceptual de Power BI basada en los contratos Gold Analytics implementados.
+- Controles de sustentación con título de sección, progreso y navegación por teclado.
 - Bloques de código explicados con archivo fuente, pasos, decisión, defensa y limitación.
 - Espacio preparado para Power BI.
 

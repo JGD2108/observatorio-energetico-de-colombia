@@ -305,61 +305,108 @@ const goldDiagram = `flowchart LR
 <BaseLayout>
   <header class="topbar">
     <a class="brand" href="#inicio">
-      <span class="brand-mark">OE</span>
-      <span><strong>Observatorio Energético</strong><small>Colombia · Lakehouse case study</small></span>
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 40 40" role="img">
+          <path d="M6 25.5 13 18l5 4.5L27 12l7 5.5" />
+          <path d="M6 31h28" />
+          <circle cx="27" cy="12" r="2.5" />
+        </svg>
+      </span>
+      <span><strong>Observatorio Energético</strong><small>Colombia · Data engineering case</small></span>
     </a>
+    <div class="topbar-context" aria-live="polite">
+      <span class="topbar-context__pulse"></span>
+      <span class="lang-es">Explorando</span><span class="lang-en">Exploring</span>
+      <strong data-current-section>Inicio</strong>
+    </div>
     <div class="topbar-actions">
-      <button class="button button--ghost" type="button" data-language-toggle>EN</button>
-      <button class="button button--primary" type="button" data-presentation-toggle><span class="lang-es">Modo defensa</span><span class="lang-en">Defense mode</span></button>
-      <button class="mobile-menu" type="button" data-nav-toggle aria-label="Abrir navegación">☰</button>
+      <button class="button button--ghost language-toggle" type="button" data-language-toggle aria-label="Cambiar idioma">EN</button>
+      <button class="button button--primary" type="button" data-presentation-toggle>
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 4.5h14v9H3zM7 17l3-3 3 3" /></svg>
+        <span class="lang-es">Presentar</span><span class="lang-en">Present</span>
+      </button>
+      <button class="mobile-menu" type="button" data-nav-toggle aria-label="Abrir navegación" aria-expanded="false">☰</button>
     </div>
   </header>
 
   <div class="shell">
     <aside class="side-nav" data-side-nav>
-      <p class="side-nav__label"><span class="lang-es">Contenido</span><span class="lang-en">Contents</span></p>
-      <a href="#problema"><span>01</span><span class="lang-es">Problema y objetivo</span><span class="lang-en">Problem and objective</span></a>
-      <a href="#fuentes"><span>02</span><span class="lang-es">Fuentes y dominio</span><span class="lang-en">Sources and domain</span></a>
-      <a href="#arquitectura"><span>03</span><span class="lang-es">Diseño Lakehouse</span><span class="lang-en">Lakehouse design</span></a>
-      <a href="#ingesta"><span>04</span><span class="lang-es">Ingesta y Landing</span><span class="lang-en">Ingestion and Landing</span></a>
-      <a href="#bronze"><span>05</span><span class="lang-es">Bronze y DDL</span><span class="lang-en">Bronze and DDL</span></a>
-      <a href="#silver"><span>06</span><span class="lang-es">Silver</span><span class="lang-en">Silver</span></a>
-      <a href="#eda-metodo"><span>07</span><span class="lang-es">EDA: método</span><span class="lang-en">EDA: method</span></a>
-      <a href="#eda-hallazgos"><span>08</span><span class="lang-es">EDA: hallazgos</span><span class="lang-en">EDA: findings</span></a>
-      <a href="#gold"><span>09</span><span class="lang-es">Modelo Gold</span><span class="lang-en">Gold model</span></a>
-      <a href="#gold-code"><span>10</span><span class="lang-es">Implementación Gold</span><span class="lang-en">Gold implementation</span></a>
-      <a href="#analytics"><span>11</span><span class="lang-es">Analytics y Power BI</span><span class="lang-en">Analytics and Power BI</span></a>
-      <a href="#workflow"><span>12</span><span class="lang-es">Workflow y calidad</span><span class="lang-en">Workflow and quality</span></a>
-      <a href="#resultados"><span>13</span><span class="lang-es">Resultados y próximos pasos</span><span class="lang-en">Results and next steps</span></a>
+      <div class="side-nav__intro">
+        <p class="side-nav__label"><span class="lang-es">Recorrido del caso</span><span class="lang-en">Case journey</span></p>
+        <span class="side-nav__time"><span data-reading-time>18</span> min · <span class="lang-es">lectura</span><span class="lang-en">read</span></span>
+      </div>
+      <nav aria-label="Contenido del caso de estudio">
+        <a href="#problema" data-nav-link><span>01</span><span class="lang-es">Problema y objetivo</span><span class="lang-en">Problem and objective</span></a>
+        <a href="#fuentes" data-nav-link><span>02</span><span class="lang-es">Fuentes y dominio</span><span class="lang-en">Sources and domain</span></a>
+        <a href="#arquitectura" data-nav-link><span>03</span><span class="lang-es">Diseño Lakehouse</span><span class="lang-en">Lakehouse design</span></a>
+        <a href="#ingesta" data-nav-link><span>04</span><span class="lang-es">Ingesta y Landing</span><span class="lang-en">Ingestion and Landing</span></a>
+        <a href="#bronze" data-nav-link><span>05</span><span class="lang-es">Bronze y DDL</span><span class="lang-en">Bronze and DDL</span></a>
+        <a href="#silver" data-nav-link><span>06</span><span class="lang-es">Silver</span><span class="lang-en">Silver</span></a>
+        <a href="#eda-metodo" data-nav-link><span>07</span><span class="lang-es">EDA: método</span><span class="lang-en">EDA: method</span></a>
+        <a href="#eda-hallazgos" data-nav-link><span>08</span><span class="lang-es">EDA: hallazgos</span><span class="lang-en">EDA: findings</span></a>
+        <a href="#gold" data-nav-link><span>09</span><span class="lang-es">Modelo Gold</span><span class="lang-en">Gold model</span></a>
+        <a href="#gold-code" data-nav-link><span>10</span><span class="lang-es">Implementación Gold</span><span class="lang-en">Gold implementation</span></a>
+        <a href="#analytics" data-nav-link><span>11</span><span class="lang-es">Analytics y Power BI</span><span class="lang-en">Analytics and Power BI</span></a>
+        <a href="#workflow" data-nav-link><span>12</span><span class="lang-es">Workflow y calidad</span><span class="lang-en">Workflow and quality</span></a>
+        <a href="#resultados" data-nav-link><span>13</span><span class="lang-es">Resultados y próximos pasos</span><span class="lang-en">Results and next steps</span></a>
+      </nav>
       <div class="side-nav__links">
         <a href="https://github.com/JGD2108/observatorio-energetico-de-colombia/tree/main" target="_blank">GitHub ↗</a>
         <a href="https://www.linkedin.com/in/jdgdsoft/" target="_blank">LinkedIn ↗</a>
       </div>
     </aside>
 
-    <main class="article">
+    <main class="article" id="contenido-principal">
       <section class="hero" id="inicio">
+        <div class="hero-orbit hero-orbit--one"></div>
+        <div class="hero-orbit hero-orbit--two"></div>
         <div class="hero-copy">
-          <span class="eyebrow"><span class="lang-es">Caso de estudio técnico · Portafolio</span><span class="lang-en">Technical case study · Portfolio</span></span>
-          <h1><span class="lang-es">Observatorio Energético</span><span class="lang-en">Colombian Energy</span><em><span class="lang-es">de Colombia</span><span class="lang-en">Observatory</span></em></h1>
-          <p class="hero-lead lang-es">Una explicación de principio a fin de cómo diseñé un MVP Lakehouse en Databricks para transformar fuentes públicas, versionadas y heterogéneas del mercado eléctrico colombiano en un modelo analítico trazable.</p>
-          <p class="hero-lead lang-en">An end-to-end explanation of how I designed a Databricks Lakehouse MVP to transform public, versioned and heterogeneous Colombian electricity-market sources into a traceable analytical model.</p>
-          <div class="hero-actions">
-            <a class="button button--primary" href="#problema"><span class="lang-es">Leer el caso</span><span class="lang-en">Read the case</span></a>
-            <button class="button button--ghost" type="button" data-presentation-toggle><span class="lang-es">Iniciar sustentación</span><span class="lang-en">Start presentation</span></button>
+          <div class="hero-meta">
+            <span class="eyebrow"><span class="lang-es">Caso de estudio · Ingeniería de datos</span><span class="lang-en">Case study · Data engineering</span></span>
+            <span class="hero-meta__status"><i></i><span class="lang-es">MVP implementado</span><span class="lang-en">MVP implemented</span></span>
           </div>
-          <div class="hero-author"><span class="lang-es">Diseñado e implementado por</span><span class="lang-en">Designed and implemented by</span><strong>Jose David Gómez</strong></div>
+          <h1><span class="lang-es">La energía pública,</span><span class="lang-en">Public energy,</span><em><span class="lang-es">convertida en decisiones.</span><span class="lang-en">turned into decisions.</span></em></h1>
+          <p class="hero-lead lang-es">Un Lakehouse en Databricks que convierte nueve fuentes heterogéneas del mercado eléctrico colombiano en datos trazables, comparables y listos para analítica.</p>
+          <p class="hero-lead lang-en">A Databricks Lakehouse that transforms nine heterogeneous Colombian electricity-market sources into traceable, comparable, analytics-ready data.</p>
+          <div class="hero-actions">
+            <a class="button button--primary button--large" href="#problema">
+              <span class="lang-es">Explorar el caso</span><span class="lang-en">Explore the case</span><span aria-hidden="true">↓</span>
+            </a>
+            <button class="button button--ghost button--large" type="button" data-presentation-toggle>
+              <span class="play-icon">▶</span><span class="lang-es">Iniciar sustentación</span><span class="lang-en">Start presentation</span>
+            </button>
+          </div>
+          <div class="hero-proof">
+            <div><span>01</span><strong><span class="lang-es">Problema</span><span class="lang-en">Problem</span></strong><small><span class="lang-es">Versiones TX y granos incompatibles</span><span class="lang-en">TX versions and incompatible grains</span></small></div>
+            <div><span>02</span><strong><span class="lang-es">Decisión</span><span class="lang-en">Decision</span></strong><small>Medallion + dimensional model</small></div>
+            <div><span>03</span><strong><span class="lang-es">Resultado</span><span class="lang-en">Outcome</span></strong><small><span class="lang-es">Contratos confiables para BI</span><span class="lang-en">Trusted contracts for BI</span></small></div>
+          </div>
+          <div class="hero-author"><span class="hero-author__avatar">JG</span><span><span class="lang-es">Diseñado e implementado por</span><span class="lang-en">Designed and implemented by</span><strong>Jose David Gómez</strong></span></div>
         </div>
         <div class="hero-visual">
-          <div class="hero-visual__bar"><i></i><i></i><i></i><span>observatorio_dev</span></div>
-          <div class="pipeline-mini">
-            <div class="pipeline-mini__row"><b>Source</b><div class="pipeline-mini__node">SIMEM · pydataxm</div></div>
-            <div class="pipeline-mini__row"><b>Storage</b><div class="pipeline-mini__node">Unity Catalog Volumes</div></div>
-            <div class="pipeline-mini__row"><b>Process</b><div class="pipeline-mini__node">Bronze → Silver → Gold</div></div>
-            <div class="pipeline-mini__row"><b>Serve</b><div class="pipeline-mini__node">Analytics views → Power BI</div></div>
+          <div class="hero-visual__bar"><div><i></i><i></i><i></i></div><span>observatorio_dev / live architecture</span></div>
+          <div class="hero-signal">
+            <div>
+              <span class="hero-signal__label"><span class="lang-es">Flujo del producto</span><span class="lang-en">Product flow</span></span>
+              <strong>24.6M</strong>
+              <small><span class="lang-es">filas preservadas en Bronze</span><span class="lang-en">rows preserved in Bronze</span></small>
+            </div>
+            <svg viewBox="0 0 220 74" role="img" aria-label="Tendencia de procesamiento">
+              <defs><linearGradient id="signal-fill" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#52ddd3" stop-opacity=".34"/><stop offset="1" stop-color="#52ddd3" stop-opacity="0"/></linearGradient></defs>
+              <path class="signal-area" d="M0 64 C20 61 24 49 43 51 S69 65 89 43 S114 49 132 30 S159 36 179 19 S203 25 220 8 V74 H0Z" />
+              <path class="signal-line" d="M0 64 C20 61 24 49 43 51 S69 65 89 43 S114 49 132 30 S159 36 179 19 S203 25 220 8" />
+              <circle cx="220" cy="8" r="4" />
+            </svg>
           </div>
-          <div class="hero-stats"><div><strong>9</strong><span>data domains</span></div><div><strong>24.6M</strong><span>Bronze rows</span></div><div><strong>1</strong><span>orchestrated job</span></div></div>
+          <div class="pipeline-mini">
+            <div class="pipeline-mini__row"><b>01 · Source</b><div class="pipeline-mini__node"><span>SIMEM · pydataxm</span><em>9 domains</em></div></div>
+            <div class="pipeline-mini__row"><b>02 · Store</b><div class="pipeline-mini__node"><span>Unity Catalog</span><em>raw evidence</em></div></div>
+            <div class="pipeline-mini__row"><b>03 · Refine</b><div class="pipeline-mini__node"><span>Bronze → Silver → Gold</span><em>Delta Lake</em></div></div>
+            <div class="pipeline-mini__row"><b>04 · Serve</b><div class="pipeline-mini__node"><span>Analytics views</span><em>Power BI ready</em></div></div>
+          </div>
+          <div class="hero-stats"><div><strong>9</strong><span>data domains</span></div><div><strong>14</strong><span>technical decisions</span></div><div><strong>1</strong><span>orchestrated job</span></div></div>
         </div>
+        <div class="hero-scroll" aria-hidden="true"><span></span><small>SCROLL TO TRACE THE DATA</small></div>
       </section>
 
       <section class="article-section" id="problema">
@@ -383,16 +430,25 @@ const goldDiagram = `flowchart LR
 
       <section class="article-section article-section--tint" id="fuentes">
         <SectionHeader number="02" kickerEs="Dominio y procedencia" kickerEn="Domain and provenance" titleEs="Nueve fuentes para observar el sistema energético desde varias perspectivas." titleEn="Nine sources to observe the energy system from multiple perspectives." introEs="Cada fuente resuelve una pregunta distinta. La arquitectura evita forzarlas a compartir una estructura que no les corresponde." introEn="Each source answers a different question. The architecture avoids forcing them into a structure that does not fit their nature." />
+        <div class="source-toolbar" role="group" aria-label="Filtrar fuentes">
+          <span><span class="lang-es">Explorar por dominio</span><span class="lang-en">Explore by domain</span></span>
+          <div>
+            <button class="source-filter is-active" type="button" data-source-filter="all"><span class="lang-es">Todos</span><span class="lang-en">All</span> <b>9</b></button>
+            <button class="source-filter" type="button" data-source-filter="operation"><span class="lang-es">Operación</span><span class="lang-en">Operations</span> <b>4</b></button>
+            <button class="source-filter" type="button" data-source-filter="market"><span class="lang-es">Mercado</span><span class="lang-en">Market</span> <b>2</b></button>
+            <button class="source-filter" type="button" data-source-filter="master"><span class="lang-es">Maestros</span><span class="lang-en">Masters</span> <b>3</b></button>
+          </div>
+        </div>
         <div class="source-grid">
-          <article class="source-card"><code>055A4D · GREAL</code><h3><span class="lang-es">Generación real</span><span class="lang-en">Actual generation</span></h3><p><span class="lang-es">Medición horaria por planta, agente y versión.</span><span class="lang-en">Hourly measurement by plant, agent and version.</span></p></article>
-          <article class="source-card"><code>DISPREAL</code><h3><span class="lang-es">Disponibilidad de plantas</span><span class="lang-en">Plant availability</span></h3><p><span class="lang-es">Capacidad disponible reportada por recurso y hora.</span><span class="lang-en">Available capacity reported by resource and hour.</span></p></article>
-          <article class="source-card"><code>EC6945 · PB</code><h3><span class="lang-es">Precio de bolsa</span><span class="lang-en">Spot price</span></h3><p><span class="lang-es">Precio nacional, internacional y TIE por periodo.</span><span class="lang-en">National, international and TIE price by period.</span></p></article>
-          <article class="source-card"><code>DEMREAL</code><h3><span class="lang-es">Demanda real</span><span class="lang-en">Actual demand</span></h3><p><span class="lang-es">Consumo horario por agente y tipo de mercado.</span><span class="lang-en">Hourly consumption by agent and market type.</span></p></article>
-          <article class="source-card"><code>NEM</code><h3><span class="lang-es">Energía embalsada</span><span class="lang-en">Stored energy</span></h3><p><span class="lang-es">Nivel diario reportado mediante códigos de planta.</span><span class="lang-en">Daily level reported through plant codes.</span></p></article>
-          <article class="source-card"><code>MASTER</code><h3><span class="lang-es">Plantas</span><span class="lang-en">Plants</span></h3><p><span class="lang-es">Capacidad, tecnología, clasificación, despacho y agente.</span><span class="lang-en">Capacity, technology, classification, dispatch and agent.</span></p></article>
-          <article class="source-card"><code>MASTER</code><h3><span class="lang-es">Agentes</span><span class="lang-en">Agents</span></h3><p><span class="lang-es">Identidad y actividad de participantes del mercado.</span><span class="lang-en">Identity and activity of market participants.</span></p></article>
-          <article class="source-card"><code>GEO</code><h3><span class="lang-es">Embalses</span><span class="lang-en">Reservoirs</span></h3><p><span class="lang-es">Catálogo y coordenadas para análisis geográfico.</span><span class="lang-en">Catalog and coordinates for geographic analysis.</span></p></article>
-          <article class="source-card"><code>BRIDGE SOURCE</code><h3><span class="lang-es">Planta–reservorio</span><span class="lang-en">Plant–reservoir</span></h3><p><span class="lang-es">Relación que permite navegar entre recursos y embalses.</span><span class="lang-en">Relationship used to navigate between resources and reservoirs.</span></p></article>
+          <article class="source-card" data-source-category="operation"><span class="source-card__icon">G</span><code>055A4D · GREAL</code><h3><span class="lang-es">Generación real</span><span class="lang-en">Actual generation</span></h3><p><span class="lang-es">Medición horaria por planta, agente y versión.</span><span class="lang-en">Hourly measurement by plant, agent and version.</span></p><small>hour · plant · agent · TX</small></article>
+          <article class="source-card" data-source-category="operation"><span class="source-card__icon">D</span><code>DISPREAL</code><h3><span class="lang-es">Disponibilidad de plantas</span><span class="lang-en">Plant availability</span></h3><p><span class="lang-es">Capacidad disponible reportada por recurso y hora.</span><span class="lang-en">Available capacity reported by resource and hour.</span></p><small>hour · plant</small></article>
+          <article class="source-card" data-source-category="market"><span class="source-card__icon">$</span><code>EC6945 · PB</code><h3><span class="lang-es">Precio de bolsa</span><span class="lang-en">Spot price</span></h3><p><span class="lang-es">Precio nacional, internacional y TIE por periodo.</span><span class="lang-en">National, international and TIE price by period.</span></p><small>hour · market</small></article>
+          <article class="source-card" data-source-category="market"><span class="source-card__icon">M</span><code>DEMREAL</code><h3><span class="lang-es">Demanda real</span><span class="lang-en">Actual demand</span></h3><p><span class="lang-es">Consumo horario por agente y tipo de mercado.</span><span class="lang-en">Hourly consumption by agent and market type.</span></p><small>hour · agent · market</small></article>
+          <article class="source-card" data-source-category="operation"><span class="source-card__icon">E</span><code>NEM</code><h3><span class="lang-es">Energía embalsada</span><span class="lang-en">Stored energy</span></h3><p><span class="lang-es">Nivel diario reportado mediante códigos de planta.</span><span class="lang-en">Daily level reported through plant codes.</span></p><small>day · reservoir</small></article>
+          <article class="source-card" data-source-category="master"><span class="source-card__icon">P</span><code>MASTER</code><h3><span class="lang-es">Plantas</span><span class="lang-en">Plants</span></h3><p><span class="lang-es">Capacidad, tecnología, clasificación, despacho y agente.</span><span class="lang-en">Capacity, technology, classification, dispatch and agent.</span></p><small>SCD · plant</small></article>
+          <article class="source-card" data-source-category="master"><span class="source-card__icon">A</span><code>MASTER</code><h3><span class="lang-es">Agentes</span><span class="lang-en">Agents</span></h3><p><span class="lang-es">Identidad y actividad de participantes del mercado.</span><span class="lang-en">Identity and activity of market participants.</span></p><small>SCD · agent</small></article>
+          <article class="source-card" data-source-category="master"><span class="source-card__icon">↗</span><code>GEO</code><h3><span class="lang-es">Embalses</span><span class="lang-en">Reservoirs</span></h3><p><span class="lang-es">Catálogo y coordenadas para análisis geográfico.</span><span class="lang-en">Catalog and coordinates for geographic analysis.</span></p><small>geo · reservoir</small></article>
+          <article class="source-card" data-source-category="operation"><span class="source-card__icon">↔</span><code>BRIDGE SOURCE</code><h3><span class="lang-es">Planta–reservorio</span><span class="lang-en">Plant–reservoir</span></h3><p><span class="lang-es">Relación que permite navegar entre recursos y embalses.</span><span class="lang-en">Relationship used to navigate between resources and reservoirs.</span></p><small>many-to-many</small></article>
         </div>
       </section>
 
@@ -530,7 +586,37 @@ const goldDiagram = `flowchart LR
         <div class="views-grid">
           {['vw_sistema_horario','vw_resumen_diario_sistema','vw_actualizacion_fuentes','vw_demanda_diaria_mercado','vw_demanda_diaria_agente','vw_operacion_diaria_planta','vw_generacion_diaria_tipo','vw_energia_embalsada_diaria','vw_resumen_energia_embalsada_diaria','vw_dim_agente_powerbi'].map((view) => <article class="view-card reveal"><code>{view}</code><p><span class="lang-es">Contrato analítico preparado para consumo en Power BI.</span><span class="lang-en">Analytical contract prepared for Power BI consumption.</span></p></article>)}
         </div>
-        <div class="dashboard-placeholder reveal"><div><strong><span class="lang-es">Espacio reservado para Power BI</span><span class="lang-en">Reserved space for Power BI</span></strong><p><span class="lang-es">Cuando el reporte esté publicado, la URL de inserción o el enlace autenticado se configura en este componente sin cambiar la narrativa del proyecto.</span><span class="lang-en">When the report is published, the embed URL or authenticated link can be configured in this component without changing the project narrative.</span></p><button class="button button--ghost" type="button" disabled><span class="lang-es">Dashboard pendiente de publicación</span><span class="lang-en">Dashboard publication pending</span></button></div></div>
+        <div class="dashboard-preview reveal">
+          <header class="dashboard-preview__top">
+            <div><span class="dashboard-preview__mark">OE</span><div><strong><span class="lang-es">Pulso del sistema</span><span class="lang-en">System pulse</span></strong><small><span class="lang-es">Vista conceptual · contrato Gold Analytics</span><span class="lang-en">Concept view · Gold Analytics contract</span></small></div></div>
+            <span class="dashboard-preview__badge"><i></i><span class="lang-es">Preparado para Power BI</span><span class="lang-en">Power BI ready</span></span>
+          </header>
+          <div class="dashboard-preview__tabs"><span class="is-active"><span class="lang-es">Resumen</span><span class="lang-en">Overview</span></span><span><span class="lang-es">Generación</span><span class="lang-en">Generation</span></span><span><span class="lang-es">Mercado</span><span class="lang-en">Market</span></span><span><span class="lang-es">Embalses</span><span class="lang-en">Reservoirs</span></span></div>
+          <div class="dashboard-preview__body">
+            <div class="dashboard-kpis">
+              <article><small><span class="lang-es">Hechos auditados</span><span class="lang-en">Audited facts</span></small><strong>2.39M</strong><span class="trend trend--up">↗ <span class="lang-es">sin duplicados</span><span class="lang-en">no duplicates</span></span></article>
+              <article><small><span class="lang-es">Fuentes integradas</span><span class="lang-en">Integrated sources</span></small><strong>9</strong><span class="trend">100% traced</span></article>
+              <article><small><span class="lang-es">Contratos analíticos</span><span class="lang-en">Analytical contracts</span></small><strong>10</strong><span class="trend">Gold views</span></article>
+            </div>
+            <div class="dashboard-charts">
+              <article class="dashboard-chart dashboard-chart--wide">
+                <div class="dashboard-chart__title"><div><strong><span class="lang-es">Flujo horario del sistema</span><span class="lang-en">Hourly system flow</span></strong><small>Generation · Availability · Demand</small></div><span>24H</span></div>
+                <svg viewBox="0 0 700 180" preserveAspectRatio="none" aria-hidden="true">
+                  <g class="chart-grid"><path d="M0 35H700M0 80H700M0 125H700M0 170H700"/></g>
+                  <path class="chart-area" d="M0 148 C45 126 65 145 105 112 S170 98 210 118 S276 95 320 74 S390 98 430 62 S490 54 535 69 S610 35 700 28 V180H0Z"/>
+                  <path class="chart-line chart-line--main" d="M0 148 C45 126 65 145 105 112 S170 98 210 118 S276 95 320 74 S390 98 430 62 S490 54 535 69 S610 35 700 28"/>
+                  <path class="chart-line chart-line--secondary" d="M0 132 C60 120 91 126 140 103 S212 93 260 99 S330 68 385 83 S470 51 520 59 S625 43 700 52"/>
+                </svg>
+                <div class="chart-legend"><span><i></i><span class="lang-es">Generación</span><span class="lang-en">Generation</span></span><span><i></i><span class="lang-es">Disponibilidad</span><span class="lang-en">Availability</span></span></div>
+              </article>
+              <article class="dashboard-chart">
+                <div class="dashboard-chart__title"><div><strong><span class="lang-es">Cobertura del producto</span><span class="lang-en">Product coverage</span></strong><small>Medallion layers</small></div></div>
+                <div class="coverage-bars"><span style="--coverage: 100%"><b>Bronze</b><i></i><em>100%</em></span><span style="--coverage: 96%"><b>Silver</b><i></i><em>96%</em></span><span style="--coverage: 92%"><b>Gold</b><i></i><em>92%</em></span><span style="--coverage: 84%"><b>Analytics</b><i></i><em>84%</em></span></div>
+              </article>
+            </div>
+          </div>
+          <footer class="dashboard-preview__footer"><span><span class="lang-es">Vista de presentación basada en los contratos construidos; la publicación del reporte Power BI permanece como siguiente paso.</span><span class="lang-en">Presentation view based on the built contracts; publishing the Power BI report remains a next step.</span></span><span>observatorio_dev.gold</span></footer>
+        </div>
       </section>
 
       <section class="article-section" id="workflow">
@@ -565,11 +651,19 @@ const goldDiagram = `flowchart LR
 
   <footer class="footer"><strong>Observatorio Energético de Colombia</strong> · Jose David Gómez · <a href="https://github.com/JGD2108/observatorio-energetico-de-colombia/tree/main" target="_blank">GitHub</a> · <a href="https://www.linkedin.com/in/jdgdsoft/" target="_blank">LinkedIn</a></footer>
 
-  <div class="presentation-controls">
+  <button class="back-to-top" type="button" data-back-to-top aria-label="Volver al inicio">↑</button>
+
+  <div class="presentation-controls" role="toolbar" aria-label="Controles de presentación">
+    <div class="presentation-controls__meta">
+      <small><span class="lang-es">Sustentación</span><span class="lang-en">Presentation</span></small>
+      <strong data-presentation-title>Inicio</strong>
+    </div>
     <button type="button" data-presentation-prev aria-label="Anterior">←</button>
     <span data-presentation-counter>1 / 14</span>
     <button type="button" data-presentation-next aria-label="Siguiente">→</button>
+    <span class="presentation-controls__hint">← →</span>
     <button type="button" data-presentation-toggle aria-label="Cerrar">×</button>
+    <i class="presentation-controls__progress" data-presentation-progress></i>
   </div>
 
   <script>

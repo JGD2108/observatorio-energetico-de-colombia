@@ -9,7 +9,7 @@ const { titleEs, titleEn, captionEs, captionEn, diagram, id = 'diagram' } = Astr
       <p><span class="lang-es">{captionEs}</span><span class="lang-en">{captionEn}</span></p>
     </div>
     <div class="diagram-actions">
-      <button type="button" class="diagram-zoom" data-diagram-target={id}>⤢ <span class="lang-es">Ampliar</span><span class="lang-en">Expand</span></button>
+      <button type="button" class="diagram-zoom" data-diagram-target={id} aria-expanded="false"><span aria-hidden="true">⤢</span> <span class="lang-es">Ampliar</span><span class="lang-en">Expand</span></button>
     </div>
   </figcaption>
   <div class="mermaid-stage">
