@@ -13,6 +13,13 @@ resources:
         - { name: historical_start_date, default: "${var.historical_start_date}" }
         - { name: lookback_days, default: "${var.lookback_days}" }
         - { name: max_lag_days, default: "${var.max_lag_days}" }
+        - { name: run_id, default: "{{job.run_id}}" }
+        - { name: job_id, default: "{{job.id}}" }
+        - { name: job_run_id, default: "{{job.run_id}}" }
+        - { name: job_name, default: "{{job.name}}" }
+        - { name: job_start_time, default: "{{job.start_time.iso_datetime}}" }
+        - { name: repair_count, default: "{{job.repair_count}}" }
+        - { name: trigger_type, default: "{{job.trigger.type}}" }
       environments:
         - environment_key: default
           spec:
@@ -25,40 +32,45 @@ resources:
           environment_key: default
           notebook_task: { notebook_path: "${workspace.file_path}/setup/00_bootstrap", source: WORKSPACE }
 
-        - task_key: ing_demanda_real
+        - task_key: audit_start
           depends_on: [{ task_key: setup_catalog }]
+          environment_key: default
+          notebook_task: { notebook_path: "${workspace.file_path}/Automation/00_audit_start", source: WORKSPACE }
+
+        - task_key: ing_demanda_real
+          depends_on: [{ task_key: audit_start }]
           environment_key: default
           notebook_task: { notebook_path: "${workspace.file_path}/Ingestion/Demanda_real", source: WORKSPACE }
         - task_key: ing_disponibilidad
-          depends_on: [{ task_key: setup_catalog }]
+          depends_on: [{ task_key: audit_start }]
           environment_key: default
           notebook_task: { notebook_path: "${workspace.file_path}/Ingestion/Disponibilidad Planta", source: WORKSPACE }
         - task_key: ing_agentes
-          depends_on: [{ task_key: setup_catalog }]
+          depends_on: [{ task_key: audit_start }]
           environment_key: default
           notebook_task: { notebook_path: "${workspace.file_path}/Ingestion/agentes", source: WORKSPACE }
         - task_key: ing_generacion_real
-          depends_on: [{ task_key: setup_catalog }]
+          depends_on: [{ task_key: audit_start }]
           environment_key: default
           notebook_task: { notebook_path: "${workspace.file_path}/Ingestion/generacion_real", source: WORKSPACE }
         - task_key: ing_niveles_embalses
-          depends_on: [{ task_key: setup_catalog }]
+          depends_on: [{ task_key: audit_start }]
           environment_key: default
           notebook_task: { notebook_path: "${workspace.file_path}/Ingestion/Nivel embalses dado por plantas", source: WORKSPACE }
         - task_key: ing_plantas
-          depends_on: [{ task_key: setup_catalog }]
+          depends_on: [{ task_key: audit_start }]
           environment_key: default
           notebook_task: { notebook_path: "${workspace.file_path}/Ingestion/Plantas", source: WORKSPACE }
         - task_key: ing_precio_bolsa
-          depends_on: [{ task_key: setup_catalog }]
+          depends_on: [{ task_key: audit_start }]
           environment_key: default
           notebook_task: { notebook_path: "${workspace.file_path}/Ingestion/PrecioBolsa", source: WORKSPACE }
         - task_key: ing_embalses
-          depends_on: [{ task_key: setup_catalog }]
+          depends_on: [{ task_key: audit_start }]
           environment_key: default
           notebook_task: { notebook_path: "${workspace.file_path}/Ingestion/Embalses", source: WORKSPACE }
         - task_key: ing_plantas_reservorios
-          depends_on: [{ task_key: setup_catalog }]
+          depends_on: [{ task_key: audit_start }]
           environment_key: default
           notebook_task: { notebook_path: "${workspace.file_path}/Ingestion/embalse_plantas", source: WORKSPACE }
 
@@ -133,6 +145,84 @@ resources:
         - task_key: gold_analytics
           depends_on: [{ task_key: quality_check }]
           notebook_task: { notebook_path: "${workspace.file_path}/Gold_Analytics/01_vistas_dashboard", source: WORKSPACE }
+          environment_key: default
+
+        - task_key: audit_finalize
+          depends_on: [{ task_key: gold_analytics }]
+          run_if: ALL_DONE
+          notebook_task:
+            notebook_path: "${workspace.file_path}/Automation/99_audit_finalize"
+            source: WORKSPACE
+            base_parameters:
+              state_setup_catalog: "{{tasks.setup_catalog.result_state}}"
+              task_run_setup_catalog: "{{tasks.setup_catalog.run_id}}"
+              attempt_setup_catalog: "{{tasks.setup_catalog.execution_count}}"
+              state_ing_demanda_real: "{{tasks.ing_demanda_real.result_state}}"
+              task_run_ing_demanda_real: "{{tasks.ing_demanda_real.run_id}}"
+              attempt_ing_demanda_real: "{{tasks.ing_demanda_real.execution_count}}"
+              state_ing_disponibilidad: "{{tasks.ing_disponibilidad.result_state}}"
+              task_run_ing_disponibilidad: "{{tasks.ing_disponibilidad.run_id}}"
+              attempt_ing_disponibilidad: "{{tasks.ing_disponibilidad.execution_count}}"
+              state_ing_agentes: "{{tasks.ing_agentes.result_state}}"
+              task_run_ing_agentes: "{{tasks.ing_agentes.run_id}}"
+              attempt_ing_agentes: "{{tasks.ing_agentes.execution_count}}"
+              state_ing_generacion_real: "{{tasks.ing_generacion_real.result_state}}"
+              task_run_ing_generacion_real: "{{tasks.ing_generacion_real.run_id}}"
+              attempt_ing_generacion_real: "{{tasks.ing_generacion_real.execution_count}}"
+              state_ing_niveles_embalses: "{{tasks.ing_niveles_embalses.result_state}}"
+              task_run_ing_niveles_embalses: "{{tasks.ing_niveles_embalses.run_id}}"
+              attempt_ing_niveles_embalses: "{{tasks.ing_niveles_embalses.execution_count}}"
+              state_ing_plantas: "{{tasks.ing_plantas.result_state}}"
+              task_run_ing_plantas: "{{tasks.ing_plantas.run_id}}"
+              attempt_ing_plantas: "{{tasks.ing_plantas.execution_count}}"
+              state_ing_precio_bolsa: "{{tasks.ing_precio_bolsa.result_state}}"
+              task_run_ing_precio_bolsa: "{{tasks.ing_precio_bolsa.run_id}}"
+              attempt_ing_precio_bolsa: "{{tasks.ing_precio_bolsa.execution_count}}"
+              state_ing_embalses: "{{tasks.ing_embalses.result_state}}"
+              task_run_ing_embalses: "{{tasks.ing_embalses.run_id}}"
+              attempt_ing_embalses: "{{tasks.ing_embalses.execution_count}}"
+              state_ing_plantas_reservorios: "{{tasks.ing_plantas_reservorios.result_state}}"
+              task_run_ing_plantas_reservorios: "{{tasks.ing_plantas_reservorios.run_id}}"
+              attempt_ing_plantas_reservorios: "{{tasks.ing_plantas_reservorios.execution_count}}"
+              state_bronze_daily: "{{tasks.bronze_daily.result_state}}"
+              task_run_bronze_daily: "{{tasks.bronze_daily.run_id}}"
+              attempt_bronze_daily: "{{tasks.bronze_daily.execution_count}}"
+              state_slv_agentes: "{{tasks.slv_agentes.result_state}}"
+              task_run_slv_agentes: "{{tasks.slv_agentes.run_id}}"
+              attempt_slv_agentes: "{{tasks.slv_agentes.execution_count}}"
+              state_slv_plantas: "{{tasks.slv_plantas.result_state}}"
+              task_run_slv_plantas: "{{tasks.slv_plantas.run_id}}"
+              attempt_slv_plantas: "{{tasks.slv_plantas.execution_count}}"
+              state_slv_embalses: "{{tasks.slv_embalses.result_state}}"
+              task_run_slv_embalses: "{{tasks.slv_embalses.run_id}}"
+              attempt_slv_embalses: "{{tasks.slv_embalses.execution_count}}"
+              state_slv_precio_bolsa: "{{tasks.slv_precio_bolsa.result_state}}"
+              task_run_slv_precio_bolsa: "{{tasks.slv_precio_bolsa.run_id}}"
+              attempt_slv_precio_bolsa: "{{tasks.slv_precio_bolsa.execution_count}}"
+              state_slv_demanda_real: "{{tasks.slv_demanda_real.result_state}}"
+              task_run_slv_demanda_real: "{{tasks.slv_demanda_real.run_id}}"
+              attempt_slv_demanda_real: "{{tasks.slv_demanda_real.execution_count}}"
+              state_slv_disponibilidad: "{{tasks.slv_disponibilidad.result_state}}"
+              task_run_slv_disponibilidad: "{{tasks.slv_disponibilidad.run_id}}"
+              attempt_slv_disponibilidad: "{{tasks.slv_disponibilidad.execution_count}}"
+              state_slv_generacion: "{{tasks.slv_generacion.result_state}}"
+              task_run_slv_generacion: "{{tasks.slv_generacion.run_id}}"
+              attempt_slv_generacion: "{{tasks.slv_generacion.execution_count}}"
+              state_slv_niveles_embalses: "{{tasks.slv_niveles_embalses.result_state}}"
+              task_run_slv_niveles_embalses: "{{tasks.slv_niveles_embalses.run_id}}"
+              attempt_slv_niveles_embalses: "{{tasks.slv_niveles_embalses.execution_count}}"
+              state_slv_plantas_reservorios: "{{tasks.slv_plantas_reservorios.result_state}}"
+              task_run_slv_plantas_reservorios: "{{tasks.slv_plantas_reservorios.run_id}}"
+              attempt_slv_plantas_reservorios: "{{tasks.slv_plantas_reservorios.execution_count}}"
+              state_gold_daily: "{{tasks.gold_daily.result_state}}"
+              task_run_gold_daily: "{{tasks.gold_daily.run_id}}"
+              attempt_gold_daily: "{{tasks.gold_daily.execution_count}}"
+              state_quality_check: "{{tasks.quality_check.result_state}}"
+              task_run_quality_check: "{{tasks.quality_check.run_id}}"
+              attempt_quality_check: "{{tasks.quality_check.execution_count}}"
+              state_gold_analytics: "{{tasks.gold_analytics.result_state}}"
+              task_run_gold_analytics: "{{tasks.gold_analytics.run_id}}"
+              attempt_gold_analytics: "{{tasks.gold_analytics.execution_count}}"
           environment_key: default
       queue: { enabled: true }
       performance_target: PERFORMANCE_OPTIMIZED

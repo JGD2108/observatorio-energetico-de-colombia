@@ -74,6 +74,13 @@ GOLD_TABLES = {
 
 ANALYTICS_SCHEMA = f"{CATALOG}.{SCHEMAS['gold_analytics']}"
 MONITORING_SCHEMA = f"{CATALOG}.{SCHEMAS['monitoring']}"
+AUDIT_SCHEMA = f"{CATALOG}.{SCHEMAS['audit']}"
+
+AUDIT_TABLES = {
+    "pipeline_runs": f"{AUDIT_SCHEMA}.pipeline_runs",
+    "task_runs": f"{AUDIT_SCHEMA}.task_runs",
+    "layer_metrics": f"{AUDIT_SCHEMA}.layer_metrics",
+}
 
 LANDING_FILES = {
     "agentes": f"{LANDING_VOLUME}/agentes.json",

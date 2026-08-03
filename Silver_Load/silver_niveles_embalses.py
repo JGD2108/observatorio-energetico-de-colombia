@@ -311,8 +311,22 @@ invalid_values_df = transformed_df.filter(
 )
 
 
-invalid_key_rows = invalid_keys_df.count()
-invalid_value_rows = invalid_values_df.count()
+validation_stats = transformed_df.agg(
+    F.sum(F.when(invalid_key_condition, 1).otherwise(0)).alias("invalid_key_rows"),
+    F.sum(F.when(F.col("valor").isNull(), 1).otherwise(0)).alias("invalid_value_rows"),
+    F.sum(
+        F.when(~invalid_key_condition & F.col("valor").isNotNull(), 1).otherwise(0)
+    ).alias("valid_rows"),
+    F.sum(F.when(F.col("es_valor_negativo"), 1).otherwise(0)).alias("valores_negativos"),
+    F.sum(F.when(F.col("es_valor_cero"), 1).otherwise(0)).alias("valores_cero"),
+    F.min("valor").alias("valor_minimo"),
+    F.max("valor").alias("valor_maximo"),
+    F.avg("valor").alias("valor_promedio"),
+).first()
+
+invalid_key_rows = validation_stats["invalid_key_rows"] or 0
+invalid_value_rows = validation_stats["invalid_value_rows"] or 0
+valid_rows = validation_stats["valid_rows"] or 0
 
 
 print(
@@ -356,9 +370,6 @@ valid_df = transformed_df.filter(
 )
 
 
-valid_rows = valid_df.count()
-
-
 print(
     "Registros válidos:",
     f"{valid_rows:,}",
@@ -366,43 +377,15 @@ print(
 
 # COMMAND ----------
 
-display(
-    valid_df
-    .agg(
-        F.count("*").alias(
-            "total_registros"
-        ),
-
-        F.sum(
-            F.when(
-                F.col("es_valor_negativo"),
-                1,
-            ).otherwise(0)
-        ).alias(
-            "valores_negativos"
-        ),
-
-        F.sum(
-            F.when(
-                F.col("es_valor_cero"),
-                1,
-            ).otherwise(0)
-        ).alias(
-            "valores_cero"
-        ),
-
-        F.min("valor").alias(
-            "valor_minimo"
-        ),
-
-        F.max("valor").alias(
-            "valor_maximo"
-        ),
-
-        F.avg("valor").alias(
-            "valor_promedio"
-        ),
-    )
+print(
+    "Calidad de valores:",
+    {
+        "valores_negativos": validation_stats["valores_negativos"] or 0,
+        "valores_cero": validation_stats["valores_cero"] or 0,
+        "valor_minimo": validation_stats["valor_minimo"],
+        "valor_maximo": validation_stats["valor_maximo"],
+        "valor_promedio": validation_stats["valor_promedio"],
+    },
 )
 
 # COMMAND ----------
@@ -462,50 +445,15 @@ silver_df = (
 )
 
 
-silver_rows = silver_df.count()
-
-
 print(
-    "Registros después de deduplicar:",
-    f"{silver_rows:,}",
-)
-
-print(
-    "Duplicados descartados:",
-    f"{valid_rows - silver_rows:,}",
+    "La deduplicación se materializará una sola vez durante el MERGE."
 )
 
 # COMMAND ----------
 
-duplicate_source_keys = (
-    silver_df
-    .groupBy(*reservoir_level_key)
-    .count()
-    .filter(
-        F.col("count") > 1
-    )
-)
-
-
-duplicate_groups = (
-    duplicate_source_keys.count()
-)
-
-
-if duplicate_groups > 0:
-    display(
-        duplicate_source_keys.limit(100)
-    )
-
-    raise ValueError(
-        "La fuente del MERGE contiene "
-        "llaves duplicadas. "
-        f"Grupos: {duplicate_groups:,}"
-    )
-
-
 print(
-    "Fuente única por llave de niveles_embalses."
+    "Fuente única por llave de niveles_embalses; "
+    "garantizada por row_number = 1."
 )
 
 # COMMAND ----------
@@ -543,94 +491,23 @@ silver_df = (
 
 
 print(
-    "Registros enriquecidos:",
-    f"{silver_df.count():,}",
+    "Enriquecimiento con el maestro de plantas preparado."
 )
 
 # COMMAND ----------
 
-display(
-    silver_df
-    .agg(
-        F.count("*").alias(
-            "total_registros"
-        ),
+print("La calidad referencial se calcula una sola vez en la validación final.")
 
-        F.sum(
-            F.when(
-                F.col("planta_encontrada") == True,
-                1,
-            ).otherwise(0)
-        ).alias(
-            "registros_con_planta"
-        ),
+# COMMAND ----------
 
-        F.sum(
-            F.when(
-                F.col("planta_encontrada") == False,
-                1,
-            ).otherwise(0)
-        ).alias(
-            "registros_sin_planta"
-        ),
-
-        F.countDistinct(
-            F.when(
-                F.col("planta_encontrada") == False,
-                F.col("codigo_planta"),
-            )
-        ).alias(
-            "codigos_planta_sin_maestro"
-        ),
-    )
+print(
+    "El detalle por variable y versión se consulta bajo demanda; "
+    "no se materializa durante la carga diaria."
 )
 
 # COMMAND ----------
 
-display(
-    silver_df
-    .groupBy(
-        "codigo_variable",
-        "codigo_duracion",
-        "unidad_medida",
-        "version",
-    )
-    .agg(
-        F.count("*").alias(
-            "registros"
-        ),
-
-        F.min("fecha_inicio").alias(
-            "fecha_minima"
-        ),
-
-        F.max("fecha_inicio").alias(
-            "fecha_maxima"
-        ),
-
-        F.countDistinct(
-            "codigo_planta"
-        ).alias(
-            "plantas_distintas"
-        ),
-
-        F.min("valor").alias(
-            "valor_minimo"
-        ),
-
-        F.max("valor").alias(
-            "valor_maximo"
-        ),
-    )
-    .orderBy(
-        "codigo_variable",
-        "version",
-    )
-)
-
-# COMMAND ----------
-
-if silver_rows == 0:
+if valid_rows == 0:
     print(
         "No existen registros válidos "
         "para cargar en Silver."
@@ -806,21 +683,36 @@ silver_validation_df = spark.table(
 )
 
 
-total_rows = silver_validation_df.count()
+validation_summary = silver_validation_df.agg(
+    F.count("*").alias("total_registros"),
+    F.countDistinct(*[F.col(column) for column in reservoir_level_key]).alias(
+        "llaves_distintas"
+    ),
+    F.min("fecha_inicio").alias("fecha_minima"),
+    F.max("fecha_inicio").alias("fecha_maxima"),
+    F.countDistinct("codigo_planta").alias("plantas_distintas"),
+    F.countDistinct("codigo_variable").alias("variables_distintas"),
+    F.countDistinct("version").alias("versiones_distintas"),
+    F.sum(F.when(F.col("es_valor_negativo"), 1).otherwise(0)).alias(
+        "valores_negativos"
+    ),
+    F.sum(F.when(F.col("es_valor_cero"), 1).otherwise(0)).alias("valores_cero"),
+    F.sum(F.when(F.col("planta_encontrada").isNull(), 1).otherwise(0)).alias(
+        "planta_encontrada_nula"
+    ),
+    F.sum(F.when(~F.col("planta_encontrada"), 1).otherwise(0)).alias(
+        "registros_sin_planta"
+    ),
+    F.countDistinct(
+        F.when(~F.col("planta_encontrada"), F.col("codigo_planta"))
+    ).alias("codigos_planta_sin_maestro"),
+    F.min("valor").alias("valor_minimo"),
+    F.max("valor").alias("valor_maximo"),
+).first()
 
-
-distinct_keys = (
-    silver_validation_df
-    .select(*reservoir_level_key)
-    .distinct()
-    .count()
-)
-
-
-duplicate_rows = (
-    total_rows
-    - distinct_keys
-)
+total_rows = validation_summary["total_registros"]
+distinct_keys = validation_summary["llaves_distintas"]
+duplicate_rows = total_rows - distinct_keys
 
 
 print(
@@ -845,92 +737,4 @@ if duplicate_rows > 0:
         "llaves duplicadas."
     )
 
-# COMMAND ----------
-
-display(
-    silver_validation_df
-    .agg(
-        F.count("*").alias(
-            "total_registros"
-        ),
-
-        F.min("fecha_inicio").alias(
-            "fecha_minima"
-        ),
-
-        F.max("fecha_inicio").alias(
-            "fecha_maxima"
-        ),
-
-        F.countDistinct(
-            "codigo_planta"
-        ).alias(
-            "plantas_distintas"
-        ),
-
-        F.countDistinct(
-            "codigo_variable"
-        ).alias(
-            "variables_distintas"
-        ),
-
-        F.countDistinct(
-            "version"
-        ).alias(
-            "versiones_distintas"
-        ),
-
-        F.sum(
-            F.when(
-                F.col("es_valor_negativo"),
-                1,
-            ).otherwise(0)
-        ).alias(
-            "valores_negativos"
-        ),
-
-        F.sum(
-            F.when(
-                F.col("es_valor_cero"),
-                1,
-            ).otherwise(0)
-        ).alias(
-            "valores_cero"
-        ),
-
-        F.sum(
-            F.when(
-                F.col("planta_encontrada").isNull(),
-                1,
-            ).otherwise(0)
-        ).alias(
-            "planta_encontrada_nula"
-        ),
-
-        F.sum(
-            F.when(
-                F.col("planta_encontrada") == False,
-                1,
-            ).otherwise(0)
-        ).alias(
-            "registros_sin_planta"
-        ),
-
-        F.countDistinct(
-            F.when(
-                F.col("planta_encontrada") == False,
-                F.col("codigo_planta"),
-            )
-        ).alias(
-            "codigos_planta_sin_maestro"
-        ),
-
-        F.min("valor").alias(
-            "valor_minimo"
-        ),
-
-        F.max("valor").alias(
-            "valor_maximo"
-        ),
-    )
-)
+print("Resumen final:", validation_summary.asDict())

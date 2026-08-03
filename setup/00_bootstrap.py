@@ -14,7 +14,8 @@ if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
 from config.project_config import (  # noqa: E402
-    BRONZE_TABLES, CATALOG, GOLD_TABLES, LANDING_VOLUME_NAME, SCHEMAS,
+    AUDIT_SCHEMA, AUDIT_TABLES, BRONZE_TABLES, CATALOG, GOLD_TABLES,
+    LANDING_VOLUME_NAME, SCHEMAS,
     SILVER_TABLES,
 )
 
@@ -81,6 +82,93 @@ for name, contract in SILVER_CONTRACTS.items():
     _create_or_extend(SILVER_TABLES[name], contract, COMMON_SILVER, "silver")
 
 
+spark.sql(f"""
+CREATE TABLE IF NOT EXISTS {AUDIT_TABLES['pipeline_runs']} (
+    run_id STRING NOT NULL,
+    job_id STRING,
+    job_name STRING,
+    environment STRING,
+    catalog STRING,
+    trigger_type STRING,
+    repair_count BIGINT,
+    started_at TIMESTAMP,
+    finished_at TIMESTAMP,
+    duration_seconds BIGINT,
+    status STRING NOT NULL,
+    tasks_total BIGINT,
+    tasks_succeeded BIGINT,
+    tasks_failed BIGINT,
+    error_message STRING,
+    updated_at TIMESTAMP NOT NULL
+) USING DELTA
+TBLPROPERTIES ('quality'='audit', 'delta.enableChangeDataFeed'='true')
+""")
+
+spark.sql(f"""
+CREATE TABLE IF NOT EXISTS {AUDIT_TABLES['task_runs']} (
+    run_id STRING NOT NULL,
+    task_key STRING NOT NULL,
+    task_run_id STRING,
+    layer STRING,
+    source_name STRING,
+    status STRING NOT NULL,
+    execution_count BIGINT,
+    started_at TIMESTAMP,
+    finished_at TIMESTAMP,
+    duration_seconds BIGINT,
+    error_code STRING,
+    error_message STRING,
+    updated_at TIMESTAMP NOT NULL
+) USING DELTA
+TBLPROPERTIES ('quality'='audit', 'delta.enableChangeDataFeed'='true')
+""")
+
+spark.sql(f"""
+CREATE TABLE IF NOT EXISTS {AUDIT_TABLES['layer_metrics']} (
+    run_id STRING NOT NULL,
+    layer STRING NOT NULL,
+    source_name STRING NOT NULL,
+    table_name STRING NOT NULL,
+    rows_received BIGINT,
+    rows_inserted BIGINT,
+    rows_updated BIGINT,
+    rows_rejected BIGINT,
+    rows_unchanged BIGINT,
+    rows_current BIGINT,
+    min_event_time TIMESTAMP,
+    max_event_time TIMESTAMP,
+    lag_seconds BIGINT,
+    status STRING NOT NULL,
+    error_message STRING,
+    collected_at TIMESTAMP NOT NULL
+) USING DELTA
+TBLPROPERTIES ('quality'='audit', 'delta.enableChangeDataFeed'='true')
+""")
+
+spark.sql(f"""
+CREATE OR REPLACE VIEW {AUDIT_SCHEMA}.vw_latest_pipeline_run AS
+SELECT * EXCEPT (row_number)
+FROM (
+    SELECT *, ROW_NUMBER() OVER (ORDER BY started_at DESC, run_id DESC) AS row_number
+    FROM {AUDIT_TABLES['pipeline_runs']}
+)
+WHERE row_number = 1
+""")
+
+spark.sql(f"""
+CREATE OR REPLACE VIEW {AUDIT_SCHEMA}.vw_source_freshness AS
+SELECT
+    source_name,
+    layer,
+    MAX(max_event_time) AS max_event_time,
+    MAX_BY(lag_seconds, collected_at) AS latest_lag_seconds,
+    MAX(collected_at) AS collected_at
+FROM {AUDIT_TABLES['layer_metrics']}
+WHERE status = 'SUCCESS'
+GROUP BY source_name, layer
+""")
+
+
 def _gold_sql_cells() -> list[str]:
     text = (Path(PROJECT_ROOT) / "DDL's" / "DDL GOLD.py").read_text(encoding="utf-8")
     cells = []
@@ -103,7 +191,12 @@ for cell in _gold_sql_cells():
         )
         spark.sql(sql)
 
-required = [*BRONZE_TABLES.values(), *SILVER_TABLES.values(), *GOLD_TABLES.values()]
+required = [
+    *BRONZE_TABLES.values(),
+    *SILVER_TABLES.values(),
+    *GOLD_TABLES.values(),
+    *AUDIT_TABLES.values(),
+]
 missing = [table for table in required if not spark.catalog.tableExists(table)]
 if missing:
     raise RuntimeError(f"Bootstrap incompleto: {missing}")

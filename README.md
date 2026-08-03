@@ -4,14 +4,14 @@ Pipeline Lakehouse en Databricks para integrar y analizar datos del sistema
 eléctrico colombiano. Usa arquitectura Medallion, Delta Lake, Unity Catalog y
 un modelo dimensional con cinco hechos.
 
-> Fase 1 de endurecimiento implementada. El bundle debe ejecutarse todavía en
-> Databricks antes de declarar la instalación limpia certificada.
+> Fases 1 y 2 certificadas mediante ejecuciones completas en Databricks: pipeline
+> reproducible y observabilidad de corridas, tareas y capas operativa en dev.
 
 ## Flujo
 
 ```text
-SIMEM / maestros → Landing → Bronze → Silver → Gold → Quality Gate → Analytics
-                                                        └→ monitoring
+Audit Start → SIMEM / maestros → Landing → Bronze → Silver → Gold
+           → Quality Gate → Analytics → Audit Finalize
 ```
 
 - Nueve dominios de ingesta, nueve tablas Bronze y nueve Silver.
@@ -29,6 +29,7 @@ SIMEM / maestros → Landing → Bronze → Silver → Gold → Quality Gate →
 | `Silver_Load/` | Normalización y MERGE por dominio |
 | `GOLD LOAD/GOLD_LOAD.py` | Modelo dimensional |
 | `Automation/` | Job y quality checks |
+| `observability/` | Auditoría de corridas, tareas y métricas por capa |
 | `Gold_Analytics/` | Vistas analíticas; certificación pendiente |
 | `config/` | Configuración parametrizable |
 | `setup/00_bootstrap.py` | Bootstrap idempotente |
@@ -58,11 +59,13 @@ Dependencias fijadas:
 - [Arquitectura actual](docs/architecture.md)
 - [Inventario técnico](docs/technical_inventory.md)
 - [Fase 1](docs/phase1_hardening.md)
+- [Fase 2 y manual de observabilidad](docs/phase2_observability.md)
 - [Clasificación de archivos](docs/file_classification.md)
 
 ## Limitaciones
 
 - Landing todavía usa nombres fijos.
+- Los registros rechazados permanecen en cero hasta implementar cuarentena en Fase 3.
 - La regla TX requiere gobierno formal en Fase 4.
 - Las vistas no están certificadas semánticamente; corresponde a Fase 6.
 - No existe todavía API, serving ni dashboard conectado a datos.
