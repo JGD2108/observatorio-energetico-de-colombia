@@ -16,6 +16,7 @@ resources:
       environments:
         - environment_key: default
           spec:
+            environment_version: "4"
             dependencies:
               - "pydataxm==0.3.18"
               - "geopy==2.5.0"
