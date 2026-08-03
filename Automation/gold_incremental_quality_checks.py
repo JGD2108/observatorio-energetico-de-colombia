@@ -19,6 +19,7 @@
 from pyspark.sql import functions as F
 from pyspark.sql.window import Window
 from datetime import timedelta
+import hashlib
 import sys
 import uuid
 
@@ -31,13 +32,17 @@ if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
 from config.project_config import (  # noqa: E402
-    CATALOG, GOLD_TABLES, MONITORING_SCHEMA, SCHEMAS, SILVER_TABLES,
+    AUDIT_TABLES, CATALOG, GOLD_TABLES, MONITORING_SCHEMA, QUARANTINE_TABLES,
+    SCHEMAS, SILVER_TABLES,
 )
 
 SILVER_SCHEMA = f"{CATALOG}.{SCHEMAS['silver']}"
 GOLD_SCHEMA = f"{CATALOG}.{SCHEMAS['gold']}"
 
 QUALITY_RESULTS_TABLE = f"{MONITORING_SCHEMA}.gold_incremental_quality_results"
+GOVERNED_QUALITY_TABLE = AUDIT_TABLES["data_quality_results"]
+QUALITY_ALERTS_TABLE = AUDIT_TABLES["data_quality_alerts"]
+QUARANTINE_EXCEPTIONS_TABLE = QUARANTINE_TABLES["data_quality_exceptions"]
 
 print("Configuración cargada.")
 print("Silver:", SILVER_SCHEMA)
@@ -55,6 +60,7 @@ print("Monitoring:", MONITORING_SCHEMA)
 try:
     dbutils.widgets.text("lookback_days", "45", "Días de validación")
     dbutils.widgets.text("max_lag_days", "45", "Rezago máximo permitido")
+    dbutils.widgets.text("run_id", "", "Identificador de ejecución")
 except Exception:
     pass
 
@@ -73,7 +79,10 @@ if LOOKBACK_DAYS <= 0:
 if MAX_LAG_DAYS < 0:
     raise ValueError("max_lag_days no puede ser negativo.")
 
-RUN_ID = str(uuid.uuid4())
+try:
+    RUN_ID = dbutils.widgets.get("run_id").strip() or str(uuid.uuid4())
+except Exception:
+    RUN_ID = str(uuid.uuid4())
 RUN_DATE = spark.sql("SELECT current_date() AS run_date").first()["run_date"]
 WINDOW_END_DATE = RUN_DATE
 WINDOW_START_DATE = RUN_DATE - timedelta(days=LOOKBACK_DAYS - 1)
@@ -127,12 +136,46 @@ if missing_tables > 0:
 
 quality_results = []
 
-def add_quality_result(component, validation, error_count, detail):
+
+def quality_policy(validation):
+    normalized = validation.lower()
+    policies = [
+        ("existencia de datos", "COMPLETENESS", "CRITICAL", True),
+        ("claves duplicadas", "UNIQUENESS", "CRITICAL", True),
+        ("claves primarias nulas", "COMPLETENESS", "CRITICAL", True),
+        ("integridad referencial", "INTEGRITY", "CRITICAL", True),
+        ("medidas nulas o negativas", "VALIDITY", "HIGH", True),
+        ("consistencia de versi", "CONSISTENCY", "HIGH", True),
+        ("frescura del dato", "TIMELINESS", "HIGH", True),
+        ("reconciliaci", "CONSISTENCY", "CRITICAL", True),
+        ("contrato de esquema", "SHAPE", "CRITICAL", True),
+        ("cobertura horaria", "COMPLETENESS", "HIGH", True),
+        ("variaci", "VOLUME", "MEDIUM", False),
+    ]
+    for fragment, dimension, severity, blocking in policies:
+        if fragment in normalized:
+            return dimension, severity, blocking
+    return "VALIDITY", "MEDIUM", False
+
+
+def add_quality_result(component, validation, error_count, detail, denominator=None):
     error_count = int(error_count)
+    dimension, severity, blocking = quality_policy(validation)
+    rule_id = hashlib.sha256(
+        f"{component}|{validation}".encode("utf-8")
+    ).hexdigest()[:20]
     quality_results.append({
+        "rule_id": rule_id,
         "componente": component,
         "validacion": validation,
+        "dimension_calidad": dimension,
+        "severidad": severity,
+        "bloqueante": blocking,
         "errores": error_count,
+        "tasa_error": (
+            float(error_count) / float(denominator)
+            if denominator not in (None, 0) else None
+        ),
         "aprobado": error_count == 0,
         "detalle": str(detail),
     })
@@ -990,6 +1033,114 @@ for component, difference_df in difference_dataframes:
 # COMMAND ----------
 
 # MAGIC %md
+# MAGIC ## Fase 3 — Contrato de esquema, cobertura horaria y variación de volumen
+
+# COMMAND ----------
+
+EXPECTED_FACT_SCHEMAS = {
+    "Generación": {
+        "generacion_key": "string", "fecha_hora": "timestamp",
+        "generacion_real_kwh": "decimal(24,6)",
+    },
+    "Disponibilidad": {
+        "disponibilidad_key": "string", "fecha_hora": "timestamp",
+        "disponibilidad_real_kwh": "decimal(24,6)",
+    },
+    "Demanda": {
+        "demanda_key": "string", "fecha_hora": "timestamp",
+        "demanda_real_kwh": "decimal(24,6)",
+    },
+    "Precio de bolsa": {
+        "precio_bolsa_key": "string", "fecha_hora": "timestamp",
+        "precio_bolsa_nacional_cop_kwh": "decimal(24,6)",
+    },
+    "Energía embalsada": {
+        "energia_embalsada_key": "string", "fecha_medicion": "date",
+        "energia_embalsada_kwh": "decimal(24,6)",
+    },
+}
+
+for cfg in FACT_CONFIGURATIONS:
+    component = cfg["component"]
+    actual_types = dict(spark.table(cfg["table"]).dtypes)
+    schema_errors = [
+        f"{column}: esperado={expected_type}, actual={actual_types.get(column)}"
+        for column, expected_type in EXPECTED_FACT_SCHEMAS[component].items()
+        if actual_types.get(column) != expected_type
+    ]
+    add_quality_result(
+        component,
+        "Contrato de esquema Gold",
+        len(schema_errors),
+        "; ".join(schema_errors) if schema_errors else "Columnas y tipos conformes",
+        len(EXPECTED_FACT_SCHEMAS[component]),
+    )
+
+    if cfg["date"] != "fecha_hora":
+        continue
+
+    daily_counts_df = (
+        filter_validation_window(spark.table(cfg["table"]), cfg["date"])
+        .groupBy(F.to_date(cfg["date"]).alias("fecha"))
+        .agg(
+            F.count("*").alias("registros"),
+            F.countDistinct(F.hour(cfg["date"])).alias("horas"),
+        )
+    )
+    date_spine_df = (
+        daily_counts_df
+        .agg(F.min("fecha").alias("min_fecha"), F.max("fecha").alias("max_fecha"))
+        .select(F.explode(F.sequence("min_fecha", "max_fecha")).alias("fecha"))
+    )
+    volume_baseline_df = daily_counts_df.agg(
+        F.percentile_approx("registros", 0.5, 10000).alias("mediana")
+    )
+    temporal_profile = (
+        date_spine_df
+        .join(daily_counts_df, "fecha", "left")
+        .crossJoin(volume_baseline_df)
+        .agg(
+            F.count("*").alias("dias_evaluados"),
+            F.sum(
+                F.when(F.coalesce(F.col("horas"), F.lit(0)) != 24, 1).otherwise(0)
+            ).alias("dias_horas_incompletas"),
+            F.sum(
+                F.when(
+                    (F.col("mediana") > 0)
+                    & (
+                        (F.coalesce(F.col("registros"), F.lit(0)) < F.col("mediana") * 0.5)
+                        | (F.col("registros") > F.col("mediana") * 2.0)
+                    ),
+                    1,
+                ).otherwise(0)
+            ).alias("dias_volumen_atipico"),
+            F.max("mediana").alias("mediana_registros"),
+        )
+        .first()
+    )
+    evaluated_days = int(temporal_profile["dias_evaluados"] or 0)
+    incomplete_days = int(temporal_profile["dias_horas_incompletas"] or 0)
+    drift_days = int(temporal_profile["dias_volumen_atipico"] or 0)
+    median_rows = int(temporal_profile["mediana_registros"] or 0)
+    add_quality_result(
+        component,
+        "Cobertura horaria diaria",
+        incomplete_days,
+        f"Días sin 24 horas: {incomplete_days:,} de {evaluated_days:,}",
+        evaluated_days,
+    )
+    add_quality_result(
+        component,
+        "Variación diaria de volumen",
+        drift_days,
+        f"Días fuera de 0.5x–2x la mediana ({median_rows:,} filas): {drift_days:,}",
+        evaluated_days,
+    )
+
+
+# COMMAND ----------
+
+# MAGIC %md
 # MAGIC ## Celda 22 — Resumen general
 
 # COMMAND ----------
@@ -997,9 +1148,14 @@ for component, difference_df in difference_dataframes:
 quality_results_df = (
     spark.createDataFrame(quality_results)
     .select(
+        "rule_id",
         "componente",
         "validacion",
+        "dimension_calidad",
+        "severidad",
+        F.col("bloqueante").cast("boolean"),
         F.col("errores").cast("long"),
+        F.col("tasa_error").cast("double"),
         F.col("aprobado").cast("boolean"),
         "detalle",
     )
@@ -1069,12 +1225,135 @@ print("Resultados guardados en:", QUALITY_RESULTS_TABLE)
 # COMMAND ----------
 
 # MAGIC %md
+# MAGIC ## Fase 3 — Persistencia gobernada, cuarentena y alertas
+
+# COMMAND ----------
+
+governed_quality_df = (
+    quality_results_df
+    .withColumn("run_id", F.lit(RUN_ID))
+    .withColumn("window_start_date", F.lit(WINDOW_START_DATE).cast("date"))
+    .withColumn("window_end_date", F.lit(WINDOW_END_DATE).cast("date"))
+    .withColumn("executed_at", F.current_timestamp())
+    .select(
+        "run_id",
+        "rule_id",
+        F.col("componente").alias("component"),
+        F.col("validacion").alias("rule_name"),
+        F.col("dimension_calidad").alias("quality_dimension"),
+        F.col("severidad").alias("severity"),
+        F.col("bloqueante").alias("is_blocking"),
+        F.col("errores").alias("error_count"),
+        F.col("tasa_error").alias("error_rate"),
+        F.col("aprobado").alias("passed"),
+        F.col("detalle").alias("detail"),
+        "window_start_date",
+        "window_end_date",
+        "executed_at",
+    )
+)
+governed_quality_df.createOrReplaceTempView("phase3_quality_results")
+spark.sql(f"""
+MERGE INTO {GOVERNED_QUALITY_TABLE} AS target
+USING phase3_quality_results AS source
+ON target.run_id = source.run_id AND target.rule_id = source.rule_id
+WHEN MATCHED THEN UPDATE SET *
+WHEN NOT MATCHED THEN INSERT *
+""")
+
+source_table_map = F.create_map(*[
+    item
+    for component, table in {
+        "Generación": GOLD_TABLES["fact_generacion_real"],
+        "Disponibilidad": GOLD_TABLES["fact_disponibilidad_planta"],
+        "Demanda": GOLD_TABLES["fact_demanda_real"],
+        "Precio de bolsa": GOLD_TABLES["fact_precio_bolsa"],
+        "Energía embalsada": GOLD_TABLES["fact_energia_embalsada_planta"],
+    }.items()
+    for item in (F.lit(component), F.lit(table))
+])
+
+exceptions_df = (
+    governed_quality_df
+    .filter(~F.col("passed"))
+    .withColumn(
+        "exception_id",
+        F.sha2(F.concat_ws("|", "run_id", "rule_id"), 256),
+    )
+    .withColumn("source_table", source_table_map[F.col("component")])
+    .withColumn("record_key", F.col("rule_id"))
+    .withColumn("event_time", F.lit(None).cast("timestamp"))
+    .withColumn("reason", F.col("detail"))
+    .withColumn(
+        "payload_json",
+        F.to_json(F.struct("rule_name", "quality_dimension", "error_count", "error_rate")),
+    )
+    .withColumn("quarantined_at", F.current_timestamp())
+    .select(
+        "run_id", "exception_id", "rule_id", "component", "source_table",
+        "record_key", "event_time", "severity", "reason", "payload_json",
+        "quarantined_at",
+    )
+)
+exceptions_df.createOrReplaceTempView("phase3_quality_exceptions")
+spark.sql(f"""
+MERGE INTO {QUARANTINE_EXCEPTIONS_TABLE} AS target
+USING phase3_quality_exceptions AS source
+ON target.run_id = source.run_id AND target.exception_id = source.exception_id
+WHEN MATCHED THEN UPDATE SET *
+WHEN NOT MATCHED THEN INSERT *
+""")
+
+spark.sql(f"""
+MERGE INTO {QUALITY_ALERTS_TABLE} AS target
+USING phase3_quality_results AS source
+ON target.rule_id = source.rule_id AND target.status = 'OPEN'
+WHEN MATCHED AND source.passed THEN UPDATE SET
+  target.status = 'RESOLVED', target.resolved_at = current_timestamp()
+""")
+
+alerts_df = (
+    governed_quality_df
+    .filter((~F.col("passed")) & F.col("is_blocking"))
+    .withColumn(
+        "alert_id",
+        F.sha2(F.concat_ws("|", "run_id", "rule_id"), 256),
+    )
+    .withColumn("status", F.lit("OPEN"))
+    .withColumn("message", F.concat_ws(": ", "rule_name", "detail"))
+    .withColumn("created_at", F.current_timestamp())
+    .withColumn("resolved_at", F.lit(None).cast("timestamp"))
+    .select(
+        "run_id", "alert_id", "rule_id", "component", "severity", "status",
+        "error_count", "message", "created_at", "resolved_at",
+    )
+)
+alerts_df.createOrReplaceTempView("phase3_quality_alerts")
+spark.sql(f"""
+MERGE INTO {QUALITY_ALERTS_TABLE} AS target
+USING phase3_quality_alerts AS source
+ON target.run_id = source.run_id AND target.alert_id = source.alert_id
+WHEN MATCHED THEN UPDATE SET *
+WHEN NOT MATCHED THEN INSERT *
+""")
+
+print("Resultados gobernados:", GOVERNED_QUALITY_TABLE)
+print("Excepciones en cuarentena:", QUARANTINE_EXCEPTIONS_TABLE)
+print("Alertas operativas:", QUALITY_ALERTS_TABLE)
+
+
+# COMMAND ----------
+
+# MAGIC %md
 # MAGIC ## Celda 24 — Resultado final y fallo controlado
 
 # COMMAND ----------
 
 total_validations = quality_results_df.count()
 failed_validations = quality_results_df.filter(~F.col("aprobado")).count()
+blocking_failures = quality_results_df.filter(
+    (~F.col("aprobado")) & F.col("bloqueante")
+).count()
 total_errors = (
     quality_results_df
     .agg(F.coalesce(F.sum("errores"), F.lit(0)).alias("total_errores"))
@@ -1088,16 +1367,21 @@ print("Run ID:", RUN_ID)
 print("Ventana:", WINDOW_START_DATE, "→", WINDOW_END_DATE)
 print("Validaciones ejecutadas:", total_validations)
 print("Validaciones fallidas:", failed_validations)
+print("Validaciones bloqueantes fallidas:", blocking_failures)
 print("Errores detectados:", total_errors)
 
-if failed_validations > 0:
+if blocking_failures > 0:
     display(
         quality_results_df
-        .filter(~F.col("aprobado"))
-        .orderBy("componente", "validacion")
+        .filter((~F.col("aprobado")) & F.col("bloqueante"))
+        .orderBy(F.desc("severidad"), "componente", "validacion")
     )
     raise ValueError(
-        "CONTROL DE CALIDAD GOLD INCREMENTAL NO APROBADO."
+        "CONTROL DE CALIDAD GOLD INCREMENTAL NO APROBADO: "
+        "existen fallos HIGH o CRITICAL."
     )
+
+if failed_validations > 0:
+    print("CONTROL APROBADO CON ADVERTENCIAS MEDIUM/LOW NO BLOQUEANTES.")
 
 print("CONTROL DE CALIDAD GOLD INCREMENTAL APROBADO.")

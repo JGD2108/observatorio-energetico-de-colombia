@@ -15,7 +15,7 @@ if PROJECT_ROOT not in sys.path:
 
 from config.project_config import (  # noqa: E402
     AUDIT_SCHEMA, AUDIT_TABLES, BRONZE_TABLES, CATALOG, GOLD_TABLES,
-    LANDING_VOLUME_NAME, SCHEMAS,
+    LANDING_VOLUME_NAME, QUARANTINE_TABLES, SCHEMAS,
     SILVER_TABLES,
 )
 
@@ -146,6 +146,59 @@ TBLPROPERTIES ('quality'='audit', 'delta.enableChangeDataFeed'='true')
 """)
 
 spark.sql(f"""
+CREATE TABLE IF NOT EXISTS {AUDIT_TABLES['data_quality_results']} (
+    run_id STRING NOT NULL,
+    rule_id STRING NOT NULL,
+    component STRING NOT NULL,
+    rule_name STRING NOT NULL,
+    quality_dimension STRING NOT NULL,
+    severity STRING NOT NULL,
+    is_blocking BOOLEAN NOT NULL,
+    error_count BIGINT NOT NULL,
+    error_rate DOUBLE,
+    passed BOOLEAN NOT NULL,
+    detail STRING,
+    window_start_date DATE,
+    window_end_date DATE,
+    executed_at TIMESTAMP NOT NULL
+) USING DELTA
+TBLPROPERTIES ('quality'='audit', 'delta.enableChangeDataFeed'='true')
+""")
+
+spark.sql(f"""
+CREATE TABLE IF NOT EXISTS {AUDIT_TABLES['data_quality_alerts']} (
+    run_id STRING NOT NULL,
+    alert_id STRING NOT NULL,
+    rule_id STRING NOT NULL,
+    component STRING NOT NULL,
+    severity STRING NOT NULL,
+    status STRING NOT NULL,
+    error_count BIGINT NOT NULL,
+    message STRING,
+    created_at TIMESTAMP NOT NULL,
+    resolved_at TIMESTAMP
+) USING DELTA
+TBLPROPERTIES ('quality'='audit', 'delta.enableChangeDataFeed'='true')
+""")
+
+spark.sql(f"""
+CREATE TABLE IF NOT EXISTS {QUARANTINE_TABLES['data_quality_exceptions']} (
+    run_id STRING NOT NULL,
+    exception_id STRING NOT NULL,
+    rule_id STRING NOT NULL,
+    component STRING NOT NULL,
+    source_table STRING,
+    record_key STRING,
+    event_time TIMESTAMP,
+    severity STRING NOT NULL,
+    reason STRING NOT NULL,
+    payload_json STRING,
+    quarantined_at TIMESTAMP NOT NULL
+) USING DELTA
+TBLPROPERTIES ('quality'='quarantine', 'delta.enableChangeDataFeed'='true')
+""")
+
+spark.sql(f"""
 CREATE OR REPLACE VIEW {AUDIT_SCHEMA}.vw_latest_pipeline_run AS
 SELECT * EXCEPT (row_number)
 FROM (
@@ -166,6 +219,24 @@ SELECT
 FROM {AUDIT_TABLES['layer_metrics']}
 WHERE status = 'SUCCESS'
 GROUP BY source_name, layer
+""")
+
+spark.sql(f"""
+CREATE OR REPLACE VIEW {AUDIT_SCHEMA}.vw_latest_data_quality AS
+SELECT * EXCEPT (row_number)
+FROM (
+    SELECT *, ROW_NUMBER() OVER (
+        PARTITION BY component, rule_id ORDER BY executed_at DESC, run_id DESC
+    ) AS row_number
+    FROM {AUDIT_TABLES['data_quality_results']}
+)
+WHERE row_number = 1
+""")
+
+spark.sql(f"""
+CREATE OR REPLACE VIEW {AUDIT_SCHEMA}.vw_open_data_quality_alerts AS
+SELECT * FROM {AUDIT_TABLES['data_quality_alerts']}
+WHERE status = 'OPEN'
 """)
 
 
@@ -196,6 +267,7 @@ required = [
     *SILVER_TABLES.values(),
     *GOLD_TABLES.values(),
     *AUDIT_TABLES.values(),
+    *QUARANTINE_TABLES.values(),
 ]
 missing = [table for table in required if not spark.catalog.tableExists(table)]
 if missing:

@@ -17,6 +17,7 @@ from config.project_config import (  # noqa: E402
     CATALOG,
     GOLD_TABLES,
     LANDING_FILES,
+    QUARANTINE_TABLES,
     SILVER_TABLES,
 )
 from observability.audit import finish_pipeline_run  # noqa: E402
@@ -64,5 +65,6 @@ STATUS = finish_pipeline_run(
     TASK_SPECS,
     TABLE_SPECS,
     LANDING_FILES,
+    QUARANTINE_TABLES["data_quality_exceptions"],
 )
 print("Auditoria finalizada con estado:", STATUS)

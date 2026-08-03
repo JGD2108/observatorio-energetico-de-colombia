@@ -140,8 +140,25 @@ def main():
     ddl = "\n".join(p.read_text(encoding="utf-8") for p in (ROOT / "DDL's").glob("*.py"))
     assert "DROP TABLE" not in ddl.upper()
     bootstrap_text = (ROOT / "setup" / "00_bootstrap.py").read_text(encoding="utf-8")
-    for table_name in ("pipeline_runs", "task_runs", "layer_metrics"):
+    for table_name in (
+        "pipeline_runs", "task_runs", "layer_metrics",
+        "data_quality_results", "data_quality_alerts",
+    ):
         assert f"AUDIT_TABLES['{table_name}']" in bootstrap_text
+    assert "QUARANTINE_TABLES['data_quality_exceptions']" in bootstrap_text
+
+    quality_text = (
+        ROOT / "Automation" / "gold_incremental_quality_checks.py"
+    ).read_text(encoding="utf-8")
+    for required_feature in (
+        "quality_policy", "Contrato de esquema Gold", "Cobertura horaria diaria",
+        "Variación diaria de volumen", "phase3_quality_results",
+        "phase3_quality_exceptions", "phase3_quality_alerts",
+        "blocking_failures",
+    ):
+        assert required_feature in quality_text
+    for forbidden_cache in (".cache(", ".persist(", "StorageLevel"):
+        assert forbidden_cache not in quality_text
     print("OK: contratos estaticos de Fase 1 validados")
 
 

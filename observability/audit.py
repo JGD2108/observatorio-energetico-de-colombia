@@ -246,8 +246,10 @@ def collect_delta_metric_rows(
     run_id: str,
     started_at: datetime,
     table_specs: Iterable[tuple[str, str, str]],
+    rejected_by_table: dict[str, int] | None = None,
 ) -> list[tuple]:
     now = datetime.utcnow()
+    rejected_by_table = rejected_by_table or {}
     rows = []
     for layer, source_name, table in table_specs:
         try:
@@ -264,7 +266,8 @@ def collect_delta_metric_rows(
             unchanged = max(received - inserted - updated, 0)
             lag = int((now - maximum).total_seconds()) if maximum else None
             rows.append((
-                run_id, layer, source_name, table, received, inserted, updated, 0,
+                run_id, layer, source_name, table, received, inserted, updated,
+                rejected_by_table.get(table, 0),
                 unchanged, current, minimum, maximum, lag, "SUCCESS", None, now,
             ))
         except Exception as exc:
@@ -325,15 +328,35 @@ def finish_pipeline_run(
     task_specs: dict[str, tuple[str, str]],
     table_specs: Iterable[tuple[str, str, str]],
     landing_files: dict[str, str],
+    quarantine_table: str | None = None,
 ) -> str:
     now = datetime.utcnow()
     run_id = widget(dbutils, "run_id") or widget(dbutils, "job_run_id")
     started_at = _parse_timestamp(widget(dbutils, "job_start_time")) or now
     task_rows = collect_task_rows(dbutils, run_id, task_specs)
     _upsert(spark, task_table, task_rows, TASK_SCHEMA, ["run_id", "task_key"])
+    rejected_by_table = {}
+    if quarantine_table and spark.catalog.tableExists(quarantine_table):
+        rejected_by_table = {
+            row["source_table"]: int(row["rows_rejected"] or 0)
+            for row in (
+                spark.table(quarantine_table)
+                .filter(F.col("run_id") == run_id)
+                .filter(F.col("source_table").isNotNull())
+                .groupBy("source_table")
+                .agg(
+                    F.sum(
+                        F.get_json_object("payload_json", "$.error_count").cast("long")
+                    ).alias("rows_rejected")
+                )
+                .collect()
+            )
+        }
     metric_rows = [
         *collect_landing_metric_rows(spark, run_id, landing_files),
-        *collect_delta_metric_rows(spark, run_id, started_at, table_specs),
+        *collect_delta_metric_rows(
+            spark, run_id, started_at, table_specs, rejected_by_table,
+        ),
     ]
     _upsert(
         spark, metric_table, metric_rows, METRIC_SCHEMA,

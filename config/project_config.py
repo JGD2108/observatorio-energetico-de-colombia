@@ -80,6 +80,13 @@ AUDIT_TABLES = {
     "pipeline_runs": f"{AUDIT_SCHEMA}.pipeline_runs",
     "task_runs": f"{AUDIT_SCHEMA}.task_runs",
     "layer_metrics": f"{AUDIT_SCHEMA}.layer_metrics",
+    "data_quality_results": f"{AUDIT_SCHEMA}.data_quality_results",
+    "data_quality_alerts": f"{AUDIT_SCHEMA}.data_quality_alerts",
+}
+
+QUARANTINE_SCHEMA = f"{CATALOG}.{SCHEMAS['quarantine']}"
+QUARANTINE_TABLES = {
+    "data_quality_exceptions": f"{QUARANTINE_SCHEMA}.data_quality_exceptions",
 }
 
 LANDING_FILES = {

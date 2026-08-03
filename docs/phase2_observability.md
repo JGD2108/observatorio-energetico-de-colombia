@@ -40,9 +40,8 @@ Una fila por corrida, capa, fuente y tabla o archivo. Registra filas recibidas,
 insertadas, actualizadas, rechazadas, sin cambios y actuales; también fechas
 mínima y máxima, rezago, estado de recolección y error.
 
-`rows_rejected` se mantiene en cero en fuentes exitosas durante Fase 2. La
-persistencia de registros rechazados y su contabilización pertenecen a la
-cuarentena de Fase 3.
+Desde Fase 3, `rows_rejected` incorpora el total de errores asociado a las
+excepciones de calidad de cada tabla Gold y corrida.
 
 ### Vistas
 
