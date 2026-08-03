@@ -47,7 +47,11 @@ def main():
         assert notebook, (task["task_key"], "must run as notebook_task")
         prefix = "${workspace.file_path}/"
         assert notebook.startswith(prefix)
-        notebook_file = ROOT / notebook.removeprefix(prefix)
+        assert not notebook.endswith(".py"), (
+            task["task_key"],
+            "Databricks SOURCE notebooks are deployed without the .py suffix",
+        )
+        notebook_file = ROOT / f"{notebook.removeprefix(prefix)}.py"
         assert notebook_file.exists()
         assert notebook_file.read_text(encoding="utf-8").startswith(
             "# Databricks notebook source"
