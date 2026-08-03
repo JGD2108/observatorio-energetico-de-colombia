@@ -1,0 +1,110 @@
+# Databricks notebook source
+"""Bootstrap idempotente. No elimina tablas ni datos."""
+
+import re
+import sys
+from pathlib import Path
+
+NOTEBOOK_PATH = (
+    dbutils.notebook.entry_point.getDbutils()
+    .notebook().getContext().notebookPath().get()
+)
+PROJECT_ROOT = "/Workspace/" + NOTEBOOK_PATH.strip("/").rsplit("/", 2)[0]
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
+
+from config.project_config import (  # noqa: E402
+    BRONZE_TABLES, CATALOG, GOLD_TABLES, LANDING_VOLUME_NAME, SCHEMAS,
+    SILVER_TABLES,
+)
+
+spark.sql(f"CREATE CATALOG IF NOT EXISTS `{CATALOG}`")
+for schema_name in SCHEMAS.values():
+    spark.sql(f"CREATE SCHEMA IF NOT EXISTS `{CATALOG}`.`{schema_name}`")
+spark.sql(
+    f"CREATE VOLUME IF NOT EXISTS "
+    f"`{CATALOG}`.`{SCHEMAS['landing']}`.`{LANDING_VOLUME_NAME}`"
+)
+
+COMMON_BRONZE = """
+source_file_name STRING, source_file_path STRING,
+ingestion_timestamp TIMESTAMP, load_date DATE
+"""
+BRONZE_CONTRACTS = {
+    "agentes": "fecha STRING, codigo_duracion STRING, codigo_sic_agente STRING, nombre_agente STRING, actividad_agente STRING",
+    "plantas": "fecha STRING, codigo_duracion STRING, codigo_planta STRING, nombre_planta STRING, codigo_sic_agente STRING, cap_efectiva_neta STRING, fpo STRING, codigo_sub_area_operativa STRING, codigo_area_operativa STRING, tipo_despacho_recurso STRING, tipo_clasificacion STRING, tipo_generacion STRING",
+    "generacion_real": "codigo_variable STRING, fecha_hora STRING, codigo_duracion STRING, unidad_medida STRING, codigo_sic_agente STRING, codigo_planta STRING, version STRING, valor STRING",
+    "demanda_real": "codigo_variable STRING, fecha_hora STRING, codigo_sic_agente STRING, tipo_mercado STRING, version STRING, valor STRING, unidad_medida STRING, codigo_duracion STRING",
+    "disponibilidad_plantas": "codigo_variable STRING, fecha_hora STRING, codigo_duracion STRING, unidad_medida STRING, codigo_planta STRING, version STRING, valor STRING",
+    "precio_bolsa": "codigo_variable STRING, fecha_hora STRING, codigo_duracion STRING, unidad_medida STRING, version STRING, valor STRING",
+    "niveles_embalses": "codigo_duracion STRING, codigo_planta STRING, codigo_variable STRING, fecha_inicio STRING, unidad_medida STRING, valor STRING, version STRING",
+    "embalses": "codigo_embalse STRING, nombre_embalse STRING, latitud DOUBLE, longitud DOUBLE, tipo_coordenada STRING, coordinate_source STRING, geocoding_status STRING, geocoding_query STRING",
+    "plantas_reservorios": "region STRING, nombre_planta STRING, nombre_reservorio STRING, tipo_relacion STRING, es_principal BOOLEAN, permite_atribucion BOOLEAN, fuente_relacion STRING, estado_validacion STRING, valido_desde DATE, valido_hasta DATE",
+}
+
+COMMON_SILVER = """
+source_file_name STRING, source_file_path STRING, ingestion_timestamp TIMESTAMP,
+load_date DATE, silver_created_at TIMESTAMP, silver_updated_at TIMESTAMP
+"""
+SILVER_CONTRACTS = {
+    "agentes": "fecha DATE, codigo_duracion STRING, codigo_agente STRING, nombre_agente STRING, actividad_agente STRING",
+    "plantas": "fecha DATE, codigo_duracion STRING, codigo_planta STRING, nombre_planta STRING, codigo_sic_agente STRING, cap_efectiva_neta DOUBLE, fpo DATE, codigo_sub_area_operativa STRING, codigo_area_operativa STRING, tipo_despacho_recurso STRING, tipo_clasificacion STRING, tipo_generacion STRING",
+    "generacion_real": "codigo_variable STRING, fecha_hora TIMESTAMP, codigo_duracion STRING, unidad_medida STRING, codigo_agente STRING, codigo_planta STRING, version STRING, valor DOUBLE, planta_encontrada BOOLEAN, agente_encontrado BOOLEAN",
+    "demanda_real": "codigo_variable STRING, fecha_hora TIMESTAMP, codigo_agente STRING, tipo_mercado STRING, version STRING, demanda_real_kwh DOUBLE, unidad_medida STRING, codigo_duracion STRING, es_demanda_cero BOOLEAN, agente_encontrado BOOLEAN",
+    "disponibilidad_plantas": "codigo_variable STRING, fecha_hora TIMESTAMP, codigo_duracion STRING, unidad_medida STRING, codigo_planta STRING, version STRING, valor DOUBLE, planta_encontrada BOOLEAN",
+    "precio_bolsa": "codigo_variable STRING, fecha_hora TIMESTAMP, codigo_duracion STRING, unidad_medida STRING, version STRING, valor DOUBLE, es_precio_cero BOOLEAN, es_precio_negativo BOOLEAN",
+    "niveles_embalses": "codigo_variable STRING, fecha_inicio TIMESTAMP, codigo_duracion STRING, unidad_medida STRING, codigo_planta STRING, version STRING, valor DOUBLE, es_valor_cero BOOLEAN, es_valor_negativo BOOLEAN, planta_encontrada BOOLEAN",
+    "embalses": "codigo_embalse STRING, nombre_embalse STRING, latitud DOUBLE, longitud DOUBLE, tipo_coordenada STRING, fuente_coordenada STRING, estado_geocodificacion STRING, consulta_geocodificacion STRING, coordenadas_validas BOOLEAN, requiere_revision_manual BOOLEAN",
+    "plantas_reservorios": "region STRING, nombre_planta STRING, nombre_reservorio STRING, tipo_relacion STRING, es_principal BOOLEAN, permite_atribucion BOOLEAN, fuente_relacion STRING, estado_validacion STRING, valido_desde DATE, valido_hasta DATE, codigo_planta STRING, codigo_embalse STRING, planta_encontrada BOOLEAN, embalse_encontrado BOOLEAN, relacion_completa BOOLEAN, requiere_revision_manual BOOLEAN",
+}
+
+
+def _definitions(contract: str) -> list[str]:
+    return [part.strip() for part in contract.split(",") if part.strip()]
+
+
+def _create_or_extend(table: str, domain: str, common: str, quality: str) -> None:
+    contract = f"{domain}, {common}"
+    spark.sql(
+        f"CREATE TABLE IF NOT EXISTS {table} ({contract}) USING DELTA "
+        f"TBLPROPERTIES ('delta.enableChangeDataFeed'='true','quality'='{quality}')"
+    )
+    existing = {column.lower() for column in spark.table(table).columns}
+    missing = [d for d in _definitions(contract) if d.split()[0].lower() not in existing]
+    if missing:
+        spark.sql(f"ALTER TABLE {table} ADD COLUMNS ({', '.join(missing)})")
+
+
+for name, contract in BRONZE_CONTRACTS.items():
+    _create_or_extend(BRONZE_TABLES[name], contract, COMMON_BRONZE, "bronze")
+for name, contract in SILVER_CONTRACTS.items():
+    _create_or_extend(SILVER_TABLES[name], contract, COMMON_SILVER, "silver")
+
+
+def _gold_sql_cells() -> list[str]:
+    text = (Path(PROJECT_ROOT) / "DDL's" / "DDL GOLD.py").read_text(encoding="utf-8")
+    cells = []
+    for cell in text.split("# COMMAND ----------"):
+        lines = [line.removeprefix("# MAGIC").lstrip() for line in cell.splitlines() if line.startswith("# MAGIC")]
+        if lines and lines[0] == "%sql":
+            cells.append("\n".join(lines[1:]))
+    return cells
+
+
+for cell in _gold_sql_cells():
+    for statement in cell.split(";"):
+        sql = statement.strip()
+        if not sql or re.match(r"(?is)^(DROP\s+TABLE|SHOW\s+TABLES)", sql):
+            continue
+        sql = re.sub(r"(?i)\bobservatorio_dev\b", CATALOG, sql)
+        sql = re.sub(
+            r"(?is)^CREATE\s+TABLE\s+(?!IF\s+NOT\s+EXISTS)",
+            "CREATE TABLE IF NOT EXISTS ", sql, count=1,
+        )
+        spark.sql(sql)
+
+required = [*BRONZE_TABLES.values(), *SILVER_TABLES.values(), *GOLD_TABLES.values()]
+missing = [table for table in required if not spark.catalog.tableExists(table)]
+if missing:
+    raise RuntimeError(f"Bootstrap incompleto: {missing}")
+print(f"Bootstrap completado en {CATALOG}: {len(required)} contratos")

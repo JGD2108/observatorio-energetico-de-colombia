@@ -1,0 +1,2 @@
+pydataxm==0.3.18
+geopy==2.5.0

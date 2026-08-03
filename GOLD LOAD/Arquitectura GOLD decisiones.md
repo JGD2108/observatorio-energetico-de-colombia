@@ -1,5 +1,8 @@
 # Arquitectura y decisiones de diseño de la capa Gold
 
+> Documento histórico. La arquitectura vigente está en
+> `docs/architecture.md` y `docs/technical_inventory.md`.
+
 **Proyecto:** Observatorio Ciudadano de la Realidad de Colombia — Dominio de energía  
 **Plataforma:** Databricks Lakehouse con Delta Lake  
 **Patrón dimensional:** Constelación de hechos (*fact constellation*)  

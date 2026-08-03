@@ -1,0 +1,41 @@
+bundle:
+  name: observatorio-energetico-colombia
+  databricks_cli_version: ">= 0.218.0"
+
+include:
+  - Automation/Job.yaml
+
+variables:
+  catalog:
+    default: observatorio_dev
+  environment:
+    default: dev
+  historical_start_date:
+    default: "2026-01-01"
+  lookback_days:
+    default: "45"
+  max_lag_days:
+    default: "45"
+
+workspace:
+  root_path: /Workspace/Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}
+
+sync:
+  exclude:
+    - .git/**
+    - .databricks/**
+    - observatorio-energetico-astro/**/node_modules/**
+    - observatorio-energetico-astro/**/dist/**
+
+targets:
+  dev:
+    default: true
+    mode: development
+    variables:
+      catalog: observatorio_dev
+      environment: dev
+  prod:
+    mode: production
+    variables:
+      catalog: observatorio_prod
+      environment: prod
