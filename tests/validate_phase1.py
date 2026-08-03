@@ -8,6 +8,19 @@ import yaml
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def literal_assignment(path, name):
+    tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+    for node in tree.body:
+        if isinstance(node, ast.Assign):
+            if any(isinstance(target, ast.Name) and target.id == name for target in node.targets):
+                return ast.literal_eval(node.value)
+    raise AssertionError(f"Missing literal assignment {name} in {path}")
+
+
+def contract_columns(contract):
+    return {definition.strip().split()[0] for definition in contract.split(",")}
+
+
 def load_yaml(path):
     return yaml.safe_load(path.read_text(encoding="utf-8"))
 
@@ -76,6 +89,19 @@ def main():
         for token in ("/Workspace/Users/", "jgomezdelahoz2108@gmail.com", "!pip install"):
             assert token not in text, (path, token)
         ast.parse(text, filename=str(path))
+
+    bootstrap = ROOT / "setup" / "00_bootstrap.py"
+    bronze_contracts = literal_assignment(bootstrap, "BRONZE_CONTRACTS")
+    common_bronze = contract_columns(literal_assignment(bootstrap, "COMMON_BRONZE"))
+    for silver_path in (ROOT / "Silver_Load").glob("silver_*.py"):
+        source_name = literal_assignment(silver_path, "SOURCE_NAME")
+        required_bronze = literal_assignment(silver_path, "required_bronze_columns")
+        allowed_bronze = contract_columns(bronze_contracts[source_name]) | common_bronze
+        assert required_bronze <= allowed_bronze, (
+            silver_path,
+            "Silver requires columns outside its Bronze contract",
+            sorted(required_bronze - allowed_bronze),
+        )
     assert not list(ROOT.rglob("*.ipynb"))
     ddl = "\n".join(p.read_text(encoding="utf-8") for p in (ROOT / "DDL's").glob("*.py"))
     assert "DROP TABLE" not in ddl.upper()
