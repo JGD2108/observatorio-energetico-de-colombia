@@ -16,7 +16,6 @@ resources:
       environments:
         - environment_key: default
           spec:
-            client: "1"
             dependencies:
               - "pydataxm==0.3.18"
               - "geopy==2.5.0"
