@@ -23,44 +23,44 @@ resources:
       tasks:
         - task_key: setup_catalog
           environment_key: default
-          spark_python_task: { python_file: "${workspace.file_path}/setup/00_bootstrap.py" }
+          notebook_task: { notebook_path: "${workspace.file_path}/setup/00_bootstrap.py", source: WORKSPACE }
 
         - task_key: ing_demanda_real
           depends_on: [{ task_key: setup_catalog }]
           environment_key: default
-          spark_python_task: { python_file: "${workspace.file_path}/Ingestion/Demanda_real.py" }
+          notebook_task: { notebook_path: "${workspace.file_path}/Ingestion/Demanda_real.py", source: WORKSPACE }
         - task_key: ing_disponibilidad
           depends_on: [{ task_key: setup_catalog }]
           environment_key: default
-          spark_python_task: { python_file: "${workspace.file_path}/Ingestion/Disponibilidad Planta.py" }
+          notebook_task: { notebook_path: "${workspace.file_path}/Ingestion/Disponibilidad Planta.py", source: WORKSPACE }
         - task_key: ing_agentes
           depends_on: [{ task_key: setup_catalog }]
           environment_key: default
-          spark_python_task: { python_file: "${workspace.file_path}/Ingestion/agentes.py" }
+          notebook_task: { notebook_path: "${workspace.file_path}/Ingestion/agentes.py", source: WORKSPACE }
         - task_key: ing_generacion_real
           depends_on: [{ task_key: setup_catalog }]
           environment_key: default
-          spark_python_task: { python_file: "${workspace.file_path}/Ingestion/generacion_real.py" }
+          notebook_task: { notebook_path: "${workspace.file_path}/Ingestion/generacion_real.py", source: WORKSPACE }
         - task_key: ing_niveles_embalses
           depends_on: [{ task_key: setup_catalog }]
           environment_key: default
-          spark_python_task: { python_file: "${workspace.file_path}/Ingestion/Nivel embalses dado por plantas.py" }
+          notebook_task: { notebook_path: "${workspace.file_path}/Ingestion/Nivel embalses dado por plantas.py", source: WORKSPACE }
         - task_key: ing_plantas
           depends_on: [{ task_key: setup_catalog }]
           environment_key: default
-          spark_python_task: { python_file: "${workspace.file_path}/Ingestion/Plantas.py" }
+          notebook_task: { notebook_path: "${workspace.file_path}/Ingestion/Plantas.py", source: WORKSPACE }
         - task_key: ing_precio_bolsa
           depends_on: [{ task_key: setup_catalog }]
           environment_key: default
-          spark_python_task: { python_file: "${workspace.file_path}/Ingestion/PrecioBolsa.py" }
+          notebook_task: { notebook_path: "${workspace.file_path}/Ingestion/PrecioBolsa.py", source: WORKSPACE }
         - task_key: ing_embalses
           depends_on: [{ task_key: setup_catalog }]
           environment_key: default
-          spark_python_task: { python_file: "${workspace.file_path}/Ingestion/Embalses.py" }
+          notebook_task: { notebook_path: "${workspace.file_path}/Ingestion/Embalses.py", source: WORKSPACE }
         - task_key: ing_plantas_reservorios
           depends_on: [{ task_key: setup_catalog }]
           environment_key: default
-          spark_python_task: { python_file: "${workspace.file_path}/Ingestion/embalse_plantas.py" }
+          notebook_task: { notebook_path: "${workspace.file_path}/Ingestion/embalse_plantas.py", source: WORKSPACE }
 
         - task_key: bronze_daily
           depends_on:
@@ -73,44 +73,44 @@ resources:
             - { task_key: ing_precio_bolsa }
             - { task_key: ing_embalses }
             - { task_key: ing_plantas_reservorios }
-          spark_python_task: { python_file: "${workspace.file_path}/Bronze_Load/02_bronze_daily.py" }
+          notebook_task: { notebook_path: "${workspace.file_path}/Bronze_Load/02_bronze_daily.py", source: WORKSPACE }
           environment_key: default
 
         - task_key: slv_agentes
           depends_on: [{ task_key: bronze_daily }]
-          spark_python_task: { python_file: "${workspace.file_path}/Silver_Load/silver_agentes.py" }
+          notebook_task: { notebook_path: "${workspace.file_path}/Silver_Load/silver_agentes.py", source: WORKSPACE }
           environment_key: default
         - task_key: slv_plantas
           depends_on: [{ task_key: bronze_daily }]
-          spark_python_task: { python_file: "${workspace.file_path}/Silver_Load/silver_plantas.py" }
+          notebook_task: { notebook_path: "${workspace.file_path}/Silver_Load/silver_plantas.py", source: WORKSPACE }
           environment_key: default
         - task_key: slv_embalses
           depends_on: [{ task_key: bronze_daily }]
-          spark_python_task: { python_file: "${workspace.file_path}/Silver_Load/silver_embalses.py" }
+          notebook_task: { notebook_path: "${workspace.file_path}/Silver_Load/silver_embalses.py", source: WORKSPACE }
           environment_key: default
         - task_key: slv_precio_bolsa
           depends_on: [{ task_key: bronze_daily }]
-          spark_python_task: { python_file: "${workspace.file_path}/Silver_Load/silver_precio_bolsa.py" }
+          notebook_task: { notebook_path: "${workspace.file_path}/Silver_Load/silver_precio_bolsa.py", source: WORKSPACE }
           environment_key: default
         - task_key: slv_demanda_real
           depends_on: [{ task_key: bronze_daily }, { task_key: slv_agentes }]
-          spark_python_task: { python_file: "${workspace.file_path}/Silver_Load/silver_demanda_real.py" }
+          notebook_task: { notebook_path: "${workspace.file_path}/Silver_Load/silver_demanda_real.py", source: WORKSPACE }
           environment_key: default
         - task_key: slv_disponibilidad
           depends_on: [{ task_key: bronze_daily }, { task_key: slv_plantas }]
-          spark_python_task: { python_file: "${workspace.file_path}/Silver_Load/silver_disponibilidad_plantas.py" }
+          notebook_task: { notebook_path: "${workspace.file_path}/Silver_Load/silver_disponibilidad_plantas.py", source: WORKSPACE }
           environment_key: default
         - task_key: slv_generacion
           depends_on: [{ task_key: bronze_daily }, { task_key: slv_agentes }, { task_key: slv_plantas }]
-          spark_python_task: { python_file: "${workspace.file_path}/Silver_Load/silver_generacion_real.py" }
+          notebook_task: { notebook_path: "${workspace.file_path}/Silver_Load/silver_generacion_real.py", source: WORKSPACE }
           environment_key: default
         - task_key: slv_niveles_embalses
           depends_on: [{ task_key: bronze_daily }, { task_key: slv_plantas }]
-          spark_python_task: { python_file: "${workspace.file_path}/Silver_Load/silver_niveles_embalses.py" }
+          notebook_task: { notebook_path: "${workspace.file_path}/Silver_Load/silver_niveles_embalses.py", source: WORKSPACE }
           environment_key: default
         - task_key: slv_plantas_reservorios
           depends_on: [{ task_key: bronze_daily }, { task_key: slv_plantas }, { task_key: slv_embalses }]
-          spark_python_task: { python_file: "${workspace.file_path}/Silver_Load/silver_plantas_reservorios.py" }
+          notebook_task: { notebook_path: "${workspace.file_path}/Silver_Load/silver_plantas_reservorios.py", source: WORKSPACE }
           environment_key: default
 
         - task_key: gold_daily
@@ -122,17 +122,17 @@ resources:
             - { task_key: slv_disponibilidad }
             - { task_key: slv_agentes }
             - { task_key: slv_generacion }
-          spark_python_task: { python_file: "${workspace.file_path}/GOLD LOAD/GOLD_LOAD.py" }
+          notebook_task: { notebook_path: "${workspace.file_path}/GOLD LOAD/GOLD_LOAD.py", source: WORKSPACE }
           environment_key: default
           max_retries: 1
           min_retry_interval_millis: 300000
         - task_key: quality_check
           depends_on: [{ task_key: gold_daily }]
-          spark_python_task: { python_file: "${workspace.file_path}/Automation/gold_incremental_quality_checks.py" }
+          notebook_task: { notebook_path: "${workspace.file_path}/Automation/gold_incremental_quality_checks.py", source: WORKSPACE }
           environment_key: default
         - task_key: gold_analytics
           depends_on: [{ task_key: quality_check }]
-          spark_python_task: { python_file: "${workspace.file_path}/Gold_Analytics/01_vistas_dashboard.py" }
+          notebook_task: { notebook_path: "${workspace.file_path}/Gold_Analytics/01_vistas_dashboard.py", source: WORKSPACE }
           environment_key: default
       queue: { enabled: true }
       performance_target: PERFORMANCE_OPTIMIZED

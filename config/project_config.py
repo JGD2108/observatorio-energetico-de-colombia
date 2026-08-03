@@ -1,4 +1,3 @@
-# Databricks notebook source
 """Configuracion central del Observatorio Energetico de Colombia."""
 
 from datetime import date
@@ -7,7 +6,13 @@ import os
 
 def _runtime_parameter(name: str, default: str) -> str:
     try:
-        value = dbutils.widgets.get(name)  # type: ignore[name-defined]
+        from pyspark.dbutils import DBUtils
+        from pyspark.sql import SparkSession
+
+        spark = SparkSession.getActiveSession()
+        if spark is None:
+            return os.getenv(f"OBSERVATORIO_{name.upper()}", default)
+        value = DBUtils(spark).widgets.get(name)
         if value:
             return value
     except Exception:

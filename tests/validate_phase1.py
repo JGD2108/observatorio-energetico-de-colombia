@@ -44,10 +44,20 @@ def main():
     assert visited == 23
     for task in tasks:
         notebook = task.get("notebook_task", {}).get("notebook_path")
-        if notebook:
-            prefix = "${workspace.file_path}/"
-            assert notebook.startswith(prefix)
-            assert (ROOT / notebook.removeprefix(prefix)).exists()
+        assert notebook, (task["task_key"], "must run as notebook_task")
+        prefix = "${workspace.file_path}/"
+        assert notebook.startswith(prefix)
+        notebook_file = ROOT / notebook.removeprefix(prefix)
+        assert notebook_file.exists()
+        assert notebook_file.read_text(encoding="utf-8").startswith(
+            "# Databricks notebook source"
+        )
+
+    imported_modules = [ROOT / "config" / "project_config.py"]
+    for module in imported_modules:
+        assert not module.read_text(encoding="utf-8").startswith(
+            "# Databricks notebook source"
+        ), f"Imported Python module cannot be a Databricks notebook: {module}"
     active = [
         ROOT / "setup" / "00_bootstrap.py",
         *(ROOT / "Ingestion").glob("*.py"),
