@@ -13,6 +13,11 @@ resources:
         - { name: historical_start_date, default: "${var.historical_start_date}" }
         - { name: lookback_days, default: "${var.lookback_days}" }
         - { name: max_lag_days, default: "${var.max_lag_days}" }
+        - { name: execution_mode, default: "${var.execution_mode}" }
+        - { name: backfill_start_date, default: "${var.backfill_start_date}" }
+        - { name: backfill_end_date, default: "${var.backfill_end_date}" }
+        - { name: backfill_chunk_days, default: "${var.backfill_chunk_days}" }
+        - { name: backfill_id, default: "{{job.run_id}}" }
         - { name: run_id, default: "{{job.run_id}}" }
         - { name: job_id, default: "{{job.id}}" }
         - { name: job_run_id, default: "{{job.run_id}}" }
@@ -37,40 +42,45 @@ resources:
           environment_key: default
           notebook_task: { notebook_path: "${workspace.file_path}/Automation/00_audit_start", source: WORKSPACE }
 
-        - task_key: ing_demanda_real
+        - task_key: backfill_control
           depends_on: [{ task_key: audit_start }]
+          environment_key: default
+          notebook_task: { notebook_path: "${workspace.file_path}/Automation/05_backfill_control", source: WORKSPACE }
+
+        - task_key: ing_demanda_real
+          depends_on: [{ task_key: backfill_control }]
           environment_key: default
           notebook_task: { notebook_path: "${workspace.file_path}/Ingestion/Demanda_real", source: WORKSPACE }
         - task_key: ing_disponibilidad
-          depends_on: [{ task_key: audit_start }]
+          depends_on: [{ task_key: backfill_control }]
           environment_key: default
           notebook_task: { notebook_path: "${workspace.file_path}/Ingestion/Disponibilidad Planta", source: WORKSPACE }
         - task_key: ing_agentes
-          depends_on: [{ task_key: audit_start }]
+          depends_on: [{ task_key: backfill_control }]
           environment_key: default
           notebook_task: { notebook_path: "${workspace.file_path}/Ingestion/agentes", source: WORKSPACE }
         - task_key: ing_generacion_real
-          depends_on: [{ task_key: audit_start }]
+          depends_on: [{ task_key: backfill_control }]
           environment_key: default
           notebook_task: { notebook_path: "${workspace.file_path}/Ingestion/generacion_real", source: WORKSPACE }
         - task_key: ing_niveles_embalses
-          depends_on: [{ task_key: audit_start }]
+          depends_on: [{ task_key: backfill_control }]
           environment_key: default
           notebook_task: { notebook_path: "${workspace.file_path}/Ingestion/Nivel embalses dado por plantas", source: WORKSPACE }
         - task_key: ing_plantas
-          depends_on: [{ task_key: audit_start }]
+          depends_on: [{ task_key: backfill_control }]
           environment_key: default
           notebook_task: { notebook_path: "${workspace.file_path}/Ingestion/Plantas", source: WORKSPACE }
         - task_key: ing_precio_bolsa
-          depends_on: [{ task_key: audit_start }]
+          depends_on: [{ task_key: backfill_control }]
           environment_key: default
           notebook_task: { notebook_path: "${workspace.file_path}/Ingestion/PrecioBolsa", source: WORKSPACE }
         - task_key: ing_embalses
-          depends_on: [{ task_key: audit_start }]
+          depends_on: [{ task_key: backfill_control }]
           environment_key: default
           notebook_task: { notebook_path: "${workspace.file_path}/Ingestion/Embalses", source: WORKSPACE }
         - task_key: ing_plantas_reservorios
-          depends_on: [{ task_key: audit_start }]
+          depends_on: [{ task_key: backfill_control }]
           environment_key: default
           notebook_task: { notebook_path: "${workspace.file_path}/Ingestion/embalse_plantas", source: WORKSPACE }
 
@@ -125,7 +135,7 @@ resources:
           notebook_task: { notebook_path: "${workspace.file_path}/Silver_Load/silver_plantas_reservorios", source: WORKSPACE }
           environment_key: default
 
-        - task_key: gold_daily
+        - task_key: backfill_validate
           depends_on:
             - { task_key: slv_demanda_real }
             - { task_key: slv_precio_bolsa }
@@ -134,6 +144,11 @@ resources:
             - { task_key: slv_disponibilidad }
             - { task_key: slv_agentes }
             - { task_key: slv_generacion }
+          notebook_task: { notebook_path: "${workspace.file_path}/Automation/90_backfill_validate", source: WORKSPACE }
+          environment_key: default
+
+        - task_key: gold_daily
+          depends_on: [{ task_key: backfill_validate }]
           notebook_task: { notebook_path: "${workspace.file_path}/GOLD LOAD/GOLD_LOAD", source: WORKSPACE }
           environment_key: default
           max_retries: 1
@@ -161,6 +176,9 @@ resources:
               state_setup_catalog: "{{tasks.setup_catalog.result_state}}"
               task_run_setup_catalog: "{{tasks.setup_catalog.run_id}}"
               attempt_setup_catalog: "{{tasks.setup_catalog.execution_count}}"
+              state_backfill_control: "{{tasks.backfill_control.result_state}}"
+              task_run_backfill_control: "{{tasks.backfill_control.run_id}}"
+              attempt_backfill_control: "{{tasks.backfill_control.execution_count}}"
               state_ing_demanda_real: "{{tasks.ing_demanda_real.result_state}}"
               task_run_ing_demanda_real: "{{tasks.ing_demanda_real.run_id}}"
               attempt_ing_demanda_real: "{{tasks.ing_demanda_real.execution_count}}"
@@ -218,6 +236,9 @@ resources:
               state_slv_plantas_reservorios: "{{tasks.slv_plantas_reservorios.result_state}}"
               task_run_slv_plantas_reservorios: "{{tasks.slv_plantas_reservorios.run_id}}"
               attempt_slv_plantas_reservorios: "{{tasks.slv_plantas_reservorios.execution_count}}"
+              state_backfill_validate: "{{tasks.backfill_validate.result_state}}"
+              task_run_backfill_validate: "{{tasks.backfill_validate.run_id}}"
+              attempt_backfill_validate: "{{tasks.backfill_validate.execution_count}}"
               state_gold_daily: "{{tasks.gold_daily.result_state}}"
               task_run_gold_daily: "{{tasks.gold_daily.run_id}}"
               attempt_gold_daily: "{{tasks.gold_daily.execution_count}}"

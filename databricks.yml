@@ -16,6 +16,14 @@ variables:
     default: "45"
   max_lag_days:
     default: "45"
+  execution_mode:
+    default: "AUTO"
+  backfill_start_date:
+    default: ""
+  backfill_end_date:
+    default: ""
+  backfill_chunk_days:
+    default: "31"
 
 workspace:
   root_path: /Workspace/Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}

@@ -26,6 +26,7 @@ spark.sql(f"USE CATALOG `{CATALOG}`")
 
 TASK_SPECS = {
     "setup_catalog": ("SETUP", "catalog"),
+    "backfill_control": ("CONTROL", "backfill"),
     "ing_demanda_real": ("LANDING", "demanda_real"),
     "ing_disponibilidad": ("LANDING", "disponibilidad_plantas"),
     "ing_agentes": ("LANDING", "agentes"),
@@ -45,6 +46,7 @@ TASK_SPECS = {
     "slv_generacion": ("SILVER", "generacion_real"),
     "slv_niveles_embalses": ("SILVER", "niveles_embalses"),
     "slv_plantas_reservorios": ("SILVER", "plantas_reservorios"),
+    "backfill_validate": ("CONTROL", "backfill_coverage"),
     "gold_daily": ("GOLD", "dimensional_model"),
     "governance_check": ("GOVERNANCE", "phase4_gate"),
     "quality_check": ("QUALITY", "gold_incremental"),
@@ -68,4 +70,15 @@ STATUS = finish_pipeline_run(
     LANDING_FILES,
     QUARANTINE_TABLES["data_quality_exceptions"],
 )
+try:
+    backfill_id = dbutils.widgets.get("backfill_id")
+    escaped_status = str(STATUS).replace("'", "''")
+    escaped_id = str(backfill_id).replace("'", "''")
+    spark.sql(f"""
+      UPDATE {CATALOG}.audit.backfill_runs
+      SET status = '{escaped_status}', completed_at = current_timestamp()
+      WHERE backfill_id = '{escaped_id}'
+    """)
+except Exception as exc:
+    print("No se actualizo audit.backfill_runs:", exc)
 print("Auditoria finalizada con estado:", STATUS)

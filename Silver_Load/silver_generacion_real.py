@@ -161,12 +161,12 @@ merge_source_df = (
     .drop("row_number", "record_hash")
     .alias("generation")
     .join(
-        plants_reference_df.alias("plant"),
+        F.broadcast(plants_reference_df).alias("plant"),
         F.col("generation.codigo_planta") == F.col("plant.codigo_planta"),
         "left",
     )
     .join(
-        agents_reference_df.alias("agent"),
+        F.broadcast(agents_reference_df).alias("agent"),
         F.col("generation.codigo_agente") == F.col("agent.codigo_agente"),
         "left",
     )

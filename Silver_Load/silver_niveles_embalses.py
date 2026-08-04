@@ -175,13 +175,7 @@ if last_ingestion_timestamp is not None:
     )
 
 
-bronze_rows = bronze_df.count()
-
-
-print(
-    "Registros Bronze a procesar:",
-    f"{bronze_rows:,}",
-)
+print("Watermark Silver:", last_ingestion_timestamp)
 
 # COMMAND ----------
 
@@ -468,7 +462,7 @@ plants_reference_df = (
 silver_df = (
     silver_df.alias("level")
     .join(
-        plants_reference_df.alias("plant"),
+        F.broadcast(plants_reference_df).alias("plant"),
         F.col(
             "level.codigo_planta"
         )
@@ -663,18 +657,13 @@ else:
 
 # COMMAND ----------
 
-display(
-    spark.sql(
-        f"DESCRIBE HISTORY {silver_table}"
-    )
-    .select(
-        "version",
-        "timestamp",
-        "operation",
-        "operationMetrics",
-    )
+history_row = (
+    spark.sql(f"DESCRIBE HISTORY {silver_table}")
+    .select("version", "timestamp", "operation", "operationMetrics")
     .limit(1)
+    .first()
 )
+print("Operacion Delta:", history_row.asDict(recursive=True))
 
 # COMMAND ----------
 

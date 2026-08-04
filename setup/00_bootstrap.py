@@ -150,6 +150,38 @@ TBLPROPERTIES ('quality'='audit', 'delta.enableChangeDataFeed'='true')
 """)
 
 spark.sql(f"""
+CREATE TABLE IF NOT EXISTS {AUDIT_SCHEMA}.backfill_runs (
+    backfill_id STRING NOT NULL,
+    job_run_id STRING,
+    environment STRING,
+    execution_mode STRING NOT NULL,
+    start_date DATE,
+    end_date DATE,
+    chunk_days INT,
+    status STRING NOT NULL,
+    started_at TIMESTAMP NOT NULL,
+    completed_at TIMESTAMP,
+    message STRING
+) USING DELTA
+TBLPROPERTIES ('quality'='audit', 'delta.enableChangeDataFeed'='true')
+""")
+
+spark.sql(f"""
+CREATE TABLE IF NOT EXISTS {AUDIT_SCHEMA}.backfill_coverage (
+    backfill_id STRING NOT NULL,
+    source_name STRING NOT NULL,
+    requested_start DATE NOT NULL,
+    requested_end DATE NOT NULL,
+    actual_start DATE,
+    actual_end DATE,
+    row_count BIGINT,
+    covered BOOLEAN NOT NULL,
+    measured_at TIMESTAMP NOT NULL
+) USING DELTA
+TBLPROPERTIES ('quality'='audit', 'delta.enableChangeDataFeed'='true')
+""")
+
+spark.sql(f"""
 CREATE TABLE IF NOT EXISTS {AUDIT_TABLES['data_quality_results']} (
     run_id STRING NOT NULL,
     rule_id STRING NOT NULL,
