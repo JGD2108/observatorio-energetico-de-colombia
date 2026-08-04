@@ -15,7 +15,7 @@ if PROJECT_ROOT not in sys.path:
 
 from config.project_config import (  # noqa: E402
     AUDIT_SCHEMA, AUDIT_TABLES, BRONZE_TABLES, CATALOG, GOLD_TABLES,
-    LANDING_VOLUME_NAME, QUARANTINE_TABLES, SCHEMAS,
+    GOVERNANCE_TABLES, LANDING_VOLUME_NAME, QUARANTINE_TABLES, SCHEMAS,
     SILVER_TABLES,
 )
 
@@ -56,7 +56,7 @@ SILVER_CONTRACTS = {
     "precio_bolsa": "codigo_variable STRING, fecha_hora TIMESTAMP, codigo_duracion STRING, unidad_medida STRING, version STRING, valor DOUBLE, es_precio_cero BOOLEAN, es_precio_negativo BOOLEAN",
     "niveles_embalses": "codigo_variable STRING, fecha_inicio TIMESTAMP, codigo_duracion STRING, unidad_medida STRING, codigo_planta STRING, version STRING, valor DOUBLE, es_valor_cero BOOLEAN, es_valor_negativo BOOLEAN, planta_encontrada BOOLEAN",
     "embalses": "codigo_embalse STRING, nombre_embalse STRING, latitud DOUBLE, longitud DOUBLE, tipo_coordenada STRING, fuente_coordenada STRING, estado_geocodificacion STRING, consulta_geocodificacion STRING, coordenadas_validas BOOLEAN, requiere_revision_manual BOOLEAN",
-    "plantas_reservorios": "region STRING, nombre_planta STRING, nombre_reservorio STRING, tipo_relacion STRING, es_principal BOOLEAN, permite_atribucion BOOLEAN, fuente_relacion STRING, estado_validacion STRING, valido_desde DATE, valido_hasta DATE, codigo_planta STRING, codigo_embalse STRING, planta_encontrada BOOLEAN, embalse_encontrado BOOLEAN, relacion_completa BOOLEAN, requiere_revision_manual BOOLEAN",
+    "plantas_reservorios": "region STRING, nombre_planta STRING, nombre_reservorio STRING, tipo_relacion STRING, es_principal BOOLEAN, permite_atribucion BOOLEAN, fuente_relacion STRING, estado_validacion STRING, valido_desde DATE, valido_hasta DATE, codigo_planta STRING, codigo_embalse STRING, planta_encontrada BOOLEAN, embalse_encontrado BOOLEAN, relacion_completa BOOLEAN, requiere_revision_manual BOOLEAN, activo BOOLEAN, fecha_retiro TIMESTAMP",
 }
 
 
@@ -80,6 +80,10 @@ for name, contract in BRONZE_CONTRACTS.items():
     _create_or_extend(BRONZE_TABLES[name], contract, COMMON_BRONZE, "bronze")
 for name, contract in SILVER_CONTRACTS.items():
     _create_or_extend(SILVER_TABLES[name], contract, COMMON_SILVER, "silver")
+spark.sql(
+    f"UPDATE {SILVER_TABLES['plantas_reservorios']} SET activo = true "
+    "WHERE activo IS NULL"
+)
 
 
 spark.sql(f"""
@@ -199,6 +203,98 @@ TBLPROPERTIES ('quality'='quarantine', 'delta.enableChangeDataFeed'='true')
 """)
 
 spark.sql(f"""
+CREATE TABLE IF NOT EXISTS {GOVERNANCE_TABLES['ref_version_tx']} (
+    rule_code STRING NOT NULL,
+    match_type STRING NOT NULL,
+    version_pattern STRING NOT NULL,
+    priority INT,
+    multiplier INT,
+    description STRING NOT NULL,
+    valid_from DATE NOT NULL,
+    valid_to DATE,
+    is_active BOOLEAN NOT NULL,
+    approved_by STRING,
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL
+) USING DELTA
+TBLPROPERTIES ('quality'='governance', 'delta.enableChangeDataFeed'='true')
+""")
+
+spark.sql(f"""
+MERGE INTO {GOVERNANCE_TABLES['ref_version_tx']} AS target
+USING (
+  SELECT * FROM VALUES
+    ('TXF','EXACT','TXF',10000,NULL,'Versión final',DATE'2026-01-01',TRUE),
+    ('TXR','EXACT','TXR',9000,NULL,'Versión revisada',DATE'2026-01-01',TRUE),
+    ('TX_NUMERIC','REGEX','^TX[0-9]+$',NULL,100,'Versión numérica',DATE'2026-01-01',TRUE)
+  AS source(rule_code,match_type,version_pattern,priority,multiplier,description,valid_from,is_active)
+) AS source
+ON target.rule_code = source.rule_code
+WHEN NOT MATCHED THEN INSERT (
+  rule_code, match_type, version_pattern, priority, multiplier, description,
+  valid_from, valid_to, is_active, approved_by, created_at, updated_at
+) VALUES (
+  source.rule_code, source.match_type, source.version_pattern, source.priority,
+  source.multiplier, source.description, source.valid_from, NULL, source.is_active,
+  'FASE_4_BOOTSTRAP', current_timestamp(), current_timestamp()
+)
+""")
+
+spark.sql(f"""
+CREATE TABLE IF NOT EXISTS {GOVERNANCE_TABLES['ref_entity_alias']} (
+    entity_type STRING NOT NULL,
+    alias_normalized STRING NOT NULL,
+    canonical_code STRING NOT NULL,
+    source STRING NOT NULL,
+    status STRING NOT NULL,
+    valid_from DATE NOT NULL,
+    valid_to DATE,
+    approved_by STRING,
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL
+) USING DELTA
+TBLPROPERTIES ('quality'='governance', 'delta.enableChangeDataFeed'='true')
+""")
+
+spark.sql(f"""
+MERGE INTO {GOVERNANCE_TABLES['ref_entity_alias']} AS target
+USING (
+  SELECT * FROM VALUES
+    ('EMBALSE','CALIMA1','CALIMA1'),
+    ('EMBALSE','PORCEII','PORCE2'),
+    ('EMBALSE','PORCEIII','PORCE3'),
+    ('EMBALSE','URRA1','URRA1')
+  AS source(entity_type,alias_normalized,canonical_code)
+) AS source
+ON target.entity_type = source.entity_type
+AND target.alias_normalized = source.alias_normalized
+WHEN NOT MATCHED THEN INSERT (
+  entity_type, alias_normalized, canonical_code, source, status, valid_from,
+  valid_to, approved_by, created_at, updated_at
+) VALUES (
+  source.entity_type, source.alias_normalized, source.canonical_code,
+  'FASE_4_MIGRATION', 'APPROVED', DATE'2026-01-01', NULL,
+  'FASE_4_BOOTSTRAP', current_timestamp(), current_timestamp()
+)
+""")
+
+spark.sql(f"""
+CREATE TABLE IF NOT EXISTS {GOVERNANCE_TABLES['layer_reconciliation']} (
+    run_id STRING NOT NULL,
+    source_name STRING NOT NULL,
+    bronze_rows BIGINT,
+    silver_rows BIGINT,
+    gold_rows BIGINT,
+    bronze_silver_delta BIGINT,
+    silver_gold_delta BIGINT,
+    status STRING NOT NULL,
+    detail STRING,
+    reconciled_at TIMESTAMP NOT NULL
+) USING DELTA
+TBLPROPERTIES ('quality'='governance', 'delta.enableChangeDataFeed'='true')
+""")
+
+spark.sql(f"""
 CREATE OR REPLACE VIEW {AUDIT_SCHEMA}.vw_latest_pipeline_run AS
 SELECT * EXCEPT (row_number)
 FROM (
@@ -262,11 +358,27 @@ for cell in _gold_sql_cells():
         )
         spark.sql(sql)
 
+bridge_columns = set(spark.table(GOLD_TABLES["bridge_planta_embalse"]).columns)
+missing_bridge_columns = [
+    definition for definition in ("activo BOOLEAN", "fecha_retiro TIMESTAMP")
+    if definition.split()[0] not in bridge_columns
+]
+if missing_bridge_columns:
+    spark.sql(
+        f"ALTER TABLE {GOLD_TABLES['bridge_planta_embalse']} ADD COLUMNS "
+        f"({', '.join(missing_bridge_columns)})"
+    )
+spark.sql(
+    f"UPDATE {GOLD_TABLES['bridge_planta_embalse']} SET activo = true "
+    "WHERE activo IS NULL"
+)
+
 required = [
     *BRONZE_TABLES.values(),
     *SILVER_TABLES.values(),
     *GOLD_TABLES.values(),
     *AUDIT_TABLES.values(),
+    *GOVERNANCE_TABLES.values(),
     *QUARANTINE_TABLES.values(),
 ]
 missing = [table for table in required if not spark.catalog.tableExists(table)]

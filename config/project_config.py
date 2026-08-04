@@ -32,6 +32,7 @@ SCHEMAS = {
     "gold_analytics": "gold_analytics",
     "monitoring": "monitoring",
     "audit": "audit",
+    "governance": "governance",
     "quarantine": "quarantine",
     "serving": "serving",
     "serving_technical": "serving_technical",
@@ -87,6 +88,13 @@ AUDIT_TABLES = {
 QUARANTINE_SCHEMA = f"{CATALOG}.{SCHEMAS['quarantine']}"
 QUARANTINE_TABLES = {
     "data_quality_exceptions": f"{QUARANTINE_SCHEMA}.data_quality_exceptions",
+}
+
+GOVERNANCE_SCHEMA = f"{CATALOG}.{SCHEMAS['governance']}"
+GOVERNANCE_TABLES = {
+    "ref_version_tx": f"{GOVERNANCE_SCHEMA}.ref_version_tx",
+    "ref_entity_alias": f"{GOVERNANCE_SCHEMA}.ref_entity_alias",
+    "layer_reconciliation": f"{GOVERNANCE_SCHEMA}.layer_reconciliation",
 }
 
 LANDING_FILES = {

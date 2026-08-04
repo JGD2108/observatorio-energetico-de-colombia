@@ -46,6 +46,7 @@ TASK_SPECS = {
     "slv_niveles_embalses": ("SILVER", "niveles_embalses"),
     "slv_plantas_reservorios": ("SILVER", "plantas_reservorios"),
     "gold_daily": ("GOLD", "dimensional_model"),
+    "governance_check": ("GOVERNANCE", "phase4_gate"),
     "quality_check": ("QUALITY", "gold_incremental"),
     "gold_analytics": ("ANALYTICS", "dashboard_views"),
 }

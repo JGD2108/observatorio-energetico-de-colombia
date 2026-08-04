@@ -774,25 +774,41 @@ print("Todas las tablas Gold requeridas están disponibles.")
 # MAGIC CREATE OR REPLACE VIEW
 # MAGIC gold_analytics.vw_energia_embalsada_diaria AS
 # MAGIC
-# MAGIC WITH relaciones AS (
+# MAGIC WITH relaciones_gobernadas AS (
 # MAGIC     SELECT
 # MAGIC         planta_key,
+# MAGIC         embalse_key,
+# MAGIC         codigo_embalse,
+# MAGIC         valido_desde,
+# MAGIC         valido_hasta
+# MAGIC     FROM gold.bridge_planta_embalse
+# MAGIC     WHERE activo = TRUE
+# MAGIC       AND permite_atribucion = TRUE
+# MAGIC       AND estado_validacion = 'validated'
+# MAGIC       AND requiere_revision_manual = FALSE
+# MAGIC ),
+# MAGIC relaciones AS (
+# MAGIC     SELECT
+# MAGIC         energia.planta_key,
+# MAGIC         energia.fecha_medicion,
 # MAGIC         COUNT(DISTINCT embalse_key)
 # MAGIC             AS cantidad_embalses,
-# MAGIC         MAX(
-# MAGIC             CASE
-# MAGIC                 WHEN es_relacion_unica
-# MAGIC                 THEN embalse_key
-# MAGIC             END
-# MAGIC         ) AS embalse_key_unico,
+# MAGIC         MAX(embalse_key) AS embalse_key_unico,
 # MAGIC         CONCAT_WS(
 # MAGIC             ', ',
 # MAGIC             SORT_ARRAY(
 # MAGIC                 COLLECT_SET(codigo_embalse)
 # MAGIC             )
 # MAGIC         ) AS codigos_embalses_relacionados
-# MAGIC     FROM gold.bridge_planta_embalse
-# MAGIC     GROUP BY planta_key
+# MAGIC     FROM (
+# MAGIC         SELECT DISTINCT planta_key, fecha_medicion
+# MAGIC         FROM gold.fact_energia_embalsada_planta
+# MAGIC     ) energia
+# MAGIC     LEFT JOIN relaciones_gobernadas relacion
+# MAGIC       ON energia.planta_key = relacion.planta_key
+# MAGIC      AND energia.fecha_medicion >= COALESCE(relacion.valido_desde, DATE'1900-01-01')
+# MAGIC      AND energia.fecha_medicion <= COALESCE(relacion.valido_hasta, DATE'9999-12-31')
+# MAGIC     GROUP BY energia.planta_key, energia.fecha_medicion
 # MAGIC )
 # MAGIC
 # MAGIC SELECT
@@ -852,6 +868,7 @@ print("Todas las tablas Gold requeridas están disponibles.")
 # MAGIC
 # MAGIC LEFT JOIN relaciones
 # MAGIC     ON energia.planta_key = relaciones.planta_key
+# MAGIC    AND energia.fecha_medicion = relaciones.fecha_medicion
 # MAGIC
 # MAGIC LEFT JOIN gold.dim_embalse embalse
 # MAGIC     ON relaciones.embalse_key_unico = embalse.embalse_key

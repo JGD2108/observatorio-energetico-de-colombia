@@ -139,8 +139,12 @@ resources:
           max_retries: 1
           min_retry_interval_millis: 300000
         - task_key: quality_check
-          depends_on: [{ task_key: gold_daily }]
+          depends_on: [{ task_key: governance_check }]
           notebook_task: { notebook_path: "${workspace.file_path}/Automation/gold_incremental_quality_checks", source: WORKSPACE }
+          environment_key: default
+        - task_key: governance_check
+          depends_on: [{ task_key: gold_daily }]
+          notebook_task: { notebook_path: "${workspace.file_path}/Automation/phase4_governance_checks", source: WORKSPACE }
           environment_key: default
         - task_key: gold_analytics
           depends_on: [{ task_key: quality_check }]
@@ -220,6 +224,9 @@ resources:
               state_quality_check: "{{tasks.quality_check.result_state}}"
               task_run_quality_check: "{{tasks.quality_check.run_id}}"
               attempt_quality_check: "{{tasks.quality_check.execution_count}}"
+              state_governance_check: "{{tasks.governance_check.result_state}}"
+              task_run_governance_check: "{{tasks.governance_check.run_id}}"
+              attempt_governance_check: "{{tasks.governance_check.execution_count}}"
               state_gold_analytics: "{{tasks.gold_analytics.result_state}}"
               task_run_gold_analytics: "{{tasks.gold_analytics.run_id}}"
               attempt_gold_analytics: "{{tasks.gold_analytics.execution_count}}"

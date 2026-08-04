@@ -20,6 +20,7 @@ if PROJECT_ROOT not in sys.path:
 from config.project_config import (
     BRONZE_TABLES,
     CATALOG,
+    GOVERNANCE_TABLES,
     SILVER_TABLES,
 )
 
@@ -127,6 +128,8 @@ required_silver_columns = {
     "load_date",
     "silver_created_at",
     "silver_updated_at",
+    "activo",
+    "fecha_retiro",
 }
 
 
@@ -153,8 +156,14 @@ print("Esquemas validados correctamente.")
 
 # COMMAND ----------
 
-bronze_df = spark.table(
-    bronze_table
+bronze_history_df = spark.table(bronze_table)
+latest_snapshot_timestamp = (
+    bronze_history_df
+    .agg(F.max("ingestion_timestamp").alias("snapshot_timestamp"))
+    .first()["snapshot_timestamp"]
+)
+bronze_df = bronze_history_df.filter(
+    F.col("ingestion_timestamp") == F.lit(latest_snapshot_timestamp)
 )
 
 
@@ -427,27 +436,17 @@ reservoirs_reference_df = (
     )
 )
 
-reservoir_alias_data = [
-    ("CALIMA 1", "CALIMA1"),
-    ("PORCE II", "PORCE2"),
-    ("PORCE III", "PORCE3"),
-    ("URRA1", "URRA1"),
-]
-
-
 reservoir_alias_df = (
-    spark.createDataFrame(
-        reservoir_alias_data,
-        [
-            "nombre_reservorio_alias",
-            "codigo_embalse_alias",
-        ],
+    spark.table(GOVERNANCE_TABLES["ref_entity_alias"])
+    .filter(
+        (F.col("entity_type") == "EMBALSE")
+        & (F.col("status") == "APPROVED")
+        & (F.col("valid_from") <= F.current_date())
+        & (F.col("valid_to").isNull() | (F.col("valid_to") >= F.current_date()))
     )
-    .withColumn(
-        "nombre_reservorio_normalizado",
-        normalize_name(
-            F.col("nombre_reservorio_alias")
-        ),
+    .select(
+        F.col("alias_normalized").alias("nombre_reservorio_normalizado"),
+        F.col("canonical_code").alias("codigo_embalse_alias"),
     )
 )
 
@@ -681,6 +680,8 @@ silver_df = (
         "silver_updated_at",
         F.current_timestamp(),
     )
+    .withColumn("activo", F.lit(True))
+    .withColumn("fecha_retiro", F.lit(None).cast("timestamp"))
 )
 
 # COMMAND ----------
@@ -767,9 +768,41 @@ else:
             source.nombre_reservorio
         """
     )
-    .whenMatchedUpdateAll()
+    .whenMatchedUpdate(
+        condition="""
+          NOT (target.region <=> source.region)
+          OR NOT (target.tipo_relacion <=> source.tipo_relacion)
+          OR NOT (target.es_principal <=> source.es_principal)
+          OR NOT (target.permite_atribucion <=> source.permite_atribucion)
+          OR NOT (target.fuente_relacion <=> source.fuente_relacion)
+          OR NOT (target.estado_validacion <=> source.estado_validacion)
+          OR NOT (target.valido_desde <=> source.valido_desde)
+          OR NOT (target.valido_hasta <=> source.valido_hasta)
+          OR NOT (target.codigo_planta <=> source.codigo_planta)
+          OR NOT (target.codigo_embalse <=> source.codigo_embalse)
+          OR NOT (target.activo <=> true)
+        """,
+        set={
+            column: f"source.{column}"
+            for column in [
+                "region", "tipo_relacion", "es_principal", "permite_atribucion",
+                "fuente_relacion", "estado_validacion", "valido_desde", "valido_hasta",
+                "codigo_planta", "codigo_embalse", "planta_encontrada",
+                "embalse_encontrado", "relacion_completa", "requiere_revision_manual",
+                "source_file_name", "source_file_path", "ingestion_timestamp", "load_date",
+                "silver_updated_at", "activo", "fecha_retiro",
+            ]
+        },
+    )
     .whenNotMatchedInsertAll()
-    .whenNotMatchedBySourceDelete()
+    .whenNotMatchedBySourceUpdate(
+        condition="target.activo = true",
+        set={
+            "activo": "false",
+            "fecha_retiro": "current_timestamp()",
+            "silver_updated_at": "current_timestamp()",
+        },
+    )
     .execute()
 )
 

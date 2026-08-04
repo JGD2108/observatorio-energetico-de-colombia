@@ -22,12 +22,15 @@ if PROJECT_ROOT not in sys.path:
 from config.project_config import (
     CATALOG,
     GOLD_TABLES,
+    GOVERNANCE_TABLES,
     SCHEMAS,
     SILVER_TABLES,
 )
+from governance.rules import load_tx_policy, tx_priority_expression
 
 
 GOLD_SCHEMA = f"{CATALOG}.{SCHEMAS['gold']}"
+TX_POLICY = load_tx_policy(spark, GOVERNANCE_TABLES["ref_version_tx"])
 
 DIM_FECHA_TABLE = GOLD_TABLES["dim_fecha"]
 DIM_PERIODO_TABLE = GOLD_TABLES["dim_periodo"]
@@ -1472,6 +1475,7 @@ dim_agente_target = DeltaTable.forName(
                 "source.fecha_actualizacion",
         },
     )
+    .whenNotMatchedBySourceDelete()
     .execute()
 )
 
@@ -2477,7 +2481,17 @@ dim_planta_target = DeltaTable.forName(
                 "source.es_registro_inferido",
 
             "origen_registro":
-                "source.origen_registro",
+                """
+                CASE
+                  WHEN target.es_registro_inferido = true
+                   AND source.es_registro_inferido = false
+                  THEN concat(
+                    'INFERIDO:', coalesce(target.origen_registro, 'DESCONOCIDO'),
+                    '->', source.origen_registro
+                  )
+                  ELSE source.origen_registro
+                END
+                """,
 
             "esta_en_maestro_actual":
                 "source.esta_en_maestro_actual",
@@ -3406,6 +3420,7 @@ silver_bridge_table = SILVER_TABLES[
 
 silver_bridge_df = (
     spark.table(silver_bridge_table)
+    .filter(F.col("activo"))
     .select(
         F.upper(
             F.trim("codigo_planta")
@@ -3689,6 +3704,9 @@ bridge_source_df = (
         F.current_timestamp().alias(
             "fecha_actualizacion"
         ),
+
+        F.lit(True).alias("activo"),
+        F.lit(None).cast("timestamp").alias("fecha_retiro"),
     )
 )
 
@@ -3885,6 +3903,7 @@ bridge_target = DeltaTable.forName(
                 target.requiere_revision_manual
                 <=> source.requiere_revision_manual
             )
+            OR NOT (target.activo <=> true)
         """,
         set={
             "planta_key":
@@ -3938,11 +3957,22 @@ bridge_target = DeltaTable.forName(
             "requiere_revision_manual":
                 "source.requiere_revision_manual",
 
+            "activo": "source.activo",
+            "fecha_retiro": "source.fecha_retiro",
+
             "fecha_actualizacion":
                 "source.fecha_actualizacion",
         },
     )
     .whenNotMatchedInsertAll()
+    .whenNotMatchedBySourceUpdate(
+        condition="target.activo = true",
+        set={
+            "activo": "false",
+            "fecha_retiro": "current_timestamp()",
+            "fecha_actualizacion": "current_timestamp()",
+        },
+    )
     .execute()
 )
 
@@ -3954,65 +3984,17 @@ print(
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC Eliminar relaciones retiradas
+# MAGIC Las relaciones retiradas se conservan como inactivas por trazabilidad.
 
 # COMMAND ----------
 
-current_bridge_keys_df = (
-    bridge_source_df
-    .select("planta_embalse_key")
-    .distinct()
-)
-
-
-obsolete_bridge_rows_df = (
-    spark.table(
-        BRIDGE_PLANTA_EMBALSE_TABLE
-    )
-    .select("planta_embalse_key")
-    .join(
-        current_bridge_keys_df,
-        "planta_embalse_key",
-        "left_anti",
-    )
-)
-
-
-obsolete_bridge_rows = (
-    obsolete_bridge_rows_df.count()
-)
-
-
-print(
-    "Relaciones Gold retiradas de Silver:",
-    obsolete_bridge_rows,
-)
-
-
-if obsolete_bridge_rows > 0:
-    obsolete_bridge_rows_df.createOrReplaceTempView(
-        "obsolete_bridge_keys"
-    )
-
-    spark.sql(
-        f"""
-        DELETE FROM {BRIDGE_PLANTA_EMBALSE_TABLE}
-        WHERE planta_embalse_key IN (
-            SELECT planta_embalse_key
-            FROM obsolete_bridge_keys
-        )
-        """
-    )
-
-    print(
-        "Relaciones obsoletas eliminadas."
-    )
+print("Las relaciones Gold retiradas permanecen con activo=false.")
 
 # COMMAND ----------
 
 bridge_validation_df = spark.table(
     BRIDGE_PLANTA_EMBALSE_TABLE
-)
+).filter(F.col("activo"))
 
 
 total_bridge_rows = (
@@ -4293,69 +4275,9 @@ if negative_generation_rows > 0:
 generation_prioritized_df = (
     generation_base_df
     .withColumn(
-        "numero_tx",
-        F.when(
-            F.col("version").rlike(r"^TX[0-9]+$"),
-            F.regexp_extract(
-                F.col("version"),
-                r"^TX([0-9]+)$",
-                1,
-            ).cast("int"),
-        ),
-    )
-    .withColumn(
         "prioridad_version",
-        F.when(
-            F.col("version") == "TXF",
-            F.lit(10000),
-        )
-        .when(
-            F.col("version") == "TXR",
-            F.lit(9000),
-        )
-        .when(
-            F.col("numero_tx").isNotNull(),
-            F.col("numero_tx") * F.lit(100),
-        )
-        .otherwise(
-            F.lit(0)
-        ),
+        tx_priority_expression("version", TX_POLICY),
     )
-    .drop("numero_tx")
-)
-
-generation_prioritized_df = (
-    generation_base_df
-    .withColumn(
-        "numero_tx",
-        F.when(
-            F.col("version").rlike(r"^TX[0-9]+$"),
-            F.regexp_extract(
-                F.col("version"),
-                r"^TX([0-9]+)$",
-                1,
-            ).cast("int"),
-        ),
-    )
-    .withColumn(
-        "prioridad_version",
-        F.when(
-            F.col("version") == "TXF",
-            F.lit(10000),
-        )
-        .when(
-            F.col("version") == "TXR",
-            F.lit(9000),
-        )
-        .when(
-            F.col("numero_tx").isNotNull(),
-            F.col("numero_tx") * F.lit(100),
-        )
-        .otherwise(
-            F.lit(0)
-        ),
-    )
-    .drop("numero_tx")
 )
 
 unknown_generation_versions_df = (
@@ -5186,35 +5108,9 @@ if negative_availability_rows > 0:
 availability_prioritized_df = (
     availability_base_df
     .withColumn(
-        "numero_tx",
-        F.when(
-            F.col("version").rlike(r"^TX[0-9]+$"),
-            F.regexp_extract(
-                F.col("version"),
-                r"^TX([0-9]+)$",
-                1,
-            ).cast("int"),
-        ),
-    )
-    .withColumn(
         "prioridad_version",
-        F.when(
-            F.col("version") == "TXF",
-            F.lit(10000),
-        )
-        .when(
-            F.col("version") == "TXR",
-            F.lit(9000),
-        )
-        .when(
-            F.col("numero_tx").isNotNull(),
-            F.col("numero_tx") * F.lit(100),
-        )
-        .otherwise(
-            F.lit(0)
-        ),
+        tx_priority_expression("version", TX_POLICY),
     )
-    .drop("numero_tx")
 )
 
 
@@ -6065,35 +5961,9 @@ if negative_demand_rows > 0:
 demand_prioritized_df = (
     demand_base_df
     .withColumn(
-        "numero_tx",
-        F.when(
-            F.col("version").rlike(r"^TX[0-9]+$"),
-            F.regexp_extract(
-                F.col("version"),
-                r"^TX([0-9]+)$",
-                1,
-            ).cast("int"),
-        ),
-    )
-    .withColumn(
         "prioridad_version",
-        F.when(
-            F.col("version") == "TXF",
-            F.lit(10000),
-        )
-        .when(
-            F.col("version") == "TXR",
-            F.lit(9000),
-        )
-        .when(
-            F.col("numero_tx").isNotNull(),
-            F.col("numero_tx") * F.lit(100),
-        )
-        .otherwise(
-            F.lit(0)
-        ),
+        tx_priority_expression("version", TX_POLICY),
     )
-    .drop("numero_tx")
 )
 
 
@@ -7072,35 +6942,9 @@ if unexpected_price_variables > 0:
 price_prioritized_df = (
     price_base_df
     .withColumn(
-        "numero_tx",
-        F.when(
-            F.col("version").rlike(r"^TX[0-9]+$"),
-            F.regexp_extract(
-                F.col("version"),
-                r"^TX([0-9]+)$",
-                1,
-            ).cast("int"),
-        ),
-    )
-    .withColumn(
         "prioridad_version",
-        F.when(
-            F.col("version") == "TXF",
-            F.lit(10000),
-        )
-        .when(
-            F.col("version") == "TXR",
-            F.lit(9000),
-        )
-        .when(
-            F.col("numero_tx").isNotNull(),
-            F.col("numero_tx") * F.lit(100),
-        )
-        .otherwise(
-            F.lit(0)
-        ),
+        tx_priority_expression("version", TX_POLICY),
     )
-    .drop("numero_tx")
 )
 
 
@@ -8158,35 +8002,9 @@ if negative_reservoir_energy_rows > 0:
 reservoir_energy_prioritized_df = (
     reservoir_energy_base_df
     .withColumn(
-        "numero_tx",
-        F.when(
-            F.col("version").rlike(r"^TX[0-9]+$"),
-            F.regexp_extract(
-                F.col("version"),
-                r"^TX([0-9]+)$",
-                1,
-            ).cast("int"),
-        ),
-    )
-    .withColumn(
         "prioridad_version",
-        F.when(
-            F.col("version") == "TXF",
-            F.lit(10000),
-        )
-        .when(
-            F.col("version") == "TXR",
-            F.lit(9000),
-        )
-        .when(
-            F.col("numero_tx").isNotNull(),
-            F.col("numero_tx") * F.lit(100),
-        )
-        .otherwise(
-            F.lit(0)
-        ),
+        tx_priority_expression("version", TX_POLICY),
     )
-    .drop("numero_tx")
 )
 
 

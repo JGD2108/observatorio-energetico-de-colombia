@@ -290,6 +290,8 @@
 # MAGIC         COMMENT 'Indica si la planta está vinculada con un solo embalse',
 # MAGIC
 # MAGIC     requiere_revision_manual BOOLEAN NOT NULL,
+# MAGIC     activo BOOLEAN NOT NULL,
+# MAGIC     fecha_retiro TIMESTAMP,
 # MAGIC
 # MAGIC     fecha_creacion TIMESTAMP NOT NULL,
 # MAGIC     fecha_actualizacion TIMESTAMP NOT NULL

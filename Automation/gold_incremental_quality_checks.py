@@ -32,9 +32,10 @@ if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
 from config.project_config import (  # noqa: E402
-    AUDIT_TABLES, CATALOG, GOLD_TABLES, MONITORING_SCHEMA, QUARANTINE_TABLES,
-    SCHEMAS, SILVER_TABLES,
+    AUDIT_TABLES, CATALOG, GOLD_TABLES, GOVERNANCE_TABLES, MONITORING_SCHEMA,
+    QUARANTINE_TABLES, SCHEMAS, SILVER_TABLES,
 )
+from governance.rules import load_tx_policy, tx_priority_expression  # noqa: E402
 
 SILVER_SCHEMA = f"{CATALOG}.{SCHEMAS['silver']}"
 GOLD_SCHEMA = f"{CATALOG}.{SCHEMAS['gold']}"
@@ -43,6 +44,7 @@ QUALITY_RESULTS_TABLE = f"{MONITORING_SCHEMA}.gold_incremental_quality_results"
 GOVERNED_QUALITY_TABLE = AUDIT_TABLES["data_quality_results"]
 QUALITY_ALERTS_TABLE = AUDIT_TABLES["data_quality_alerts"]
 QUARANTINE_EXCEPTIONS_TABLE = QUARANTINE_TABLES["data_quality_exceptions"]
+TX_POLICY = load_tx_policy(spark, GOVERNANCE_TABLES["ref_version_tx"])
 
 print("Configuración cargada.")
 print("Silver:", SILVER_SCHEMA)
@@ -198,21 +200,10 @@ def detect_first_existing_column(dataframe, candidates, logical_name):
         )
     return selected
 
-def tx_priority_expression(version_column):
-    numeric_tx = F.regexp_extract(
-        F.col(version_column), r"^TX([0-9]+)$", 1
-    ).cast("int")
-    return (
-        F.when(F.col(version_column) == "TXF", F.lit(10000))
-        .when(F.col(version_column) == "TXR", F.lit(9000))
-        .when(F.col(version_column).rlike(r"^TX[0-9]+$"), numeric_tx * 100)
-        .otherwise(F.lit(0))
-    )
-
 def add_tx_priority(dataframe, version_column="version"):
     return dataframe.withColumn(
         "_prioridad_esperada",
-        tx_priority_expression(version_column),
+        tx_priority_expression(version_column, TX_POLICY),
     )
 
 def latest_tx_records(dataframe, business_key):
@@ -470,7 +461,7 @@ def validate_single_tx_fact(component, dataframe, version_column, priority_colum
         dataframe
         .withColumn(
             "_prioridad_calculada",
-            tx_priority_expression(version_column),
+            tx_priority_expression(version_column, TX_POLICY),
         )
         .filter(
             F.col(version_column).isNull()
@@ -494,9 +485,9 @@ validate_single_tx_fact("Energía embalsada", reservoir_window_df, "version_sele
 
 price_tx_invalid_rows = (
     price_window_df
-    .withColumn("_expected_pb_int", tx_priority_expression("version_pb_int"))
-    .withColumn("_expected_pb_nal", tx_priority_expression("version_pb_nal"))
-    .withColumn("_expected_pb_tie", tx_priority_expression("version_pb_tie"))
+    .withColumn("_expected_pb_int", tx_priority_expression("version_pb_int", TX_POLICY))
+    .withColumn("_expected_pb_nal", tx_priority_expression("version_pb_nal", TX_POLICY))
+    .withColumn("_expected_pb_tie", tx_priority_expression("version_pb_tie", TX_POLICY))
     .filter(
         F.col("version_pb_int").isNull()
         | F.col("version_pb_nal").isNull()

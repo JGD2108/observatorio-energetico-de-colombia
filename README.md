@@ -4,14 +4,14 @@ Pipeline Lakehouse en Databricks para integrar y analizar datos del sistema
 eléctrico colombiano. Usa arquitectura Medallion, Delta Lake, Unity Catalog y
 un modelo dimensional con cinco hechos.
 
-> Fases 1, 2 y 3 certificadas mediante ejecuciones completas en Databricks:
-> pipeline reproducible, observabilidad y calidad gobernada con cuarentena.
+> Fases 1 a 4 certificadas mediante ejecuciones completas en Databricks:
+> pipeline reproducible, observabilidad, calidad y referencias gobernadas.
 
 ## Flujo
 
 ```text
 Audit Start → SIMEM / maestros → Landing → Bronze → Silver → Gold
-           → Quality Gate → Analytics → Audit Finalize
+           → Governance Gate → Quality Gate → Analytics → Audit Finalize
 ```
 
 - Nueve dominios de ingesta, nueve tablas Bronze y nueve Silver.
@@ -31,6 +31,7 @@ Audit Start → SIMEM / maestros → Landing → Bronze → Silver → Gold
 | `GOLD LOAD/GOLD_LOAD.py` | Modelo dimensional |
 | `Automation/` | Job y quality checks |
 | `observability/` | Auditoría de corridas, tareas y métricas por capa |
+| `governance/` | Políticas TX y funciones compartidas de gobierno |
 | `Gold_Analytics/` | Vistas analíticas; certificación pendiente |
 | `config/` | Configuración parametrizable |
 | `setup/00_bootstrap.py` | Bootstrap idempotente |
@@ -62,6 +63,7 @@ Dependencias fijadas:
 - [Fase 1](docs/phase1_hardening.md)
 - [Fase 2 y manual de observabilidad](docs/phase2_observability.md)
 - [Fase 3: calidad, cuarentena y alertas](docs/phase3_data_quality.md)
+- [Fase 4: gobierno Silver y Gold](docs/phase4_governance.md)
 - [Clasificación de archivos](docs/file_classification.md)
 
 ## Limitaciones
@@ -69,6 +71,7 @@ Dependencias fijadas:
 - Landing todavía usa nombres fijos.
 - La cuarentena de Fase 3 conserva excepciones agregadas por regla; el rechazo
   físico fila a fila durante Silver se ampliará cuando se gobiernen sus contratos.
-- La regla TX requiere gobierno formal en Fase 4.
+- La política TX conserva la precedencia técnica anterior; cualquier cambio de
+  semántica requiere aprobación funcional del responsable del dato.
 - Las vistas no están certificadas semánticamente; corresponde a Fase 6.
 - No existe todavía API, serving ni dashboard conectado a datos.

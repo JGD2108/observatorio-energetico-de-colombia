@@ -30,14 +30,15 @@ def main():
     assert bundle["include"] == ["Automation/Job.yaml"]
     job = load_yaml(ROOT / "Automation" / "Job.yaml")["resources"]["jobs"]["observatorio_daily_pipeline"]
     tasks = job["tasks"]
-    assert len(tasks) == 25
+    assert len(tasks) == 26
     by_key = {task["task_key"]: task for task in tasks}
-    assert len(by_key) == 25
+    assert len(by_key) == 26
     dependencies = {
         key: {item["task_key"] for item in task.get("depends_on", [])}
         for key, task in by_key.items()
     }
-    assert dependencies["quality_check"] == {"gold_daily"}
+    assert dependencies["governance_check"] == {"gold_daily"}
+    assert dependencies["quality_check"] == {"governance_check"}
     assert dependencies["gold_analytics"] == {"quality_check"}
     assert dependencies["audit_start"] == {"setup_catalog"}
     assert dependencies["audit_finalize"] == {"gold_analytics"}
@@ -63,7 +64,7 @@ def main():
         for child in children[current]:
             degree[child] -= 1
             if degree[child] == 0: queue.append(child)
-    assert visited == 25
+    assert visited == 26
 
     parameters = {parameter["name"]: parameter["default"] for parameter in job["parameters"]}
     assert parameters["run_id"] == "{{job.run_id}}"
@@ -101,6 +102,7 @@ def main():
     imported_modules = [
         ROOT / "config" / "project_config.py",
         ROOT / "observability" / "audit.py",
+        ROOT / "governance" / "rules.py",
     ]
     for module in imported_modules:
         assert not module.read_text(encoding="utf-8").startswith(
@@ -114,9 +116,11 @@ def main():
         *(ROOT / "Silver_Load").glob("*.py"),
         ROOT / "GOLD LOAD" / "GOLD_LOAD.py",
         ROOT / "Automation" / "gold_incremental_quality_checks.py",
+        ROOT / "Automation" / "phase4_governance_checks.py",
         ROOT / "Automation" / "99_audit_finalize.py",
         ROOT / "Gold_Analytics" / "01_vistas_dashboard.py",
         ROOT / "observability" / "audit.py",
+        ROOT / "governance" / "rules.py",
     ]
     for path in active:
         text = path.read_text(encoding="utf-8")
@@ -146,6 +150,8 @@ def main():
     ):
         assert f"AUDIT_TABLES['{table_name}']" in bootstrap_text
     assert "QUARANTINE_TABLES['data_quality_exceptions']" in bootstrap_text
+    for table_name in ("ref_version_tx", "ref_entity_alias", "layer_reconciliation"):
+        assert f"GOVERNANCE_TABLES['{table_name}']" in bootstrap_text
 
     quality_text = (
         ROOT / "Automation" / "gold_incremental_quality_checks.py"
@@ -159,6 +165,21 @@ def main():
         assert required_feature in quality_text
     for forbidden_cache in (".cache(", ".persist(", "StorageLevel"):
         assert forbidden_cache not in quality_text
+
+    generation_text = (
+        ROOT / "Silver_Load" / "silver_generacion_real.py"
+    ).read_text(encoding="utf-8")
+    for forbidden_cache in (".cache(", ".persist(", "StorageLevel"):
+        assert forbidden_cache not in generation_text
+    assert generation_text.count(".count()") == 0
+    assert "countDistinct(F.struct" in generation_text
+
+    gold_text = (ROOT / "GOLD LOAD" / "GOLD_LOAD.py").read_text(encoding="utf-8")
+    assert "load_tx_policy" in gold_text
+    assert "whenNotMatchedBySourceDelete()" in gold_text
+    assert "INFERIDO:" in gold_text
+    assert "whenNotMatchedBySourceUpdate" in gold_text
+    assert "DELETE FROM {BRIDGE_PLANTA_EMBALSE_TABLE}" not in gold_text
     print("OK: contratos estaticos de Fase 1 validados")
 
 
