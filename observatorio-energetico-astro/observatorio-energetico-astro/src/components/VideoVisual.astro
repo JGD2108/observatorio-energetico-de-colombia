@@ -1,0 +1,86 @@
+---
+interface Props {
+  kind: 'sources' | 'lakehouse' | 'ingestion' | 'quality' | 'serving' | 'dashboard' | 'review' | 'roadmap';
+}
+
+const { kind } = Astro.props;
+---
+
+<div class={`video-visual video-visual--${kind}`} aria-label={`Visual de ${kind}`}>
+  {kind === 'sources' && (
+    <>
+      <div class="video-visual__label">9 FUENTES PÚBLICAS</div>
+      <div class="source-orbit">
+        <span>SIMEM</span><span>XM</span><span>CREG</span><span>IDEAM</span><span>UPME</span><span>Datos.gov</span>
+        <strong>Decisión<br />explicable</strong>
+      </div>
+      <div class="video-visual__footer"><i></i><b>origen</b><i></i><b>fecha</b><i></i><b>unidad</b><i></i><b>linaje</b></div>
+    </>
+  )}
+
+  {kind === 'lakehouse' && (
+    <>
+      <div class="video-visual__label">ARQUITECTURA OPERATIVA</div>
+      <div class="medallion-flow"><span>SIMEM</span><i>→</i><span>LANDING</span><i>→</i><span class="bronze">BRONZE</span><i>→</i><span class="silver">SILVER</span><i>→</i><span class="gold">GOLD</span><i>→</i><span class="serving">SERVING</span><i>→</i><span>POWER BI</span></div>
+      <div class="video-visual__footer"><b>Auditoría</b><i></i><b>Delta</b><i></i><b>Unity Catalog</b></div>
+    </>
+  )}
+
+  {kind === 'ingestion' && (
+    <>
+      <div class="video-visual__label">DOS MODOS · UNA TRAZABILIDAD</div>
+      <div class="ingestion-lanes">
+        <div><small>OPERACIÓN DIARIA</small><strong>INCREMENTAL</strong><p>Hoy − 45 días</p><em>ventana revisable</em></div>
+        <div><small>HISTÓRICO CONTROLADO</small><strong>BACKFILL</strong><p>fecha inicio → fecha fin</p><em>backfill_id + cobertura</em></div>
+      </div>
+      <div class="run-line"><span></span><b>run_id</b><span></span><b>métricas</b><span></span><b>resultado</b></div>
+    </>
+  )}
+
+  {kind === 'quality' && (
+    <>
+      <div class="video-visual__label">PUERTA DE PUBLICACIÓN</div>
+      <div class="quality-console">
+        <div class="quality-score"><strong>100%</strong><span>checks críticos</span></div>
+        <ul><li><b>✓</b> esquema</li><li><b>✓</b> grano</li><li><b>✓</b> cobertura</li><li><b>✓</b> frescura</li><li><b>✓</b> relaciones</li></ul>
+      </div>
+      <div class="quality-footer"><span>PASS</span><i></i><b>publicar</b><i></i><b>Power BI</b></div>
+    </>
+  )}
+
+  {kind === 'serving' && (
+    <>
+      <div class="video-visual__label">CONTRATOS DE CONSUMO</div>
+      <div class="contract-stack"><div><small>GOLD</small><strong>modelo interno</strong></div><i>→</i><div class="contract-stack__main"><small>SERVING</small><strong>9 vistas certificadas</strong><em>esquema · grano · SLA</em></div><i>→</i><div><small>POWER BI</small><strong>consumo estable</strong></div></div>
+      <div class="video-visual__footer"><b>vw_sistema_diario</b><i></i><b>vw_operacion_diaria_planta</b></div>
+    </>
+  )}
+
+  {kind === 'dashboard' && (
+    <>
+      <div class="video-visual__label">DASHBOARD PUBLICADO · POWER BI</div>
+      <div class="mini-dashboard">
+        <div class="mini-dashboard__header"><span>Resumen del sistema eléctrico</span><i>01/01/2026 — 25/07/2026</i></div>
+        <div class="mini-dashboard__kpis"><b>46,70<small>TWh generación</small></b><b>47,75<small>TWh demanda</small></b><b>374,94<small>COP/kWh</small></b></div>
+        <div class="mini-dashboard__chart"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      </div>
+      <div class="video-visual__footer"><b>5 páginas</b><i></i><b>fecha común</b><i></i><b>KPI comparables</b></div>
+    </>
+  )}
+
+  {kind === 'review' && (
+    <>
+      <div class="video-visual__label">REVISIÓN OPERATIVA · FASE 9</div>
+      <div class="terminal-card"><p><span>$</span> python 96_manual_phase9_review.py</p><p>fuentes dentro del SLA <b>✓</b></p><p>última corrida correcta <b>✓</b></p><p>contratos Serving disponibles <b>✓</b></p><strong>APTO <em>sin hallazgos operativos</em></strong></div>
+      <div class="video-visual__footer"><b>solo lectura</b><i></i><b>sin alertas</b><i></i><b>evidencia</b></div>
+    </>
+  )}
+
+  {kind === 'roadmap' && (
+    <>
+      <div class="video-visual__label">EVOLUCIÓN CONTROLADA · FASE 10</div>
+      <div class="roadmap-steps"><div><span>HOY</span><b>Generación<br />Mercado<br />Embalses</b></div><i>→</i><div><span>DESPUÉS</span><b>Tarifas<br />Red<br />Calidad</b></div><i>→</i><div><span>CUANDO ESTÉ CERTIFICADO</span><b>Hidrología<br />Pronóstico</b></div></div>
+      <div class="video-visual__footer"><b>contratos</b><i></i><b>reconciliación</b><i></i><b>confianza</b></div>
+    </>
+  )}
+</div>
