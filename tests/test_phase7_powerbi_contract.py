@@ -135,3 +135,16 @@ def test_date_dimension_and_summary_slicer_cover_all_business_dates_without_fixe
     payload = json.loads(slicer.read_text(encoding="utf-8-sig"))
     assert "endDate" not in payload["visual"]["objects"]["data"][0]["properties"]
     assert payload["visual"]["objects"]["general"] == []
+
+
+def test_multiline_measure_expressions_keep_valid_tmdl_indentation():
+    lines = (MODEL / "tables" / "Medidas.tmdl").read_text(encoding="utf-8").splitlines()
+    inside_expression = False
+    for line in lines:
+        if line.startswith("\tmeasure ") and line.rstrip().endswith("="):
+            inside_expression = True
+            continue
+        if inside_expression and line.startswith("\t\t") and not line.startswith("\t\t\t"):
+            inside_expression = False
+        if inside_expression and line.strip():
+            assert line.startswith("\t\t\t"), f"Invalid TMDL expression indentation: {line!r}"

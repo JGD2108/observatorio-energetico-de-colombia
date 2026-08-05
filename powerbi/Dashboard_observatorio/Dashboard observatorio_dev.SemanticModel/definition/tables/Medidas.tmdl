@@ -357,7 +357,7 @@ table Medidas
 			        VALUES('demanda_mercado_diaria'[fecha]),
 			        CALCULATE(MIN('demanda_mercado_diaria'[horas_con_datos])) = 24
 			    )
-		)
+			)
 		formatString: #,0
 		lineageTag: 90d16da7-29ea-46ca-a764-d9845d08cb1d
 
