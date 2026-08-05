@@ -17,6 +17,11 @@ class ReviewResult:
     detalle: str
 
 
+def optional_float(value: object) -> Optional[float]:
+    """Normalize Spark Decimal/numeric scalars for an explicit DoubleType schema."""
+    return None if value is None else float(value)
+
+
 def assess(
     *,
     stale_sources: int,

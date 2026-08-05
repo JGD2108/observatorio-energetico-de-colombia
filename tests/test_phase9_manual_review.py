@@ -1,4 +1,6 @@
-from operations.manual_review import assess
+from decimal import Decimal
+
+from operations.manual_review import assess, optional_float
 from pathlib import Path
 
 
@@ -38,3 +40,8 @@ def test_phase9_notebook_is_read_only_and_does_not_create_notifications():
     assert ".write" not in notebook
     assert "CREATE TABLE" not in notebook
     assert "dbutils.notebook.exit" not in notebook
+
+
+def test_spark_decimal_is_normalized_for_double_schema():
+    assert optional_float(Decimal("75.000000")) == 75.0
+    assert optional_float(None) is None
