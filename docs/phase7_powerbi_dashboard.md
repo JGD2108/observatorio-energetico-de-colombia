@@ -9,7 +9,7 @@ técnica para operar el pipeline. El PBIP versionado está en
 
 ```text
 Gold validado
-  -> observatorio_dev.serving_business
+  -> observatorio_dev.serving
        -> resumen del sistema
        -> análisis por planta
   -> observatorio_dev.serving_technical
@@ -79,4 +79,3 @@ workspace del propietario, por eso no se automatiza desde el repositorio.
 La Fase 7 cubre operación, mercado, disponibilidad, plantas y salud técnica. Los
 indicadores de tarifas al usuario y calidad del servicio no se muestran porque
 todavía no existen contratos de datos certificados para esos dominios.
-

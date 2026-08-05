@@ -258,7 +258,7 @@ table vw_generacion_diaria_tipo
 				let
 				  Origen = DatabricksMultiCloud.Catalogs("dbc-4c2404fa-9e73.cloud.databricks.com", "/sql/1.0/warehouses/049b881d5122f61a", null),
 				  #"Navegación 1" = Origen{[Name = "observatorio_dev", Kind = "Database"]}[Data],
-				  #"Navegación 2" = #"Navegación 1"{[Name = "serving_business", Kind = "Schema"]}[Data],
+				  #"Navegación 2" = #"Navegación 1"{[Name = "serving", Kind = "Schema"]}[Data],
 				  #"Navegación 3" = #"Navegación 2"{[Name = "generacion_tecnologia_diaria", Kind = "View"]}[Data]
 				in
 				  #"Navegación 3"

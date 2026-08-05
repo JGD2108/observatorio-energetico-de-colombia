@@ -268,7 +268,7 @@ table vw_resumen_diario_sistema
 				let
 				    Origen = DatabricksMultiCloud.Catalogs("dbc-4c2404fa-9e73.cloud.databricks.com", "/sql/1.0/warehouses/049b881d5122f61a", [Catalog = "", Database = ""]),
 				    observatorio_dev_Database = Origen{[Name="observatorio_dev",Kind="Database"]}[Data],
-				    serving_Schema = observatorio_dev_Database{[Name="serving_business",Kind="Schema"]}[Data],
+				    serving_Schema = observatorio_dev_Database{[Name="serving",Kind="Schema"]}[Data],
 				    vw_resumen_diario_sistema_View = serving_Schema{[Name="kpi_sistema_diario",Kind="View"]}[Data]
 				in
 				    vw_resumen_diario_sistema_View

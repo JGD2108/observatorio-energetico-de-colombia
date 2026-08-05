@@ -25,7 +25,7 @@ def test_business_tables_use_stable_serving_contracts():
     }
     for filename, view_name in expected.items():
         text = (MODEL / "tables" / filename).read_text(encoding="utf-8")
-        assert 'Name="serving_business"' in text or 'Name = "serving_business"' in text
+        assert 'Name="serving"' in text or 'Name = "serving"' in text
         assert view_name in text
 
 
@@ -63,4 +63,3 @@ def test_technology_slicer_uses_shared_dimension_without_fixed_selection():
     projection = payload["visual"]["query"]["queryState"]["Values"]["projections"][0]
     assert projection["queryRef"] == "DimTecnologia.tipo_generacion"
     assert payload["visual"]["objects"]["general"] == []
-
