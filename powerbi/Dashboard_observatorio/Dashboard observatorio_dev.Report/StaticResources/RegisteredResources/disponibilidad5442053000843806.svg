@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="Disponibilidad">
+  <circle cx="32" cy="32" r="28" fill="#DDF5F4"/>
+  <path d="M17 38a15 15 0 1 1 30 0" fill="none" stroke="#00979D" stroke-width="3" stroke-linecap="round"/>
+  <path d="M32 38 41 27" fill="none" stroke="#00979D" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="32" cy="38" r="3.5" fill="#00979D"/>
+  <path d="M20 38h24" fill="none" stroke="#00979D" stroke-width="3" stroke-linecap="round"/>
+</svg>

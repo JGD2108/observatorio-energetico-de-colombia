@@ -1,0 +1,63 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "9eff3e951712a6ce3c2b",
+  "position": {
+    "x": 16,
+    "y": 224,
+    "z": 4000,
+    "height": 95.999999999999986,
+    "width": 224,
+    "tabOrder": 4000
+  },
+  "visual": {
+    "visualType": "slicer",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "vw_dim_agente_powerbi"
+                    }
+                  },
+                  "Property": "nombre_agente"
+                }
+              },
+              "queryRef": "vw_dim_agente_powerbi.nombre_agente",
+              "nativeQueryRef": "Agente",
+              "active": true,
+              "displayName": "Agente"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "data": [
+        {
+          "properties": {
+            "mode": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Dropdown'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {}
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

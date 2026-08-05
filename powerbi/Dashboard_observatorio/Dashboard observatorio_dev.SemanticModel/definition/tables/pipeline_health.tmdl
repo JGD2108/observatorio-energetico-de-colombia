@@ -1,0 +1,115 @@
+table pipeline_health
+	lineageTag: a48bf99a-d588-489e-8926-6ac65023db86
+
+	column run_id
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 2019db57-26ce-403f-b929-e101fce27c13
+		summarizeBy: none
+		sourceColumn: run_id
+
+	column job_name
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: c565c05a-cfa8-4a64-a171-1296090c5261
+		summarizeBy: none
+		sourceColumn: job_name
+
+	column environment
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 84ad8c8e-5460-44e3-98f0-57eeed8e19cf
+		summarizeBy: none
+		sourceColumn: environment
+
+	column trigger_type
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 541dfbcf-5a4b-4397-9575-b381f3656f4e
+		summarizeBy: none
+		sourceColumn: trigger_type
+
+	column started_at
+		dataType: dateTime
+		formatString: dd/MM/yyyy HH:mm
+		sourceProviderType: datetime2
+		lineageTag: 420e42c8-6af1-4cbd-a72b-a45898d5c41c
+		summarizeBy: none
+		sourceColumn: started_at
+
+	column finished_at
+		dataType: dateTime
+		formatString: dd/MM/yyyy HH:mm
+		sourceProviderType: datetime2
+		lineageTag: f4b53f99-ad4f-4dbc-9d27-49074f03b6ea
+		summarizeBy: none
+		sourceColumn: finished_at
+
+	column duration_seconds
+		dataType: int64
+		formatString: #,0
+		sourceProviderType: bigint
+		lineageTag: 0e486d5d-5df0-47e1-928e-d84a1981e95e
+		summarizeBy: average
+		sourceColumn: duration_seconds
+
+	column status
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 60f158da-216d-499e-906e-cffbe407f3d2
+		summarizeBy: none
+		sourceColumn: status
+
+	column tasks_total
+		dataType: int64
+		formatString: #,0
+		sourceProviderType: bigint
+		lineageTag: 0c93c443-f660-4053-a415-a4874399abf4
+		summarizeBy: sum
+		sourceColumn: tasks_total
+
+	column tasks_succeeded
+		dataType: int64
+		formatString: #,0
+		sourceProviderType: bigint
+		lineageTag: 9a24ef0f-a590-4337-9537-d5972c90210c
+		summarizeBy: sum
+		sourceColumn: tasks_succeeded
+
+	column tasks_failed
+		dataType: int64
+		formatString: #,0
+		sourceProviderType: bigint
+		lineageTag: 3fa81de0-1ced-4a3c-b79b-a3ca95df88b9
+		summarizeBy: sum
+		sourceColumn: tasks_failed
+
+	column tasa_exito_ultimas_10_pct
+		dataType: double
+		formatString: 0.0\ %
+		sourceProviderType: double
+		lineageTag: 78e138ca-1d87-4738-9ab9-d80cf623f35a
+		summarizeBy: average
+		sourceColumn: tasa_exito_ultimas_10_pct
+
+	column error_message
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 9032f467-e33d-4678-979a-f25b62110685
+		summarizeBy: none
+		sourceColumn: error_message
+
+	partition pipeline_health = m
+		mode: import
+		source =
+				let
+				    Origen = DatabricksMultiCloud.Catalogs("dbc-4c2404fa-9e73.cloud.databricks.com", "/sql/1.0/warehouses/049b881d5122f61a", null),
+				    Catalogo = Origen{[Name="observatorio_dev",Kind="Database"]}[Data],
+				    Serving = Catalogo{[Name="serving_technical",Kind="Schema"]}[Data],
+				    Vista = Serving{[Name="pipeline_health",Kind="View"]}[Data]
+				in
+				    Vista
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table

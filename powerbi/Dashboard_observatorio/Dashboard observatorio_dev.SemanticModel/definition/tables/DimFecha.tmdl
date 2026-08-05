@@ -1,0 +1,83 @@
+table DimFecha
+	lineageTag: 8a14ab4c-2806-4ae7-8cb3-71f3b23276ae
+	dataCategory: Time
+
+	column Date
+		isKey
+		formatString: General Date
+		lineageTag: 97a75abe-9132-455d-ab51-cee75142c6f9
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Año
+		formatString: 0
+		lineageTag: 5d20e258-7b23-443c-b7d2-5b47929069f5
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Año]
+
+		annotation SummarizationSetBy = Automatic
+
+	column MesNumero
+		formatString: 0
+		lineageTag: e421149a-a0ef-4173-9ee6-9d7b59046592
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [MesNumero]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mes
+		lineageTag: 954d21f0-6e8c-4017-a55b-074ce06523d0
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Mes]
+
+		annotation SummarizationSetBy = Automatic
+
+	column AñoMes
+		lineageTag: 96a6948a-8fcb-46bb-bcd5-ce382f96aeba
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [AñoMes]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Trimestre
+		lineageTag: 291a77cf-7372-439d-a359-dd2241ebb51a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Trimestre]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DiaSemana
+		lineageTag: eff53778-2581-47d1-a144-4c75ea27185c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [DiaSemana]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimFecha = calculated
+		mode: import
+		source =
+				
+				ADDCOLUMNS(
+				    CALENDAR(
+				        MIN('vw_resumen_diario_sistema'[fecha]),
+				        MAX('vw_resumen_diario_sistema'[fecha])
+				    ),
+				    "Año", YEAR([Date]),
+				    "MesNumero", MONTH([Date]),
+				    "Mes", FORMAT([Date], "MMMM"),
+				    "AñoMes", FORMAT([Date], "yyyy-MM"),
+				    "Trimestre", "T" & FORMAT([Date], "Q"),
+				    "DiaSemana", FORMAT([Date], "dddd")
+				)
+
+	annotation PBI_Id = b05dd63b2c964d2a89559764068a6eb0
+

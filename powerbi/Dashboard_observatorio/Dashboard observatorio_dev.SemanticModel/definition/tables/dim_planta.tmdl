@@ -1,0 +1,231 @@
+table dim_planta
+	lineageTag: 5a3030b1-f763-437a-b9e3-349ad27e4fec
+
+	column planta_key
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 4216ecd6-ac68-4c5c-8023-1cf99236cb93
+		summarizeBy: none
+		sourceColumn: planta_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column codigo_planta
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: ab6222df-d78d-410e-ae92-abea3d141f31
+		summarizeBy: none
+		sourceColumn: codigo_planta
+
+		annotation SummarizationSetBy = Automatic
+
+	column nombre_planta
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 2e225c0f-02fe-4930-90fe-32259ea10cfb
+		summarizeBy: none
+		sourceColumn: nombre_planta
+
+		annotation SummarizationSetBy = Automatic
+
+	column codigo_sic_agente
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 65b9f450-a52c-4df1-b92a-154316499548
+		summarizeBy: none
+		sourceColumn: codigo_sic_agente
+
+		annotation SummarizationSetBy = Automatic
+
+	column cap_efectiva_neta
+		dataType: double
+		sourceProviderType: decimal(18, 4)
+		lineageTag: e62d1f9f-31ee-4a6f-b838-d52b341a10c1
+		summarizeBy: sum
+		sourceColumn: cap_efectiva_neta
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column fpo
+		dataType: dateTime
+		formatString: Long Date
+		sourceProviderType: date
+		lineageTag: 69527feb-437f-47d5-8969-746b053d967e
+		summarizeBy: none
+		sourceColumn: fpo
+
+		variation Variación
+			isDefault
+			relationship: 661cec48-f30f-494b-a7b9-8a07721699c6
+			defaultHierarchy: LocalDateTable_bdcf8a10-4e90-4055-8165-137919ca379a.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column codigo_sub_area_operativa
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 4d1a8567-1649-4cba-a39d-737519a741ff
+		summarizeBy: none
+		sourceColumn: codigo_sub_area_operativa
+
+		annotation SummarizationSetBy = Automatic
+
+	column codigo_area_operativa
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 075736e8-b2e4-4f8c-a541-f94c27a48fdb
+		summarizeBy: none
+		sourceColumn: codigo_area_operativa
+
+		annotation SummarizationSetBy = Automatic
+
+	column tipo_despacho_recurso
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 425a7af1-db77-45c1-80d3-8d63d32328da
+		summarizeBy: none
+		sourceColumn: tipo_despacho_recurso
+
+		annotation SummarizationSetBy = Automatic
+
+	column tipo_clasificacion
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: e864f582-1093-4f25-9c6d-edb2a2fff7c8
+		summarizeBy: none
+		sourceColumn: tipo_clasificacion
+
+		annotation SummarizationSetBy = Automatic
+
+	column tipo_generacion
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 8afcd11d-e6d4-42a5-9cb5-c4d86a39fac3
+		summarizeBy: none
+		sourceColumn: tipo_generacion
+
+		annotation SummarizationSetBy = Automatic
+
+	column es_registro_inferido
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		sourceProviderType: bit
+		lineageTag: 9a402761-746f-4816-a882-c03e081367b9
+		summarizeBy: none
+		sourceColumn: es_registro_inferido
+
+		annotation SummarizationSetBy = Automatic
+
+	column origen_registro
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: bdeed4ec-c77d-4be4-8311-312932195202
+		summarizeBy: none
+		sourceColumn: origen_registro
+
+		annotation SummarizationSetBy = Automatic
+
+	column numero_version
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 0b791534-32a3-429f-b2a6-3f7c3a593340
+		summarizeBy: sum
+		sourceColumn: numero_version
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha_inicio
+		dataType: dateTime
+		formatString: Long Date
+		sourceProviderType: date
+		lineageTag: e917c018-e1b3-4d96-8771-7ac3826f5e90
+		summarizeBy: none
+		sourceColumn: fecha_inicio
+
+		variation Variación
+			isDefault
+			relationship: 3ce812a1-9c65-432b-9470-1b976bcdd377
+			defaultHierarchy: LocalDateTable_30fbfffb-2070-4180-be9a-1c66100fc58a.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column fecha_fin
+		dataType: dateTime
+		formatString: Long Date
+		sourceProviderType: date
+		lineageTag: cf6f2c14-6c50-4d6b-b18f-7e96fac458b5
+		summarizeBy: none
+		sourceColumn: fecha_fin
+
+		variation Variación
+			isDefault
+			relationship: 76e2db2d-f36e-44da-8a6b-ccae3564f844
+			defaultHierarchy: LocalDateTable_90c4b901-2f2f-4344-999c-390913ccbd23.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column es_actual
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		sourceProviderType: bit
+		lineageTag: 39fde5e4-e789-4dd6-80a4-16bad6e5cdc5
+		summarizeBy: none
+		sourceColumn: es_actual
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha_creacion
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: e4894944-f8f1-4c3a-aa87-3f8a600720fa
+		summarizeBy: none
+		sourceColumn: fecha_creacion
+
+		variation Variación
+			isDefault
+			relationship: 4a248828-da76-4b5c-becf-e654c3e8545d
+			defaultHierarchy: LocalDateTable_1d6f10b2-a936-4b9a-8733-af6d4eed5a4c.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha_actualizacion
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: d8efe5e0-2583-463d-b0f2-cb25ae515dc3
+		summarizeBy: none
+		sourceColumn: fecha_actualizacion
+
+		variation Variación
+			isDefault
+			relationship: 46fed83d-f89e-4c33-b68d-0c5d2af67266
+			defaultHierarchy: LocalDateTable_40128c29-df24-4d6d-a565-f1f3fa858f7a.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_planta = m
+		mode: import
+		source =
+				let
+				    Origen = DatabricksMultiCloud.Catalogs("dbc-4c2404fa-9e73.cloud.databricks.com", "/sql/1.0/warehouses/049b881d5122f61a", null),
+				    observatorio_dev_Database = Origen{[Name="observatorio_dev",Kind="Database"]}[Data],
+				    gold_Schema = observatorio_dev_Database{[Name="gold",Kind="Schema"]}[Data],
+				    dim_planta_Table = gold_Schema{[Name="dim_planta",Kind="Table"]}[Data]
+				in
+				    dim_planta_Table
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

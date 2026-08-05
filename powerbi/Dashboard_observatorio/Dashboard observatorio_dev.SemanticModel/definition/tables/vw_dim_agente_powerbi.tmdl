@@ -1,0 +1,64 @@
+table vw_dim_agente_powerbi
+	lineageTag: f16a5d17-6602-4d27-9336-fd53b2c45471
+
+	column agente_key
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: bfca197e-b3bb-499b-81d5-6386ba7b6635
+		summarizeBy: sum
+		sourceColumn: agente_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column codigo_agente
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: f09cbbf2-c5a0-4f03-8936-1ae4bc985b76
+		summarizeBy: none
+		sourceColumn: codigo_agente
+
+		annotation SummarizationSetBy = Automatic
+
+	column nombre_agente
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 25900668-1cdb-45c5-b128-46d31fee5f89
+		summarizeBy: none
+		sourceColumn: nombre_agente
+
+		annotation SummarizationSetBy = Automatic
+
+	column nombre_agente_normalizado
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 6a84a9c3-7f29-44aa-9168-7a250763976c
+		summarizeBy: none
+		sourceColumn: nombre_agente_normalizado
+
+		annotation SummarizationSetBy = Automatic
+
+	column actividad_agente
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: bd893b34-c63d-4a3f-b332-c51c93825f9a
+		summarizeBy: none
+		sourceColumn: actividad_agente
+
+		annotation SummarizationSetBy = Automatic
+
+	partition vw_dim_agente_powerbi = m
+		mode: import
+		source =
+				let
+				    Origen = DatabricksMultiCloud.Catalogs("dbc-4c2404fa-9e73.cloud.databricks.com", "/sql/1.0/warehouses/049b881d5122f61a", null),
+				    observatorio_dev_Database = Origen{[Name="observatorio_dev",Kind="Database"]}[Data],
+				    gold_Schema = observatorio_dev_Database{[Name="gold",Kind="Schema"]}[Data],
+				    vw_dim_agente_powerbi_View = gold_Schema{[Name="vw_dim_agente_powerbi",Kind="View"]}[Data]
+				in
+				    vw_dim_agente_powerbi_View
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

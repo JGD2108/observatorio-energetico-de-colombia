@@ -1,0 +1,125 @@
+table vw_actualizacion_fuentes
+	lineageTag: 67acbd63-ff83-4788-84ae-a6e47fb3e5ea
+
+	column fuente
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 5c5721b1-7e87-4236-b84a-1ff9b6e5e6a0
+		summarizeBy: none
+		sourceColumn: fuente
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha_minima
+		dataType: dateTime
+		formatString: Long Date
+		sourceProviderType: date
+		lineageTag: f11830fd-92f7-49a4-b52f-91dec5db3270
+		summarizeBy: none
+		sourceColumn: fecha_minima
+
+		variation Variación
+			isDefault
+			relationship: 934d624a-362a-410c-bb71-4bed9afef5f2
+			defaultHierarchy: LocalDateTable_01f38504-1758-4f53-93c5-9969623300ae.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column fecha_maxima
+		dataType: dateTime
+		formatString: Short Date
+		sourceProviderType: date
+		lineageTag: 30bcbdbd-3178-4ea5-ba7c-5cdc15631e89
+		summarizeBy: none
+		sourceColumn: fecha_maxima
+
+		variation Variación
+			isDefault
+			relationship: 33a311f7-4a40-4e1c-9eef-63e18cd22f8a
+			defaultHierarchy: LocalDateTable_04386fb5-d61b-4e5e-ac9c-45f5bfef3447.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column dias_disponibles
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 031f8363-d07a-4bd6-9059-23467c78f935
+		summarizeBy: sum
+		sourceColumn: dias_disponibles
+
+		annotation SummarizationSetBy = Automatic
+
+	column registros
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: a3f4fba0-9747-4287-ad37-55c786b882ed
+		summarizeBy: sum
+		sourceColumn: registros
+
+		annotation SummarizationSetBy = Automatic
+
+	column dias_rezago
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: ce72fa1c-bfa6-4eb4-abbf-1b2f1b527ebd
+		summarizeBy: sum
+		sourceColumn: dias_rezago
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha_consulta
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: 7c597fa2-db46-4f1f-b990-11ce1d095ef3
+		summarizeBy: none
+		sourceColumn: fecha_consulta
+
+		variation Variación
+			isDefault
+			relationship: 58ed12d0-eaff-40ac-acaa-ba75b1b174ef
+			defaultHierarchy: LocalDateTable_4a81ec0b-1a7d-40aa-ba8f-815a194e4dd3.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+	column cumple_sla_frescura
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		sourceProviderType: bit
+		lineageTag: d288e2be-c168-45ee-b34b-d77112a3240d
+		summarizeBy: none
+		sourceColumn: cumple_sla_frescura
+
+		annotation SummarizationSetBy = Automatic
+
+	column estado_operativo
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 5cb3f1aa-0028-4089-9fa5-a55901173a8e
+		summarizeBy: none
+		sourceColumn: estado_operativo
+
+		annotation SummarizationSetBy = Automatic
+
+	partition vw_actualizacion_fuentes = m
+		mode: import
+		source =
+				let
+				    Origen = DatabricksMultiCloud.Catalogs("dbc-4c2404fa-9e73.cloud.databricks.com", "/sql/1.0/warehouses/049b881d5122f61a", [Catalog = "", Database = ""]),
+				    observatorio_dev_Database = Origen{[Name="observatorio_dev",Kind="Database"]}[Data],
+				    serving_Schema = observatorio_dev_Database{[Name="serving_business",Kind="Schema"]}[Data],
+				    vw_actualizacion_fuentes_View = serving_Schema{[Name="estado_fuentes",Kind="View"]}[Data]
+				in
+				    vw_actualizacion_fuentes_View
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

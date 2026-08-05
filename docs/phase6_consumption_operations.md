@@ -11,6 +11,7 @@ El esquema `serving` publica:
 - `demanda_mercado_diaria`: demanda por mercado y calendario.
 - `energia_embalsada_diaria`: energía, variación y cobertura de atribución.
 - `estado_fuentes`: cobertura, rezago y estado operativo por fuente.
+- `generacion_tecnologia_diaria`: generación, disponibilidad comparable y participación por tecnología.
 
 El esquema `serving_technical` publica:
 

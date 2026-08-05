@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="Margen">
+  <circle cx="32" cy="32" r="28" fill="#E2F4E8"/>
+  <path d="M32 17v29M23 22h18M19 46h26" fill="none" stroke="#159447" stroke-width="3" stroke-linecap="round"/>
+  <path d="m23 22-7 13h14l-7-13Zm18 0-7 13h14l-7-13Z" fill="none" stroke="#159447" stroke-width="2.8" stroke-linejoin="round"/>
+</svg>

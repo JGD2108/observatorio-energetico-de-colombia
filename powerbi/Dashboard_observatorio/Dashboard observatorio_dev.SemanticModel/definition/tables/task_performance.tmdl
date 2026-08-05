@@ -1,0 +1,78 @@
+table task_performance
+	lineageTag: 048bb496-cbf0-413e-8266-f7f4a0cbb515
+
+	column task_key
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 075ab44d-d6b9-46f4-8502-117a573fda88
+		summarizeBy: none
+		sourceColumn: task_key
+
+	column layer
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: eb8b32b5-d3b7-463e-a913-b352020464ef
+		summarizeBy: none
+		sourceColumn: layer
+
+	column source_name
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 726e95a5-ce58-4b5b-930f-f49673320b1a
+		summarizeBy: none
+		sourceColumn: source_name
+
+	column ejecuciones_30d
+		dataType: int64
+		formatString: #,0
+		sourceProviderType: bigint
+		lineageTag: da349596-f9ed-442a-b0f6-5b62779defc5
+		summarizeBy: sum
+		sourceColumn: ejecuciones_30d
+
+	column duracion_promedio_segundos
+		dataType: double
+		formatString: #,0.0
+		sourceProviderType: double
+		lineageTag: d2ba40e2-b0c7-469d-898f-a99c7316b457
+		summarizeBy: average
+		sourceColumn: duracion_promedio_segundos
+
+	column duracion_p95_segundos
+		dataType: double
+		formatString: #,0.0
+		sourceProviderType: double
+		lineageTag: 405eb520-5d79-4d3f-b01e-2933cec896a6
+		summarizeBy: average
+		sourceColumn: duracion_p95_segundos
+
+	column tasa_exito_pct
+		dataType: double
+		formatString: 0.0\ %
+		sourceProviderType: double
+		lineageTag: b45a9cfa-15ea-4bc3-948b-25177d0576a6
+		summarizeBy: average
+		sourceColumn: tasa_exito_pct
+
+	column ultima_ejecucion
+		dataType: dateTime
+		formatString: dd/MM/yyyy HH:mm
+		sourceProviderType: datetime2
+		lineageTag: 2d6e2ebd-1ff7-4540-b6ae-92f4e2cf6a28
+		summarizeBy: none
+		sourceColumn: ultima_ejecucion
+
+	partition task_performance = m
+		mode: import
+		source =
+				let
+				    Origen = DatabricksMultiCloud.Catalogs("dbc-4c2404fa-9e73.cloud.databricks.com", "/sql/1.0/warehouses/049b881d5122f61a", null),
+				    Catalogo = Origen{[Name="observatorio_dev",Kind="Database"]}[Data],
+				    Serving = Catalogo{[Name="serving_technical",Kind="Schema"]}[Data],
+				    Vista = Serving{[Name="task_performance",Kind="View"]}[Data]
+				in
+				    Vista
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table

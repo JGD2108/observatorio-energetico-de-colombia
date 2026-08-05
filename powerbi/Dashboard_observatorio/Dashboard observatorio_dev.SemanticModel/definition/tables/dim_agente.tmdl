@@ -1,0 +1,171 @@
+table dim_agente
+	lineageTag: 7b2b8222-f2f6-4458-ad80-2109f7208575
+
+	column agente_key
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: bbd5d4ed-1dae-49c2-b527-8c40ce9631c8
+		summarizeBy: sum
+		sourceColumn: agente_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column codigo_agente
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: d09fbb1b-8996-43a7-93a0-368daa251067
+		summarizeBy: none
+		sourceColumn: codigo_agente
+
+		annotation SummarizationSetBy = Automatic
+
+	column nombre_agente
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: ac23b754-8ba0-4524-bbf2-cbc13f8671fe
+		summarizeBy: none
+		sourceColumn: nombre_agente
+
+		annotation SummarizationSetBy = Automatic
+
+	column nombre_agente_normalizado
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 1ca84339-1454-42e1-a46a-d82b34b08632
+		summarizeBy: none
+		sourceColumn: nombre_agente_normalizado
+
+		annotation SummarizationSetBy = Automatic
+
+	column actividad_agente
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: ce391eaf-d972-4adf-a600-e1059c795f69
+		summarizeBy: none
+		sourceColumn: actividad_agente
+
+		annotation SummarizationSetBy = Automatic
+
+	column actividad_normalizada
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 7bce4a57-3fc9-40ac-abfd-c7272090c3df
+		summarizeBy: none
+		sourceColumn: actividad_normalizada
+
+		annotation SummarizationSetBy = Automatic
+
+	column numero_version
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 455aee32-88bf-4dba-9e6d-5ffd005a4c6c
+		summarizeBy: sum
+		sourceColumn: numero_version
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha_inicio
+		dataType: dateTime
+		formatString: Long Date
+		sourceProviderType: date
+		lineageTag: e07eab0a-600e-4153-842e-3cefd406a671
+		summarizeBy: none
+		sourceColumn: fecha_inicio
+
+		variation Variación
+			isDefault
+			relationship: 5b982a29-ddc5-42d0-a49d-60e9ae7edb99
+			defaultHierarchy: LocalDateTable_72b32ed3-7f16-4b0b-81a9-ca5b93c4d3e2.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column fecha_fin
+		dataType: dateTime
+		formatString: Long Date
+		sourceProviderType: date
+		lineageTag: 6149f78f-c9a1-4665-a42e-b6bca31348a7
+		summarizeBy: none
+		sourceColumn: fecha_fin
+
+		variation Variación
+			isDefault
+			relationship: 51a8c267-fa07-49c5-b7c9-9a7316a4ae49
+			defaultHierarchy: LocalDateTable_45bc3293-11eb-4a00-838f-b673e4af0bf6.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column es_actual
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		sourceProviderType: bit
+		lineageTag: a3a627b0-79c1-4905-bbfa-f871117577b1
+		summarizeBy: none
+		sourceColumn: es_actual
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha_creacion
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: 75712a31-5e95-4a1a-9948-446efd9390f6
+		summarizeBy: none
+		sourceColumn: fecha_creacion
+
+		variation Variación
+			isDefault
+			relationship: ae12f8ee-c563-4a20-aa2a-544229f889e7
+			defaultHierarchy: LocalDateTable_a391e967-88ef-4e4a-bcef-4802dde22347.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha_actualizacion
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: f24b4f7c-adf5-4b80-8da6-be76644bdf83
+		summarizeBy: none
+		sourceColumn: fecha_actualizacion
+
+		variation Variación
+			isDefault
+			relationship: 92b9d253-09a1-4fc4-bc14-b7861d543cb5
+			defaultHierarchy: LocalDateTable_ac0ff85c-3795-4483-a4de-4350d1c62044.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_agente = m
+		mode: import
+		source =
+				let
+				    Origen = DatabricksMultiCloud.Catalogs(
+				        "dbc-4c2404fa-9e73.cloud.databricks.com",
+				        "/sql/1.0/warehouses/049b881d5122f61a",
+				        null
+				    ),
+				    observatorio_dev_Database =
+				        Origen{[Name="observatorio_dev", Kind="Database"]}[Data],
+				    gold_Schema =
+				        observatorio_dev_Database{[Name="gold", Kind="Schema"]}[Data],
+				    dim_agente_Table =
+				        gold_Schema{[Name="dim_agente", Kind="Table"]}[Data],
+				    #"Folding detenido" =
+				        Table.StopFolding(dim_agente_Table),
+				    #"Filas filtradas" =
+				        Table.SelectRows(
+				            #"Folding detenido",
+				            each [es_actual]
+				        )
+				in
+				    #"Filas filtradas"
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,167 @@
+cultureInfo es-CO
+
+	linguisticMetadata =
+			{
+			  "Version": "2.0.0",
+			  "Language": "en-US",
+			  "Entities": {
+			    "vw_actualizacion_fuentes.fuente": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "vw_actualizacion_fuentes",
+			          "ConceptualProperty": "fuente"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Fuente": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "vw_actualizacion_fuentes.fecha_maxima": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "vw_actualizacion_fuentes",
+			          "ConceptualProperty": "fecha_maxima"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Ultimo Dato": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas.precio_promedio_cop_kwh": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas",
+			          "ConceptualProperty": "Precio promedio (COP/kWh)"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Precio promedio diario": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "dimfecha.date": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "DimFecha",
+			          "ConceptualProperty": "Date"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Fecha": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "dim_planta.nombre_planta": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "dim_planta",
+			          "ConceptualProperty": "nombre_planta"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Planta": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "dim_agente.nombre_agente": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "dim_agente",
+			          "ConceptualProperty": "nombre_agente"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "dim_planta.tipo_generacion": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "dim_planta",
+			          "ConceptualProperty": "tipo_generacion"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Tipo de generación": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "vw_dim_agente_powerbi.nombre_agente": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "vw_dim_agente_powerbi",
+			          "ConceptualProperty": "nombre_agente"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Agente": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    }
+			  }
+			}
+		contentType: json
+

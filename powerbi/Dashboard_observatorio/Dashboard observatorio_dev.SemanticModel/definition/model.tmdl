@@ -1,0 +1,47 @@
+model Model
+	culture: es-CO
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: es-CO
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["vw_resumen_diario_sistema","vw_actualizacion_fuentes","vw_sistema_horario","vw_operacion_diaria_planta","dim_agente","dim_planta","vw_dim_agente_powerbi","vw_operacion_diaria_planta (2)","vw_generacion_diaria_tipo","pipeline_health","task_performance","quality_alerts","DimTecnologia"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table vw_resumen_diario_sistema
+ref table vw_actualizacion_fuentes
+ref table vw_sistema_horario
+ref table DateTableTemplate_601c35bd-70d8-4902-9b6a-c56802afa15d
+ref table LocalDateTable_6933b2ff-fd20-4bb2-9467-9deafea6da36
+ref table DimFecha
+ref table Medidas
+ref table vw_operacion_diaria_planta
+ref table dim_agente
+ref table dim_planta
+ref table vw_dim_agente_powerbi
+ref table 'vw_operacion_diaria_planta (2)'
+ref table vw_generacion_diaria_tipo
+ref table pipeline_health
+ref table task_performance
+ref table quality_alerts
+ref table DimTecnologia
+ref table LocalDateTable_01f38504-1758-4f53-93c5-9969623300ae
+ref table LocalDateTable_04386fb5-d61b-4e5e-ac9c-45f5bfef3447
+ref table LocalDateTable_4a81ec0b-1a7d-40aa-ba8f-815a194e4dd3
+ref table LocalDateTable_72b32ed3-7f16-4b0b-81a9-ca5b93c4d3e2
+ref table LocalDateTable_45bc3293-11eb-4a00-838f-b673e4af0bf6
+ref table LocalDateTable_a391e967-88ef-4e4a-bcef-4802dde22347
+ref table LocalDateTable_ac0ff85c-3795-4483-a4de-4350d1c62044
+ref table LocalDateTable_bdcf8a10-4e90-4055-8165-137919ca379a
+ref table LocalDateTable_30fbfffb-2070-4180-be9a-1c66100fc58a
+ref table LocalDateTable_90c4b901-2f2f-4344-999c-390913ccbd23
+ref table LocalDateTable_1d6f10b2-a936-4b9a-8733-af6d4eed5a4c
+ref table LocalDateTable_40128c29-df24-4d6d-a565-f1f3fa858f7a
+ref table LocalDateTable_375b8913-a637-4aec-aa65-a71b8c982897
+
+ref cultureInfo es-CO
+

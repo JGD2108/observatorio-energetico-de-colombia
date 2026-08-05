@@ -1,0 +1,98 @@
+table quality_alerts
+	lineageTag: 95b9abde-38e3-418b-8c89-727b934c02bb
+
+	column alert_id
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 891125a2-33e3-4d91-9e46-ea8c5004fd2a
+		summarizeBy: none
+		sourceColumn: alert_id
+
+	column run_id
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 06420336-b866-4892-a33b-d66577afc251
+		summarizeBy: none
+		sourceColumn: run_id
+
+	column rule_id
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 1cdd247c-bb64-45dd-9187-e64a6c65dc62
+		summarizeBy: none
+		sourceColumn: rule_id
+
+	column component
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 328f0d8a-50af-4804-92fe-b6f2ab159a73
+		summarizeBy: none
+		sourceColumn: component
+
+	column severity
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: aaefec23-ac53-42ad-a62b-a4cad55b9ca1
+		summarizeBy: none
+		sourceColumn: severity
+
+	column status
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 1f335032-69fc-4fe8-af52-307c374c48fa
+		summarizeBy: none
+		sourceColumn: status
+
+	column error_count
+		dataType: int64
+		formatString: #,0
+		sourceProviderType: bigint
+		lineageTag: 10711783-027d-4286-948b-a402fa5e99f7
+		summarizeBy: sum
+		sourceColumn: error_count
+
+	column message
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 74633c10-1a90-4991-966e-4388448c811a
+		summarizeBy: none
+		sourceColumn: message
+
+	column created_at
+		dataType: dateTime
+		formatString: dd/MM/yyyy HH:mm
+		sourceProviderType: datetime2
+		lineageTag: 62c6d157-439c-4438-8060-a3d3a2df60a6
+		summarizeBy: none
+		sourceColumn: created_at
+
+	column resolved_at
+		dataType: dateTime
+		formatString: dd/MM/yyyy HH:mm
+		sourceProviderType: datetime2
+		lineageTag: 5f436297-5eaa-4313-91e9-a275296724af
+		summarizeBy: none
+		sourceColumn: resolved_at
+
+	column edad_horas
+		dataType: int64
+		formatString: #,0
+		sourceProviderType: bigint
+		lineageTag: ad17be15-d62c-4e2f-b829-7f56b7ba18b1
+		summarizeBy: average
+		sourceColumn: edad_horas
+
+	partition quality_alerts = m
+		mode: import
+		source =
+				let
+				    Origen = DatabricksMultiCloud.Catalogs("dbc-4c2404fa-9e73.cloud.databricks.com", "/sql/1.0/warehouses/049b881d5122f61a", null),
+				    Catalogo = Origen{[Name="observatorio_dev",Kind="Database"]}[Data],
+				    Serving = Catalogo{[Name="serving_technical",Kind="Schema"]}[Data],
+				    Vista = Serving{[Name="quality_alerts",Kind="View"]}[Data]
+				in
+				    Vista
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table

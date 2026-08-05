@@ -1,0 +1,119 @@
+relationship 48f25444-6dca-414e-b335-303be361cfaa
+	joinOnDateBehavior: datePartOnly
+	fromColumn: vw_sistema_horario.fecha_hora
+	toColumn: LocalDateTable_6933b2ff-fd20-4bb2-9467-9deafea6da36.Date
+
+relationship fa2c71da-bce9-782a-ac7f-b1d3432fa595
+	fromColumn: vw_resumen_diario_sistema.fecha
+	toColumn: DimFecha.Date
+
+relationship 3277047f-a6b2-fb0a-6233-4b5781a690fe
+	fromColumn: vw_sistema_horario.fecha
+	toColumn: DimFecha.Date
+
+relationship c7b847fa-5f31-503f-b1cb-ba13d92cf72c
+	fromColumn: vw_operacion_diaria_planta.planta_key
+	toColumn: dim_planta.planta_key
+
+relationship b8604734-3914-bde1-8ac9-29b873dbfa7b
+	fromColumn: vw_operacion_diaria_planta.codigo_sic_agente
+	toColumn: dim_agente.codigo_agente
+
+relationship 23555842-9245-73b1-ac18-0ecb83104ed5
+	fromColumn: vw_operacion_diaria_planta.fecha
+	toColumn: DimFecha.Date
+
+relationship 8b373866-72de-1ad0-3f81-2ae16f6dfc37
+	fromColumn: vw_operacion_diaria_planta.codigo_sic_agente
+	toColumn: vw_dim_agente_powerbi.codigo_agente
+
+relationship a509bbe3-54d7-5358-2a73-d964d9dc3129
+	fromColumn: 'vw_operacion_diaria_planta (2)'.fecha
+	toColumn: DimFecha.Date
+
+relationship 438ca3bc-7bab-579f-3560-998e2f708d93
+	fromColumn: 'vw_operacion_diaria_planta (2)'.planta_key
+	toColumn: dim_planta.planta_key
+
+relationship 2836e799-6799-bf42-de80-0c604ad3607d
+	fromColumn: 'vw_operacion_diaria_planta (2)'.codigo_sic_agente
+	toColumn: vw_dim_agente_powerbi.codigo_agente
+
+relationship 934d624a-362a-410c-bb71-4bed9afef5f2
+	joinOnDateBehavior: datePartOnly
+	fromColumn: vw_actualizacion_fuentes.fecha_minima
+	toColumn: LocalDateTable_01f38504-1758-4f53-93c5-9969623300ae.Date
+
+relationship 33a311f7-4a40-4e1c-9eef-63e18cd22f8a
+	joinOnDateBehavior: datePartOnly
+	fromColumn: vw_actualizacion_fuentes.fecha_maxima
+	toColumn: LocalDateTable_04386fb5-d61b-4e5e-ac9c-45f5bfef3447.Date
+
+relationship 58ed12d0-eaff-40ac-acaa-ba75b1b174ef
+	joinOnDateBehavior: datePartOnly
+	fromColumn: vw_actualizacion_fuentes.fecha_consulta
+	toColumn: LocalDateTable_4a81ec0b-1a7d-40aa-ba8f-815a194e4dd3.Date
+
+relationship 5b982a29-ddc5-42d0-a49d-60e9ae7edb99
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_agente.fecha_inicio
+	toColumn: LocalDateTable_72b32ed3-7f16-4b0b-81a9-ca5b93c4d3e2.Date
+
+relationship 51a8c267-fa07-49c5-b7c9-9a7316a4ae49
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_agente.fecha_fin
+	toColumn: LocalDateTable_45bc3293-11eb-4a00-838f-b673e4af0bf6.Date
+
+relationship ae12f8ee-c563-4a20-aa2a-544229f889e7
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_agente.fecha_creacion
+	toColumn: LocalDateTable_a391e967-88ef-4e4a-bcef-4802dde22347.Date
+
+relationship 92b9d253-09a1-4fc4-bc14-b7861d543cb5
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_agente.fecha_actualizacion
+	toColumn: LocalDateTable_ac0ff85c-3795-4483-a4de-4350d1c62044.Date
+
+relationship 661cec48-f30f-494b-a7b9-8a07721699c6
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_planta.fpo
+	toColumn: LocalDateTable_bdcf8a10-4e90-4055-8165-137919ca379a.Date
+
+relationship 3ce812a1-9c65-432b-9470-1b976bcdd377
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_planta.fecha_inicio
+	toColumn: LocalDateTable_30fbfffb-2070-4180-be9a-1c66100fc58a.Date
+
+relationship 76e2db2d-f36e-44da-8a6b-ccae3564f844
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_planta.fecha_fin
+	toColumn: LocalDateTable_90c4b901-2f2f-4344-999c-390913ccbd23.Date
+
+relationship 4a248828-da76-4b5c-becf-e654c3e8545d
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_planta.fecha_creacion
+	toColumn: LocalDateTable_1d6f10b2-a936-4b9a-8733-af6d4eed5a4c.Date
+
+relationship 46fed83d-f89e-4c33-b68d-0c5d2af67266
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_planta.fecha_actualizacion
+	toColumn: LocalDateTable_40128c29-df24-4d6d-a565-f1f3fa858f7a.Date
+
+relationship 0d6c6afa-f7fb-4ecf-b6d2-ced7554759ff
+	isActive: false
+	joinOnDateBehavior: datePartOnly
+	fromColumn: vw_generacion_diaria_tipo.fecha
+	toColumn: LocalDateTable_375b8913-a637-4aec-aa65-a71b8c982897.Date
+
+relationship d738ee22-bb90-4c18-a70f-d0b183d31c24
+	fromColumn: vw_generacion_diaria_tipo.fecha
+	toColumn: DimFecha.Date
+
+relationship 40c6687d-0784-4dc5-8e57-921be6f72f10
+	fromColumn: vw_operacion_diaria_planta.tipo_generacion
+	toColumn: DimTecnologia.tipo_generacion
+
+relationship c648bf23-0806-47d3-a313-b9def97863ea
+	fromColumn: vw_generacion_diaria_tipo.tipo_generacion
+	toColumn: DimTecnologia.tipo_generacion
+

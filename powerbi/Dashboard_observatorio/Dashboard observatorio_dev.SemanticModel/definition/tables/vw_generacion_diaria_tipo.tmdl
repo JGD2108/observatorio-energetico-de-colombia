@@ -1,0 +1,269 @@
+table vw_generacion_diaria_tipo
+	lineageTag: 154de263-adef-47b8-b222-0a1670b39d73
+
+	column fecha_key
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 292d6d64-2555-45c9-b7b4-7c937ac9baee
+		summarizeBy: sum
+		sourceColumn: fecha_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha
+		dataType: dateTime
+		formatString: Long Date
+		sourceProviderType: date
+		lineageTag: 0523f417-293b-483e-bee6-d58705983cd9
+		summarizeBy: none
+		sourceColumn: fecha
+
+		variation Variación
+			isDefault
+			relationship: 0d6c6afa-f7fb-4ecf-b6d2-ced7554759ff
+			defaultHierarchy: LocalDateTable_375b8913-a637-4aec-aa65-a71b8c982897.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column anio
+		dataType: int64
+		formatString: 0
+		sourceProviderType: smallint
+		lineageTag: b65551ca-0f01-4bdf-93a1-4d4c4322fd9b
+		summarizeBy: sum
+		sourceColumn: anio
+
+		annotation SummarizationSetBy = Automatic
+
+	column trimestre
+		dataType: int64
+		formatString: 0
+		sourceProviderType: tinyint
+		lineageTag: eb0c3bea-17f1-4425-94c6-9fb0f3b0f6a5
+		summarizeBy: sum
+		sourceColumn: trimestre
+
+		annotation SummarizationSetBy = Automatic
+
+	column mes_numero
+		dataType: int64
+		formatString: 0
+		sourceProviderType: tinyint
+		lineageTag: 0fea3bd9-6858-48aa-bb5b-3117e7c72c32
+		summarizeBy: sum
+		sourceColumn: mes_numero
+
+		annotation SummarizationSetBy = Automatic
+
+	column mes_nombre
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 87bd2e58-2782-4fc5-a395-b99bf5fae13f
+		summarizeBy: none
+		sourceColumn: mes_nombre
+
+		annotation SummarizationSetBy = Automatic
+
+	column anio_mes
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 73e29eae-34f7-476c-80d7-7017f8085b29
+		summarizeBy: sum
+		sourceColumn: anio_mes
+
+		annotation SummarizationSetBy = Automatic
+
+	column anio_mes_nombre
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 4c6a1531-2f81-454f-9725-7f15badde33f
+		summarizeBy: none
+		sourceColumn: anio_mes_nombre
+
+		annotation SummarizationSetBy = Automatic
+
+	column semana_anio
+		dataType: int64
+		formatString: 0
+		sourceProviderType: tinyint
+		lineageTag: f20103f9-d009-4c9a-8811-d221e2db7600
+		summarizeBy: sum
+		sourceColumn: semana_anio
+
+		annotation SummarizationSetBy = Automatic
+
+	column dia_semana_numero
+		dataType: int64
+		formatString: 0
+		sourceProviderType: tinyint
+		lineageTag: 8cee310b-44a9-4ee9-b0c6-2be4a90d4aac
+		summarizeBy: sum
+		sourceColumn: dia_semana_numero
+
+		annotation SummarizationSetBy = Automatic
+
+	column dia_semana_nombre
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: 8bfcc649-6886-4621-8718-b1a35c7205b1
+		summarizeBy: none
+		sourceColumn: dia_semana_nombre
+
+		annotation SummarizationSetBy = Automatic
+
+	column es_fin_semana
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		sourceProviderType: bit
+		lineageTag: aae31bd8-2bec-4efa-98f0-c2997d398565
+		summarizeBy: none
+		sourceColumn: es_fin_semana
+
+		annotation SummarizationSetBy = Automatic
+
+	column tipo_generacion
+		dataType: string
+		sourceProviderType: nvarchar(65535)
+		lineageTag: a799fa7a-d8c9-4189-877a-f9d949b3a8a1
+		summarizeBy: none
+		sourceColumn: tipo_generacion
+
+		annotation SummarizationSetBy = Automatic
+
+	column generacion_total_gwh
+		dataType: double
+		sourceProviderType: decimal(38, 12)
+		lineageTag: 4aa7dee9-acf7-4784-8f5a-661df8900814
+		summarizeBy: sum
+		sourceColumn: generacion_total_gwh
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column generacion_comparable_gwh
+		dataType: double
+		sourceProviderType: decimal(38, 12)
+		lineageTag: 92a5266b-44d4-4745-8bb9-81f88c408dd3
+		summarizeBy: sum
+		sourceColumn: generacion_comparable_gwh
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column disponibilidad_comparable_gwh
+		dataType: double
+		sourceProviderType: decimal(38, 12)
+		lineageTag: e20d7ba7-cb6c-4036-b9ee-9959fe4ecece
+		summarizeBy: sum
+		sourceColumn: disponibilidad_comparable_gwh
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column plantas_generadoras
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: d8ab53b6-2f41-47ed-a9cf-47176b59cdc9
+		summarizeBy: sum
+		sourceColumn: plantas_generadoras
+
+		annotation SummarizationSetBy = Automatic
+
+	column capacidad_observada_mw
+		dataType: double
+		sourceProviderType: decimal(33, 9)
+		lineageTag: 3854efe7-7ed1-48fd-a7f7-0e105281366f
+		summarizeBy: sum
+		sourceColumn: capacidad_observada_mw
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column energia_maxima_teorica_gwh
+		dataType: double
+		sourceProviderType: decimal(38, 6)
+		lineageTag: 020b7f9d-a6c8-4f0d-80cf-c831463724b8
+		summarizeBy: sum
+		sourceColumn: energia_maxima_teorica_gwh
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column plantas_con_alerta
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 3b63780b-2add-4f22-8c80-3b085a8d7708
+		summarizeBy: sum
+		sourceColumn: plantas_con_alerta
+
+		annotation SummarizationSetBy = Automatic
+
+	column registros_con_alerta
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: cdc9044e-d41d-4b8b-b280-98c0c83f4907
+		summarizeBy: sum
+		sourceColumn: registros_con_alerta
+
+		annotation SummarizationSetBy = Automatic
+
+	column participacion_generacion_pct
+		dataType: double
+		sourceProviderType: decimal(38, 6)
+		lineageTag: 8013d4a3-8d3c-4ae2-86b0-2a07f8b71732
+		summarizeBy: sum
+		sourceColumn: participacion_generacion_pct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column factor_capacidad_tipo_pct
+		dataType: double
+		sourceProviderType: decimal(38, 6)
+		lineageTag: 0d3ef08b-39bb-4408-a323-2b7f09c44180
+		summarizeBy: sum
+		sourceColumn: factor_capacidad_tipo_pct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column utilizacion_disponibilidad_tipo_pct
+		dataType: double
+		sourceProviderType: decimal(38, 6)
+		lineageTag: 14fc6674-b108-4b23-ac52-22ec1e3d9f61
+		summarizeBy: sum
+		sourceColumn: utilizacion_disponibilidad_tipo_pct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition vw_generacion_diaria_tipo = m
+		mode: import
+		source =
+				let
+				  Origen = DatabricksMultiCloud.Catalogs("dbc-4c2404fa-9e73.cloud.databricks.com", "/sql/1.0/warehouses/049b881d5122f61a", null),
+				  #"Navegación 1" = Origen{[Name = "observatorio_dev", Kind = "Database"]}[Data],
+				  #"Navegación 2" = #"Navegación 1"{[Name = "serving_business", Kind = "Schema"]}[Data],
+				  #"Navegación 3" = #"Navegación 2"{[Name = "generacion_tecnologia_diaria", Kind = "View"]}[Data]
+				in
+				  #"Navegación 3"
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

@@ -26,14 +26,32 @@ spark.sql(f"CREATE SCHEMA IF NOT EXISTS {SERVING_TECHNICAL_SCHEMA}")
 
 spark.sql(f"""
 CREATE OR REPLACE VIEW {SERVING_VIEWS['kpi_sistema_diario']} AS
+WITH metricas AS (
 SELECT
   base.*,
   ROUND(AVG(generacion_gwh) OVER (ORDER BY fecha ROWS BETWEEN 6 PRECEDING AND CURRENT ROW), 3) AS generacion_media_7d_gwh,
   ROUND(AVG(demanda_gwh) OVER (ORDER BY fecha ROWS BETWEEN 6 PRECEDING AND CURRENT ROW), 3) AS demanda_media_7d_gwh,
   ROUND(AVG(precio_nacional_promedio_cop_kwh) OVER (ORDER BY fecha ROWS BETWEEN 6 PRECEDING AND CURRENT ROW), 2) AS precio_media_7d_cop_kwh,
   ROUND(100.0 * horas_con_datos / 24.0, 2) AS completitud_horaria_pct,
-  DATEDIFF(CURRENT_DATE(), fecha) AS dias_desde_dato
+  DATEDIFF(CURRENT_DATE(), fecha) AS dias_desde_dato,
+  MAX(CASE
+    WHEN generacion_gwh IS NOT NULL
+      AND demanda_gwh IS NOT NULL
+      AND disponibilidad_gwh IS NOT NULL
+      AND precio_nacional_promedio_cop_kwh IS NOT NULL
+      AND horas_con_datos = 24
+    THEN fecha
+  END) OVER () AS fecha_corte_comparable
 FROM {ANALYTICS_SCHEMA}.vw_resumen_diario_sistema base
+)
+SELECT
+  metricas.*,
+  fecha <= fecha_corte_comparable AS es_periodo_comparable,
+  CASE WHEN fecha <= fecha_corte_comparable THEN generacion_gwh END AS generacion_comparable_gwh,
+  CASE WHEN fecha <= fecha_corte_comparable THEN demanda_gwh END AS demanda_comparable_gwh,
+  CASE WHEN fecha <= fecha_corte_comparable THEN disponibilidad_gwh END AS disponibilidad_comparable_gwh,
+  CASE WHEN fecha <= fecha_corte_comparable THEN precio_nacional_promedio_cop_kwh END AS precio_comparable_cop_kwh
+FROM metricas
 """)
 
 spark.sql(f"""
@@ -62,6 +80,11 @@ SELECT
     ELSE 'INCUMPLIDO'
   END AS estado_operativo
 FROM {ANALYTICS_SCHEMA}.vw_actualizacion_fuentes
+""")
+
+spark.sql(f"""
+CREATE OR REPLACE VIEW {SERVING_VIEWS['generacion_tecnologia_diaria']} AS
+SELECT * FROM {ANALYTICS_SCHEMA}.vw_generacion_diaria_tipo
 """)
 
 # COMMAND ----------

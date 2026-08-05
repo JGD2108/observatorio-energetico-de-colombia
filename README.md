@@ -4,8 +4,8 @@ Pipeline Lakehouse en Databricks para integrar y analizar datos del sistema
 eléctrico colombiano. Usa arquitectura Medallion, Delta Lake, Unity Catalog y
 un modelo dimensional con cinco hechos.
 
-> Fases 1 a 4 certificadas mediante ejecuciones completas en Databricks:
-> pipeline reproducible, observabilidad, calidad y referencias gobernadas.
+> Fases 1 a 6 certificadas mediante ejecuciones completas en Databricks:
+> pipeline reproducible, observabilidad, calidad, gobierno, backfill y Serving.
 
 ## Flujo
 
@@ -32,7 +32,9 @@ Audit Start → SIMEM / maestros → Landing → Bronze → Silver → Gold
 | `Automation/` | Job y quality checks |
 | `observability/` | Auditoría de corridas, tareas y métricas por capa |
 | `governance/` | Políticas TX y funciones compartidas de gobierno |
-| `Gold_Analytics/` | Vistas analíticas; certificación pendiente |
+| `Gold_Analytics/` | Vistas analíticas certificadas |
+| `Serving/` | Contratos estables de negocio y operación |
+| `powerbi/` | Proyecto Power BI y modelo semántico de la Fase 7 |
 | `config/` | Configuración parametrizable |
 | `setup/00_bootstrap.py` | Bootstrap idempotente |
 
@@ -64,6 +66,9 @@ Dependencias fijadas:
 - [Fase 2 y manual de observabilidad](docs/phase2_observability.md)
 - [Fase 3: calidad, cuarentena y alertas](docs/phase3_data_quality.md)
 - [Fase 4: gobierno Silver y Gold](docs/phase4_governance.md)
+- [Fase 5: backfill y optimización](docs/phase5_backfill_optimization.md)
+- [Fase 6: consumo y operación](docs/phase6_consumption_operations.md)
+- [Fase 7: dashboard Power BI](docs/phase7_powerbi_dashboard.md)
 - [Clasificación de archivos](docs/file_classification.md)
 
 ## Limitaciones
@@ -73,5 +78,6 @@ Dependencias fijadas:
   físico fila a fila durante Silver se ampliará cuando se gobiernen sus contratos.
 - La política TX conserva la precedencia técnica anterior; cualquier cambio de
   semántica requiere aprobación funcional del responsable del dato.
-- Las vistas no están certificadas semánticamente; corresponde a Fase 6.
-- No existe todavía API, serving ni dashboard conectado a datos.
+- El PBIP requiere autenticación interactiva del propietario para actualizar y
+  publicar el modelo en Power BI Service.
+- Tarifas y calidad del servicio siguen pendientes de contratos certificados.

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Dashboard observatorio_dev"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "23b39b01-f675-4587-9c2b-351bd9039234"
+  }
+}

@@ -98,6 +98,7 @@ SERVING_VIEWS = {
     "demanda_mercado_diaria": f"{SERVING_SCHEMA}.demanda_mercado_diaria",
     "energia_embalsada_diaria": f"{SERVING_SCHEMA}.energia_embalsada_diaria",
     "estado_fuentes": f"{SERVING_SCHEMA}.estado_fuentes",
+    "generacion_tecnologia_diaria": f"{SERVING_SCHEMA}.generacion_tecnologia_diaria",
     "pipeline_health": f"{SERVING_TECHNICAL_SCHEMA}.pipeline_health",
     "task_performance": f"{SERVING_TECHNICAL_SCHEMA}.task_performance",
     "quality_alerts": f"{SERVING_TECHNICAL_SCHEMA}.quality_alerts",

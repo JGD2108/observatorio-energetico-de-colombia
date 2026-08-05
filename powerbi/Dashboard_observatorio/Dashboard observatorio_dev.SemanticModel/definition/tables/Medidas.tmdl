@@ -1,0 +1,348 @@
+table Medidas
+	lineageTag: 8a6b3b84-dc37-448f-b44d-42c7ca28c01d
+
+	measure 'Generación total (GWh)' =
+			
+			SUM('vw_resumen_diario_sistema'[generacion_comparable_gwh])
+		formatString: 0.00" GWh"
+		lineageTag: 3240fd7b-7ab1-46ce-a372-a9fee238580c
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	measure 'Demanda total (GWh)' =
+			
+			SUM('vw_resumen_diario_sistema'[demanda_comparable_gwh])
+		formatString: " 0.00"" GWh"""
+		lineageTag: 7b9dc470-5c29-44e4-90b7-1a2dd568580d
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	measure 'Disponibilidad total (GWh)' =
+			
+			SUM('vw_resumen_diario_sistema'[disponibilidad_comparable_gwh])
+		lineageTag: 11c5dd53-8750-44c0-9594-0b6e3aa38a08
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Precio promedio (COP/kWh)' =
+			
+			AVERAGE(
+			    'vw_resumen_diario_sistema'[precio_comparable_cop_kwh]
+			)
+		formatString: #,0.00 "COP/kWh"
+		lineageTag: 196dad22-a50c-4c87-a50b-f8ac20b6bb46
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Margen generación-demanda (GWh)' =
+			
+			[Generación total (GWh)] - [Demanda total (GWh)]
+		lineageTag: 996d9f07-9074-4d94-a22a-b71dd0144df3
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Utilización disponibilidad (%)' =
+			
+			DIVIDE(
+			    [Generación total (GWh)],
+			    [Disponibilidad total (GWh)]
+			) * 100
+		formatString: 0.00\ %
+		lineageTag: fb4d7fdb-4311-4e0c-b621-9d21ed23b1ad
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Generación total (TWh)' =
+			
+			DIVIDE([Generación total (GWh)], 1000)
+		lineageTag: 15b6876f-ae14-404a-a5bb-09d460deadad
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Demanda total (TWh)' =
+			
+			DIVIDE([Demanda total (GWh)], 1000)
+		lineageTag: 7035eb8f-5e3e-47d4-871f-431e0f751bbd
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Disponibilidad total (TWh)' =
+			
+			DIVIDE([Disponibilidad total (GWh)], 1000)
+		lineageTag: 4b0a517e-24b4-4365-ad98-6fc156057ef5
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Margen generación-demanda (TWh)' =
+			
+			DIVIDE(
+			    [Generación total (GWh)] - [Demanda total (GWh)],
+			    1000
+			)
+		lineageTag: 1f541db5-477a-4937-9cb2-5fc411ad374b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Margen generación-demanda (%)' =
+			
+			DIVIDE(
+			    [Margen generación-demanda (GWh)],
+			    [Demanda total (GWh)]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: d048309f-faf8-4b2f-9471-cd149597caf1
+
+	measure 'Fecha de corte comparable' =
+			
+			MAX('vw_resumen_diario_sistema'[fecha_corte_comparable])
+		formatString: dd/MM/yyyy
+		lineageTag: efd63a4c-d44c-4097-95f4-b0219f98c2f7
+
+	measure 'Generación planta (GWh)' =
+			
+			COALESCE(
+			    SUM(
+			        'vw_operacion_diaria_planta'[generacion_total_gwh]
+			    ),
+			    0
+			)
+		lineageTag: 4eb3ddee-0260-44e7-bb26-d4c579efc171
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Generación planta (TWh)' =
+			
+			DIVIDE(
+			    [Generación planta (GWh)],
+			    1000,
+			    0
+			)
+		lineageTag: 86ebb9ec-5a73-4265-bae9-2fcae8e36c3d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Capacidad seleccionada (MW)' =
+			
+			COALESCE(
+			    SUMX(
+			        VALUES('vw_operacion_diaria_planta'[planta_key]),
+			        CALCULATE(
+			            MAX(
+			                'vw_operacion_diaria_planta'[capacidad_efectiva_neta_mw]
+			            )
+			        )
+			    ),
+			    0
+			)
+		lineageTag: 786e3266-67bb-4ac0-8f90-67166f67c6dc
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Disponibilidad promedio (MW)' =
+			
+			COALESCE(
+			    AVERAGEX(
+			        VALUES(
+			            'vw_operacion_diaria_planta'[fecha]
+			        ),
+			        CALCULATE(
+			            SUM(
+			                'vw_operacion_diaria_planta'[disponibilidad_promedio_mw]
+			            )
+			        )
+			    ),
+			    0
+			)
+		lineageTag: a9606d9d-ac3f-4a81-9eaf-332bb750d780
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Factor de capacidad (%)' =
+			
+			VAR GeneracionValidaMWh =
+			    SUMX(
+			        FILTER(
+			            'vw_operacion_diaria_planta',
+			            'vw_operacion_diaria_planta'[capacidad_efectiva_neta_mw] > 0
+			        ),
+			        COALESCE(
+			            'vw_operacion_diaria_planta'[generacion_total_gwh],
+			            0
+			        ) * 1000
+			    )
+			
+			VAR CapacidadMaximaMWh =
+			    SUMX(
+			        FILTER(
+			            'vw_operacion_diaria_planta',
+			            'vw_operacion_diaria_planta'[capacidad_efectiva_neta_mw] > 0
+			        ),
+			        'vw_operacion_diaria_planta'[capacidad_efectiva_neta_mw] * 24
+			    )
+			
+			RETURN
+			    COALESCE(
+			        DIVIDE(
+			            GeneracionValidaMWh,
+			            CapacidadMaximaMWh
+			        ),
+			        0
+			    )
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: af937499-79ec-49c8-9465-c1c1323ee32c
+
+	measure 'Utilización planta (%)' =
+			
+			DIVIDE(
+			    SUM('vw_operacion_diaria_planta'[generacion_total_gwh]),
+			    SUM('vw_operacion_diaria_planta'[disponibilidad_total_gwh])
+			)
+		formatString: 0.00%
+		lineageTag: ed4b8a7d-8458-442e-ac37-0ac312ab7cce
+
+	measure 'Plantas activas' =
+			
+			CALCULATE(
+			    DISTINCTCOUNT('vw_operacion_diaria_planta'[planta_key]),
+			    'vw_operacion_diaria_planta'[horas_con_generacion] > 0
+			)
+		formatString: #,0
+		lineageTag: 79f56d32-a847-4728-8f11-e7eb8f0a1ec1
+
+	measure 'Generación diaria gráfico (GWh)' =
+			
+			VAR HorasConDato =
+			    SUM(
+			        'vw_operacion_diaria_planta'[horas_con_generacion]
+			    )
+			RETURN
+			    IF(
+			        ISBLANK(HorasConDato),
+			        BLANK(),
+			        SUM(
+			            'vw_operacion_diaria_planta'[generacion_total_gwh]
+			        )
+			    )
+		lineageTag: 8df3b6f6-4596-4ad3-8979-8b2fdd25c2b4
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Generación por tipo (GWh)' =
+			
+			COALESCE(
+			    SUM(
+			        'vw_generacion_diaria_tipo'[generacion_total_gwh]
+			    ),
+			    0
+			)
+		lineageTag: 368642bf-59d9-4b04-bb5f-30964ee1ce8e
+
+	measure 'Utilización disponibilidad por tipo (%)' =
+			
+			DIVIDE(
+			    SUM(
+			        'vw_generacion_diaria_tipo'[generacion_comparable_gwh]
+			    ),
+			    SUM(
+			        'vw_generacion_diaria_tipo'[disponibilidad_comparable_gwh]
+			    )
+			)
+		formatString: 0.0%
+		lineageTag: 6fcc45cd-0523-4aa9-b3bf-329d56f62054
+
+	measure 'Estado última ejecución' =
+			
+			MAXX(
+			    TOPN(1, ALL('pipeline_health'), 'pipeline_health'[started_at], DESC),
+			    'pipeline_health'[status]
+			)
+		lineageTag: f74be0ee-bde5-4a84-b94c-00e65832f484
+
+	measure 'Duración última ejecución (min)' =
+			
+			DIVIDE(
+			    MAXX(
+			        TOPN(1, ALL('pipeline_health'), 'pipeline_health'[started_at], DESC),
+			        'pipeline_health'[duration_seconds]
+			    ),
+			    60
+			)
+		formatString: #,0.0 "min"
+		lineageTag: 19596617-a0b6-4e8c-aab8-c581a413fa47
+
+	measure 'Tasa éxito últimas 10 (%)' =
+			
+			MAXX(
+			    TOPN(1, ALL('pipeline_health'), 'pipeline_health'[started_at], DESC),
+			    'pipeline_health'[tasa_exito_ultimas_10_pct]
+			)
+		formatString: 0.0\ %
+		lineageTag: b800461d-18de-42aa-ab71-2ffc84a1cff7
+
+	measure 'Tareas fallidas última ejecución' =
+			
+			MAXX(
+			    TOPN(1, ALL('pipeline_health'), 'pipeline_health'[started_at], DESC),
+			    'pipeline_health'[tasks_failed]
+			)
+		formatString: #,0
+		lineageTag: 49140205-c462-423f-8a15-dea81831489a
+
+	measure 'Alertas abiertas' =
+			
+			CALCULATE(
+			    COUNTROWS('quality_alerts'),
+			    'quality_alerts'[status] = "OPEN"
+			)
+		formatString: #,0
+		lineageTag: b2ab74de-6682-4127-90f0-e6d0e82e80ab
+
+	measure 'Rezago máximo fuentes (días)' =
+			
+			MAX('vw_actualizacion_fuentes'[dias_rezago])
+		formatString: #,0 "días"
+		lineageTag: bdac0fd8-d8aa-498f-b8cc-6d4078adeabb
+
+	measure 'Fuentes dentro del SLA (%)' =
+			
+			DIVIDE(
+			    CALCULATE(
+			        COUNTROWS('vw_actualizacion_fuentes'),
+			        'vw_actualizacion_fuentes'[cumple_sla_frescura] = TRUE()
+			    ),
+			    COUNTROWS('vw_actualizacion_fuentes')
+			)
+		formatString: 0.0%
+		lineageTag: e43fe708-9bc0-4a58-8f0b-14b1ca77194f
+
+	measure 'Duración ejecución (min)' =
+			
+			DIVIDE(AVERAGE('pipeline_health'[duration_seconds]), 60)
+		formatString: #,0.0 "min"
+		lineageTag: d8ce53be-dc3c-410a-adf4-e39c107f7d98
+
+	measure 'Duración promedio tarea (min)' =
+			
+			DIVIDE(AVERAGE('task_performance'[duracion_promedio_segundos]), 60)
+		formatString: #,0.0 "min"
+		lineageTag: e72e586f-b6bd-44c4-8346-3a20efe6e802
+
+	column Value
+		formatString: 0
+		lineageTag: 1d162040-7764-42f1-a4c2-42133995c051
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Value]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Medidas = calculated
+		mode: import
+		source = Row("Value", BLANK())
+
+	annotation PBI_Id = a4a4a6f5e3504b6483bdc1a10cce49d5
+
+	annotation 436ba87b-9c83-4389-a31b-ebd06a36be98 = {"Expression":null}
+
+	annotation 277cc1b9-af89-4597-8e15-cacc25c0886b = Para usar caracteres especiales en un nombre de tabla calculada, incluya el nombre completo entre corchetes ([]) y agregue un ] a cualquier corchete de cierre en el nombre.
+

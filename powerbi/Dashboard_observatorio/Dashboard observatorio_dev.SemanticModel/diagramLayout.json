@@ -1,0 +1,178 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 0,
+            "y": 0
+          },
+          "nodeIndex": "vw_actualizacion_fuentes",
+          "nodeLineageTag": "67acbd63-ff83-4788-84ae-a6e47fb3e5ea",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 5
+        },
+        {
+          "location": {
+            "x": 419,
+            "y": 356
+          },
+          "nodeIndex": "vw_resumen_diario_sistema",
+          "nodeLineageTag": "d18af208-3d56-460f-ba39-c9c20f28cd9b",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 6
+        },
+        {
+          "location": {
+            "x": 568,
+            "y": 0
+          },
+          "nodeIndex": "vw_sistema_horario",
+          "nodeLineageTag": "0d8b2496-3a9d-420f-8c00-f0c4164b2c2c",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 7
+        },
+        {
+          "location": {
+            "x": 1112.7421072140596,
+            "y": 907.41274888067
+          },
+          "nodeIndex": "DimFecha",
+          "nodeLineageTag": "8a14ab4c-2806-4ae7-8cb3-71f3b23276ae",
+          "size": {
+            "height": 337.36005492538925,
+            "width": 234
+          },
+          "zIndex": 8
+        },
+        {
+          "location": {
+            "x": 1332.0242450497742,
+            "y": 0
+          },
+          "nodeIndex": "dim_agente",
+          "nodeLineageTag": "7b2b8222-f2f6-4458-ad80-2109f7208575",
+          "size": {
+            "height": 490.30090942788308,
+            "width": 234
+          },
+          "zIndex": 3
+        },
+        {
+          "location": {
+            "x": 1402.8299931343263,
+            "y": 691.669372064737
+          },
+          "nodeIndex": "dim_planta",
+          "nodeLineageTag": "5a3030b1-f763-437a-b9e3-349ad27e4fec",
+          "size": {
+            "height": 574.3194209382491,
+            "width": 234
+          },
+          "zIndex": 9
+        },
+        {
+          "location": {
+            "x": 1997.320950621925,
+            "y": 173.13090256220937
+          },
+          "nodeIndex": "vw_operacion_diaria_planta",
+          "nodeLineageTag": "b743023f-53ff-4790-879d-6fd2ca067100",
+          "size": {
+            "height": 1000,
+            "width": 234
+          },
+          "zIndex": 4
+        },
+        {
+          "location": {
+            "x": 1597.9287089862876,
+            "y": 38.898597384647189
+          },
+          "nodeIndex": "vw_dim_agente_powerbi",
+          "nodeLineageTag": "f16a5d17-6602-4d27-9336-fd53b2c45471",
+          "size": {
+            "height": 260.95987131961084,
+            "width": 234
+          },
+          "zIndex": 1
+        },
+        {
+          "location": {
+            "x": 2281.320950621925,
+            "y": 482.99439650149304
+          },
+          "nodeIndex": "vw_operacion_diaria_planta (2)",
+          "nodeLineageTag": "c1e5a3ae-fee1-4f0f-91ce-4d2d9a2921f0",
+          "size": {
+            "height": 778.0537277169484,
+            "width": 234
+          },
+          "zIndex": 2
+        },
+        {
+          "location": {
+            "x": 852,
+            "y": 228
+          },
+          "nodeIndex": "Medidas",
+          "size": {
+            "height": 365.92673808754233,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2565.320950621925,
+            "y": 482.99439650149304
+          },
+          "nodeIndex": "vw_generacion_diaria_tipo",
+          "nodeLineageTag": "154de263-adef-47b8-b222-0a1670b39d73",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "Todas las tablas",
+      "zoomValue": 62.336089590424315,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    },
+    {
+      "ordinal": 1,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [],
+      "name": "Disposición 1",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "Todas las tablas",
+  "defaultDiagram": "Todas las tablas"
+}

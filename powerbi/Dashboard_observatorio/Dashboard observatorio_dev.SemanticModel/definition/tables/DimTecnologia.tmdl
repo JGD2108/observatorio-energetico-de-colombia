@@ -1,0 +1,29 @@
+table DimTecnologia
+	lineageTag: 2bd34728-7b7e-4479-b9e0-3a677f4ef307
+
+	column tipo_generacion
+		lineageTag: 31184c98-e43a-4417-a924-2d59050ad2ac
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [tipo_generacion]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimTecnologia = calculated
+		mode: import
+		source =
+				
+				DISTINCT(
+				    UNION(
+				        SELECTCOLUMNS(
+				            'vw_operacion_diaria_planta',
+				            "tipo_generacion", 'vw_operacion_diaria_planta'[tipo_generacion]
+				        ),
+				        SELECTCOLUMNS(
+				            'vw_generacion_diaria_tipo',
+				            "tipo_generacion", 'vw_generacion_diaria_tipo'[tipo_generacion]
+				        )
+				    )
+				)
+
+	annotation PBI_Id = d413ec25e3704365b3213ef74d4fd8ca
