@@ -416,10 +416,15 @@ html[data-lang="en"] .lang-en { display: revert !important; }
 .presentation-mode .video-slide::after { opacity: .25; }
 .presentation-mode .video-slide__eyebrow { position: absolute; z-index: 5; top: 28px; left: 5vw; right: 5vw; max-width: none; margin: 0; }
 .presentation-mode .video-slide__grid { position: absolute; z-index: 5; top: 53px; left: 5vw; display: block; width: 90vw; max-width: none; min-height: 0; margin: 0; padding: 0; border: 0; }
-.presentation-mode .video-slide .eyebrow, .presentation-mode .video-slide__lead { display: none; }
+.presentation-mode .video-slide .eyebrow,
+.presentation-mode .video-slide__lead { display: none !important; }
+html body.presentation-mode main > section.video-slide .video-slide__lead { display: none !important; }
 .presentation-mode .video-slide h2, .presentation-mode .video-slide--long h2 { max-width: none; overflow: hidden; margin: 0; color: #d7e8e8; font: 500 clamp(21px, 2.3vw, 34px)/1.05 var(--serif); letter-spacing: -.025em; text-overflow: ellipsis; white-space: nowrap; }
 .presentation-mode .video-visual { top: 102px; right: 5vw; bottom: 92px; left: 5vw; width: auto; min-height: 0; padding: 18px 22px 16px; border-radius: 16px; }
 .presentation-mode .video-visual__label { font-size: 9px; }
+.presentation-mode .evidence-shot figcaption,
+.presentation-mode .dashboard-filmstrip figcaption { display: none; }
+.presentation-mode .privacy-mask { color: transparent; font-size: 0; }
 .presentation-mode .evidence-intro { height: calc(100% - 33px); }
 .presentation-mode .evidence-intro .evidence-shot img { height: 100%; object-fit: contain; object-position: center; }
 .presentation-mode .repo-tree { display: flex; flex-direction: column; justify-content: center; padding: clamp(18px, 3vw, 42px); }
