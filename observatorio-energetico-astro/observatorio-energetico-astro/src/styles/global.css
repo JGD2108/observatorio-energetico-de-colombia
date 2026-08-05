@@ -394,6 +394,8 @@ html[data-lang="en"] .lang-en { display: revert !important; }
 .medallion-ribbon span:nth-of-type(3) { color: #d7ae94; }.medallion-ribbon span:nth-of-type(4) { color: #dde1e2; }.medallion-ribbon span:nth-of-type(5) { color: var(--gold); }.medallion-ribbon span:nth-of-type(6) { color: var(--cyan); }
 .medallion-ribbon i { color: #6c8c90; font-size: 8px; font-style: normal; }
 .evidence-shot--job img { height: 195px; object-fit: contain; object-position: center; }
+.evidence-shot--architecture { margin-top: 14px; }
+.evidence-shot--architecture img { height: 245px; object-fit: contain; object-position: center; }
 .evidence-shot--dim img { filter: brightness(.5) saturate(.65); }
 .parameter-overlay { position: absolute; top: 67px; right: 40px; display: grid; grid-template-columns: 1fr auto; gap: 7px 14px; width: 265px; padding: 14px; border: 1px solid rgba(82,221,211,.36); border-radius: 8px; background: rgba(3,16,22,.94); box-shadow: 0 18px 40px rgba(0,0,0,.38); }
 .parameter-overlay span { color: #91aaad; font: 7px var(--mono); }.parameter-overlay b { color: var(--cyan); font: 700 8px var(--mono); text-align: right; }
@@ -431,6 +433,7 @@ html body.presentation-mode main > section.video-slide .video-slide__lead { disp
 .presentation-mode .repo-tree span { font-size: 9px; }.presentation-mode .repo-tree b { margin: 22px 0 18px; font-size: 12px; }.presentation-mode .repo-tree code { font-size: clamp(10px, 1vw, 14px); line-height: 1.8; }
 .presentation-mode .medallion-ribbon { height: 28px; margin: 8px 0; }.presentation-mode .medallion-ribbon span { padding: 6px 11px; font-size: 8px; }.presentation-mode .medallion-ribbon i { font-size: 11px; }
 .presentation-mode .video-visual--lakehouse .evidence-shot--job { height: calc(100% - 58px); }.presentation-mode .video-visual--lakehouse .evidence-shot--job img { height: 100%; object-fit: contain; }
+.presentation-mode .video-visual--lakehouse .evidence-shot--architecture { height: calc(100% - 35px); margin-top: 12px; }.presentation-mode .video-visual--lakehouse .evidence-shot--architecture img { height: 100%; object-fit: contain; }
 .presentation-mode .video-visual--ingestion .evidence-shot--job { height: calc(100% - 55px); margin-top: 13px; }.presentation-mode .video-visual--ingestion .evidence-shot--job img { height: 100%; object-fit: contain; }
 .presentation-mode .parameter-overlay { top: clamp(76px, 14vh, 130px); right: clamp(38px, 7vw, 105px); width: min(390px, 34vw); padding: 22px; gap: 13px 24px; }.presentation-mode .parameter-overlay span, .presentation-mode .parameter-overlay b { font-size: clamp(8px, .8vw, 12px); }
 .presentation-mode .quality-evidence { grid-template-columns: minmax(200px, .5fr) minmax(0, 1.7fr); gap: clamp(28px, 6vw, 90px); height: calc(100% - 82px); margin: 18px auto 0; padding: 0 8vw; }.presentation-mode .quality-evidence__score { width: clamp(165px, 18vw, 240px); height: clamp(165px, 18vw, 240px); justify-self: center; }.presentation-mode .quality-evidence__score strong { font-size: clamp(58px, 7vw, 96px); }.presentation-mode .quality-evidence__score span { font-size: 10px; }.presentation-mode .quality-evidence__terminal { padding: clamp(22px, 3vw, 42px); font-size: clamp(11px, 1.15vw, 17px); line-height: 1.85; }.presentation-mode .quality-evidence__terminal strong { margin-top: 18px; padding-top: 16px; font-size: clamp(12px, 1.3vw, 19px); }

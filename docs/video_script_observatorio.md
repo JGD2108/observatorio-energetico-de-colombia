@@ -231,98 +231,190 @@ mostrar que las tarjetas y gráficos responden coherentemente.
 
 **Cerrar con:** “Un dashboard confiable comienza mucho antes de la visualización”.
 
-## Video completo para LinkedIn
+## Video completo profesional para LinkedIn y portafolio
 
-**Duración objetivo:** 4 a 6 minutos.
+**Duración objetivo:** 6 minutos y 45 segundos.
 
-**Formato:** 16:9, subtítulos, cortes cada 8–12 segundos, voz clara y capturas
-de pantalla con zoom suave. No mostrar credenciales.
+**Formato:** 16:9, subtítulos, voz directa y cortes visuales cada 8–12 segundos.
+Usar zoom únicamente para señalar evidencia y ocultar credenciales, identificadores
+personales o configuraciones sensibles.
 
-### Guion narrado con tiempos
+**Tesis del video:** no construí solamente un dashboard; diseñé un producto de
+datos auditable que conecta decisiones del sector eléctrico con arquitectura,
+calidad, gobierno y operación.
 
-**0:00–0:25 — Gancho**
+**Qué debe reconocer cada audiencia:**
 
-> ¿Cómo pasar de datos públicos del sistema eléctrico colombiano a una decisión
-> confiable? No basta con poner cuatro tarjetas en Power BI. Hay que controlar
-> origen, fecha, grano, calidad y operación. Ese fue el objetivo del Observatorio
-> Energético de Colombia.
+- **Reclutadores y líderes de datos:** criterio de arquitectura, modelado,
+  confiabilidad, ownership y capacidad de llevar una solución a producción.
+- **Profesionales y clientes del sector energético:** preguntas de negocio,
+  unidades, cobertura temporal, comparabilidad y límites de interpretación.
+- **Observadores no técnicos:** por qué una cifra confiable requiere mucho más
+  que una gráfica atractiva.
 
-**Mostrar:** portada del README y dashboard.
+### Guion narrado con tiempos y decisiones
 
-**0:25–1:10 — Problema y objetivo**
+**0:00–0:30 — Propuesta de valor**
 
-> El proyecto integra generación, demanda, disponibilidad, precio de bolsa,
-> plantas, agentes, tecnología y energía embalsada. La pregunta no es solamente
-> cuánto ocurrió, sino si la cifra está completa, si las fuentes terminan en la
-> misma fecha y si el pipeline que la produce terminó correctamente.
+**Decisión que debe quedar clara:** construir un producto auditable, no una
+visualización aislada.
 
-**Mostrar:** KPI de resumen y tabla de actualización de fuentes.
+> ¿Cómo convertir datos públicos del sistema eléctrico colombiano en decisiones
+> que un analista, un cliente o un líder pueda defender? Mi respuesta fue el
+> Observatorio Energético de Colombia: una plataforma que conecta ingeniería de
+> datos, gobierno y analítica para explicar generación, demanda, disponibilidad,
+> precio de bolsa y reserva energética. El resultado visible es Power BI, pero la
+> confianza se construye mucho antes del dashboard.
 
-**1:10–2:00 — Arquitectura**
+**Mostrar:** portada del proyecto y vista general del dashboard. Mantener en
+pantalla el título “De datos públicos a decisiones defendibles”.
 
-> La solución usa Databricks, Delta Lake y Unity Catalog. Los datos pasan por
-> Landing, Bronze, Silver y Gold. Luego se publican vistas Gold Analytics y
-> contratos Serving para Power BI. La auditoría conserva el run_id, tareas,
-> métricas y resultados de calidad.
+**0:30–1:15 — Alcance y criterio de producto**
 
-**Mostrar:** diagrama de arquitectura y carpetas del repositorio.
+**Decisión que debe quedar clara:** cada dominio entra solamente cuando puede
+soportar una pregunta concreta y una interpretación responsable.
 
-**2:00–2:45 — Calidad y gobierno**
+> Primero definí qué decisión podía soportar cada dato. Para el alcance actual
+> integré operación del sistema, mercado y energía embalsada: generación y
+> demanda para observar balance; disponibilidad y desempeño por planta para
+> estudiar utilización; precio de bolsa para seguir señales de mercado; y
+> embalses para entender la reserva energética. También hice explícito lo que el
+> producto todavía no responde: tarifas al usuario, restricciones de red,
+> calidad del servicio y pronósticos. Prefiero declarar un límite antes que
+> publicar una conclusión sin fuente, cobertura o reconciliación suficiente.
 
-> El pipeline valida esquema, grano, cobertura horaria, frescura, claves y
-> relaciones. Las reglas TX, alias, SCD2 y el bridge planta-embalse están
-> gobernados. Los problemas bloqueantes no deben convertirse en KPI ejecutivos.
+**Mostrar:** resumen del sistema, frescura por fuente y las páginas de demanda y
+embalses. Señalar que las fechas máximas pueden diferir entre fuentes y que los
+KPI combinados usan un corte comparable.
 
-**Mostrar:** vista técnica, calidad y contrato `estado_fuentes`.
+**1:15–2:20 — Arquitectura Medallion y trade-offs**
 
-**2:45–3:45 — Dashboard**
+**Decisión que debe quedar clara:** separar responsabilidades para poder reparar,
+evolucionar y volver a publicar sin romper a los consumidores.
 
-> El dashboard tiene cinco páginas. El resumen muestra el estado del sistema. El
-> análisis por planta explica contribuciones. La operación técnica verifica la
-> salud del pipeline. Demanda y mercado muestra picos y cobertura. Embalses y
-> cobertura sigue la reserva energética y la trazabilidad del dato.
+> Diseñé una arquitectura Medallion sobre Databricks, Delta Lake y Unity Catalog.
+> Landing conserva la respuesta recibida y su evidencia. Bronze normaliza la
+> persistencia técnica sin inventar significado de negocio. Silver limpia,
+> tipifica y resuelve entidades. Gold organiza el dominio en cinco tablas de
+> hechos, cinco dimensiones y un bridge planta–embalse. Finalmente, Serving
+> publica contratos estables para Power BI. Elegí más capas y controles porque
+> el beneficio es trazabilidad, reparabilidad y desacoplamiento: una corrección
+> interna no tiene que romper el reporte. Cada ejecución conserva `run_id`,
+> tareas, métricas y resultados de calidad en Unity Catalog.
 
-**Mostrar:** recorrido de las cinco páginas y cambio de filtros.
+**Mostrar:** la diapositiva Medallion completa. Recorrer visualmente
+`FUENTES → LANDING → BRONZE → SILVER → GOLD → SERVING → POWER BI` y después los
+controles transversales: catálogo, auditoría, calidad bloqueante y modos de carga.
 
-**3:45–4:25 — Operación**
+**1:55–2:20 — Decisiones de ingestión dentro de la misma diapositiva**
 
-> Después de publicar, la Fase 9 ejecuta una revisión manual de solo lectura. El
-> resultado actual es APTO: fuentes dentro del SLA, última corrida correcta,
-> contratos disponibles y sin bloqueos operativos. No activé alertas automáticas;
-> la revisión queda bajo control del responsable.
+> Para el día a día uso carga incremental; para reconstruir historia uso un
+> backfill controlado y auditable. Las llamadas HTTP tienen reintentos limitados,
+> la cobertura se valida explícitamente y las escrituras Delta usan operaciones
+> idempotentes para que repetir una ventana no duplique resultados. Las
+> optimizaciones se concentraron en filtros, proyecciones, agregaciones y joins,
+> sin depender de caché ni de persistencia en memoria.
 
-**Mostrar:** notebook y salida `APTO`.
+**2:20–3:25 — Calidad, identidad y gobierno**
 
-**4:25–5:10 — Próximos pasos**
+**Decisión que debe quedar clara:** la calidad es una puerta de publicación; un
+fallo bloqueante nunca debe convertirse en KPI ejecutivo.
 
-> La siguiente evolución incorporará tarifas al usuario, restricciones de red,
-> calidad del servicio, hidrología y pronósticos, pero solo cuando cada dominio
-> tenga fuente oficial, permisos, grano, cobertura, reglas de calidad y contrato
-> Serving. La prioridad es crecer sin perder confianza.
+> Un dato puede tener el tipo correcto y aun así representar mal el negocio. Por
+> eso el pipeline valida esquema, grano, duplicados, cobertura horaria, frescura,
+> relaciones y reconciliaciones antes de publicar. Normalicé códigos TX para
+> evitar categorías equivalentes con nombres distintos; usé dimensiones SCD2
+> para conservar historia; miembros inferidos para no perder hechos tempranos; y
+> un bridge para representar la relación real entre plantas y embalses. En la
+> ejecución validada se corrieron 62 controles: cero fallidos y cero bloqueantes.
+> Ese número no reemplaza el criterio profesional, pero sí demuestra que la
+> publicación pasó por controles reproducibles.
 
-**Mostrar:** tabla de roadmap del README.
+**Mostrar:** evidencia de calidad `62 / 0 / 0`, resultado del job en verde y un
+detalle breve de gobierno o relaciones. No recorrer código línea por línea.
 
-**5:10–5:30 — Cierre para LinkedIn**
+**3:25–4:35 — Del modelo Gold al producto de decisión**
 
-> Este proyecto demuestra que la analítica energética no empieza en el gráfico.
-> Empieza en una arquitectura reproducible, continúa con datos gobernados y
-> termina en una decisión que puede explicarse. El Observatorio Energético de
-> Colombia ya está publicado en Power BI.
+**Decisión que debe quedar clara:** Gold expresa el negocio y Serving protege el
+contrato que consumen las herramientas externas.
 
-**Mostrar:** dashboard, repositorio y llamada a la acción.
+> Sobre el modelo Gold publiqué contratos Serving orientados a consumo. Esta
+> separación permite evolucionar cálculos internos sin cambiar inesperadamente
+> nombres, tipos o granularidad en Power BI. El dashboard resume el sistema,
+> compara generación y demanda, analiza desempeño por planta, muestra salud
+> operativa, separa demanda regulada y no regulada y sigue energía embalsada. Las
+> cinco páginas comparten una dimensión de fecha y los indicadores cruzados usan
+> el último corte común disponible. Así, el diseño visual no solo muestra cifras:
+> ayuda a distinguir estado, causa, frescura y capacidad de acción.
+
+**Mostrar:** recorrido de las cinco páginas. En cada una formular una pregunta:
+“¿cómo está el sistema?”, “¿qué planta o tecnología explica el resultado?”,
+“¿está sano el pipeline?”, “¿cómo se comporta la demanda?” y “¿cómo evoluciona
+la reserva energética?”. Cambiar un filtro para demostrar interacción real.
+
+**4:35–5:30 — Operación responsable**
+
+**Decisión que debe quedar clara:** automatizar también significa saber cuándo
+reintentar, cuándo bloquear y cuándo solicitar revisión humana.
+
+> El workflow orquesta catálogo, auditoría, ingestión, Bronze, Silver, Gold,
+> calidad, Serving y cierre operativo. Los reintentos son acotados para no
+> convertir una falla externa en tráfico indefinido. El backfill verifica
+> cobertura antes de aprobarse y la revisión de Fase 9 es de solo lectura. Como
+> decidí no activar alertas automáticas, el control devuelve APTO o REVISAR con
+> evidencia para que el responsable actúe. El estado validado fue APTO, sin
+> hallazgos operativos.
+
+**Mostrar:** workflow completo y salida `REVISION FASE 9: APTO`. Señalar que un
+pipeline verde es evidencia operativa, no una garantía absoluta del mercado.
+
+**5:30–6:45 — Resultado, límites y siguiente decisión**
+
+**Decisión que debe quedar clara:** crecer solo cuando una nueva fuente tenga
+propietario, permisos, grano, cobertura, calidad, reconciliación y contrato.
+
+> El resultado es una solución reproducible de extremo a extremo: datos públicos,
+> arquitectura Medallion, modelo dimensional, 62 validaciones aprobadas, contratos
+> de consumo, cinco páginas analíticas y una revisión operativa APTO. También es
+> una solución honesta sobre sus límites: no atribuye causalidad donde solo hay
+> correlación y no presenta como disponible un dominio que aún no está certificado.
+> La siguiente evolución prioriza tarifas, red, calidad del servicio, hidrología y
+> pronósticos, cada uno con el mismo estándar de trazabilidad. Este proyecto muestra
+> cómo trabajo: diseño la arquitectura, implemento el pipeline, valido el dato y
+> comunico la decisión. Si su equipo necesita convertir datos energéticos en un
+> producto confiable, estaré encantado de conversar.
+
+**Mostrar:** roadmap, repositorio, dashboard publicado y cierre con datos de
+contacto profesional. Mantener cinco segundos finales sin movimiento.
+
+### Lista de grabación del video completo
+
+1. Grabar primero la voz definitiva y luego ajustar los cortes a sus pausas.
+2. Capturar arquitectura, job, calidad y dashboard en 1920×1080 o superior.
+3. Usar una sola evidencia principal por diapositiva; no superponer párrafos a
+   capturas.
+4. Resaltar con cursor o zoom únicamente el elemento que se está explicando.
+5. Añadir subtítulos revisados manualmente para `run_id`, SCD2, Delta, Serving y
+   nombres del sector.
+6. Mantener visibles las unidades: MW, GWh, TWh y COP/kWh.
+7. Cerrar con GitHub, Power BI y una invitación concreta a conversar.
 
 ### Texto de publicación para LinkedIn
 
-> Presento el Observatorio Energético de Colombia: una plataforma en Databricks
-> que transforma datos públicos del sistema eléctrico en contratos analíticos y
-> un dashboard de Power BI para operación, mercado y energía embalsada.
+> Presento el Observatorio Energético de Colombia, un producto de datos que
+> transforma información pública del sistema eléctrico en decisiones trazables.
 >
-> El proyecto integra arquitectura Medallion, calidad, gobierno, backfill,
-> auditoría y Serving. La idea central es simple: una visualización solo es útil
-> cuando se puede explicar de dónde viene, qué fecha representa y si el pipeline
-> que la produce está sano.
+> Lo construí de extremo a extremo: Databricks y Delta Lake, arquitectura
+> Medallion, gobierno en Unity Catalog, modelo dimensional, cargas incrementales
+> y backfill, controles de calidad bloqueantes, contratos Serving y un dashboard
+> de Power BI con cinco perspectivas del sistema.
 >
-> Próximo reto: incorporar tarifas al usuario, restricciones de red, calidad del
-> servicio, hidrología y pronósticos con fuentes certificadas.
+> La ejecución validada completó 62 controles con cero fallos y la revisión
+> operativa concluyó APTO. Igual de importante: el producto declara sus límites y
+> no publica nuevos dominios sin fuente, cobertura, reconciliación y contrato.
+>
+> Este proyecto refleja cómo abordo la analítica energética: conectando contexto
+> de negocio, ingeniería confiable y comunicación clara. Si trabajas en datos,
+> energía o transformación analítica, conversemos.
 >
 > #DataEngineering #Databricks #PowerBI #DataQuality #EnergyAnalytics
