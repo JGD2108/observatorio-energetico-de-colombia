@@ -10,8 +10,8 @@ PROJECT_ROOT = "/Workspace/" + NOTEBOOK_PATH.strip("/").rsplit("/", 2)[0]
 if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
-from backfill.runtime import _parameter  # noqa: E402
-from config.project_config import BRONZE_TABLES, CATALOG  # noqa: E402
+from backfill.runtime import _parameter, is_window_covered  # noqa: E402
+from config.project_config import BRONZE_TABLES, CATALOG, MAX_LAG_DAYS  # noqa: E402
 
 mode = _parameter(dbutils, "execution_mode", "AUTO").upper()
 if mode != "BACKFILL":
@@ -53,7 +53,13 @@ for source_name, date_column in sources.items():
         .first()
     )
     actual_start, actual_end = profile["actual_start"], profile["actual_end"]
-    covered = bool(actual_start and actual_end and actual_start <= requested_start and actual_end >= requested_end)
+    covered = is_window_covered(
+        requested_start,
+        requested_end,
+        actual_start,
+        actual_end,
+        MAX_LAG_DAYS,
+    )
     rows.append((backfill_id, source_name, requested_start, requested_end, actual_start, actual_end, int(profile["row_count"] or 0), covered))
 
 coverage = spark.createDataFrame(rows, "backfill_id string, source_name string, requested_start date, requested_end date, actual_start date, actual_end date, row_count long, covered boolean").withColumn("measured_at", F.current_timestamp())
@@ -62,5 +68,7 @@ spark.sql(f"DELETE FROM `{CATALOG}`.`audit`.`backfill_coverage` WHERE backfill_i
 coverage.write.mode("append").saveAsTable(f"{CATALOG}.audit.backfill_coverage")
 missing = [row["source_name"] for row in coverage.filter(~F.col("covered")).select("source_name").collect()]
 if missing:
-    raise ValueError(f"Backfill sin cobertura completa en: {missing}")
+    raise ValueError(
+        f"Backfill fuera de cobertura o del SLA de {MAX_LAG_DAYS} dias en: {missing}"
+    )
 print("Cobertura historica completa:", [row["source_name"] for row in coverage.select("source_name").collect()])

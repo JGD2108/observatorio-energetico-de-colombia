@@ -17,6 +17,7 @@ from config.project_config import (  # noqa: E402
     CATALOG,
     GOLD_TABLES,
     LANDING_FILES,
+    MONITORING_TABLES,
     QUARANTINE_TABLES,
     SILVER_TABLES,
 )
@@ -51,12 +52,15 @@ TASK_SPECS = {
     "governance_check": ("GOVERNANCE", "phase4_gate"),
     "quality_check": ("QUALITY", "gold_incremental"),
     "gold_analytics": ("ANALYTICS", "dashboard_views"),
+    "serving_publish": ("SERVING", "consumer_views"),
+    "operational_readiness": ("MONITORING", "production_gate"),
 }
 
 TABLE_SPECS = [
     *(("BRONZE", source, table) for source, table in BRONZE_TABLES.items()),
     *(("SILVER", source, table) for source, table in SILVER_TABLES.items()),
     *(("GOLD", source, table) for source, table in GOLD_TABLES.items()),
+    *(("MONITORING", source, table) for source, table in MONITORING_TABLES.items()),
 ]
 
 STATUS = finish_pipeline_run(

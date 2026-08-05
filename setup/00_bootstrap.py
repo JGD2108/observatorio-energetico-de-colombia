@@ -15,8 +15,8 @@ if PROJECT_ROOT not in sys.path:
 
 from config.project_config import (  # noqa: E402
     AUDIT_SCHEMA, AUDIT_TABLES, BRONZE_TABLES, CATALOG, GOLD_TABLES,
-    GOVERNANCE_TABLES, LANDING_VOLUME_NAME, QUARANTINE_TABLES, SCHEMAS,
-    SILVER_TABLES,
+    GOVERNANCE_TABLES, LANDING_VOLUME_NAME, MONITORING_TABLES,
+    QUARANTINE_TABLES, SCHEMAS, SILVER_TABLES,
 )
 
 spark.sql(f"CREATE CATALOG IF NOT EXISTS `{CATALOG}`")
@@ -218,6 +218,38 @@ TBLPROPERTIES ('quality'='audit', 'delta.enableChangeDataFeed'='true')
 """)
 
 spark.sql(f"""
+CREATE TABLE IF NOT EXISTS {MONITORING_TABLES['slo_results']} (
+    run_id STRING NOT NULL,
+    slo_id STRING NOT NULL,
+    metric_name STRING NOT NULL,
+    metric_value DOUBLE,
+    operator STRING NOT NULL,
+    threshold DOUBLE NOT NULL,
+    passed BOOLEAN NOT NULL,
+    blocking BOOLEAN NOT NULL,
+    detail STRING,
+    measured_at TIMESTAMP NOT NULL
+) USING DELTA
+TBLPROPERTIES ('quality'='monitoring', 'delta.enableChangeDataFeed'='true')
+""")
+
+spark.sql(f"""
+CREATE TABLE IF NOT EXISTS {MONITORING_TABLES['operational_alerts']} (
+    alert_id STRING NOT NULL,
+    run_id STRING NOT NULL,
+    slo_id STRING NOT NULL,
+    severity STRING NOT NULL,
+    status STRING NOT NULL,
+    metric_value DOUBLE,
+    threshold DOUBLE,
+    message STRING,
+    created_at TIMESTAMP NOT NULL,
+    resolved_at TIMESTAMP
+) USING DELTA
+TBLPROPERTIES ('quality'='monitoring', 'delta.enableChangeDataFeed'='true')
+""")
+
+spark.sql(f"""
 CREATE TABLE IF NOT EXISTS {QUARANTINE_TABLES['data_quality_exceptions']} (
     run_id STRING NOT NULL,
     exception_id STRING NOT NULL,
@@ -410,6 +442,7 @@ required = [
     *SILVER_TABLES.values(),
     *GOLD_TABLES.values(),
     *AUDIT_TABLES.values(),
+    *MONITORING_TABLES.values(),
     *GOVERNANCE_TABLES.values(),
     *QUARANTINE_TABLES.values(),
 ]

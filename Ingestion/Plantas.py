@@ -23,7 +23,7 @@ PROJECT_ROOT = "/Workspace/" + NOTEBOOK_PATH.strip("/").rsplit("/", 2)[0]
 if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
-from backfill.runtime import chunk_days, read_simem_chunked, resolve_window  # noqa: E402
+from backfill.runtime import chunk_days, read_simem_chunked, resolve_window, retry_settings  # noqa: E402
 
 from config.project_config import (
     TIMEZONE,
@@ -78,8 +78,10 @@ print(
     f"{fecha_inicio_str} a {fecha_fin_str}"
 )
 
+simem_max_retries, simem_retry_base_seconds = retry_settings(dbutils)
 df_plantas = read_simem_chunked(
-    ReadSIMEM, DATASET_ID, fecha_inicio, fecha_fin, chunk_days(dbutils)
+    ReadSIMEM, DATASET_ID, fecha_inicio, fecha_fin, chunk_days(dbutils),
+    simem_max_retries, simem_retry_base_seconds,
 )
 
 if df_plantas is None or df_plantas.empty:

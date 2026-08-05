@@ -76,6 +76,8 @@ GOLD_TABLES = {
 ANALYTICS_SCHEMA = f"{CATALOG}.{SCHEMAS['gold_analytics']}"
 MONITORING_SCHEMA = f"{CATALOG}.{SCHEMAS['monitoring']}"
 AUDIT_SCHEMA = f"{CATALOG}.{SCHEMAS['audit']}"
+SERVING_SCHEMA = f"{CATALOG}.{SCHEMAS['serving']}"
+SERVING_TECHNICAL_SCHEMA = f"{CATALOG}.{SCHEMAS['serving_technical']}"
 
 AUDIT_TABLES = {
     "pipeline_runs": f"{AUDIT_SCHEMA}.pipeline_runs",
@@ -83,6 +85,22 @@ AUDIT_TABLES = {
     "layer_metrics": f"{AUDIT_SCHEMA}.layer_metrics",
     "data_quality_results": f"{AUDIT_SCHEMA}.data_quality_results",
     "data_quality_alerts": f"{AUDIT_SCHEMA}.data_quality_alerts",
+}
+
+MONITORING_TABLES = {
+    "slo_results": f"{MONITORING_SCHEMA}.slo_results",
+    "operational_alerts": f"{MONITORING_SCHEMA}.operational_alerts",
+}
+
+SERVING_VIEWS = {
+    "kpi_sistema_diario": f"{SERVING_SCHEMA}.kpi_sistema_diario",
+    "operacion_planta_diaria": f"{SERVING_SCHEMA}.operacion_planta_diaria",
+    "demanda_mercado_diaria": f"{SERVING_SCHEMA}.demanda_mercado_diaria",
+    "energia_embalsada_diaria": f"{SERVING_SCHEMA}.energia_embalsada_diaria",
+    "estado_fuentes": f"{SERVING_SCHEMA}.estado_fuentes",
+    "pipeline_health": f"{SERVING_TECHNICAL_SCHEMA}.pipeline_health",
+    "task_performance": f"{SERVING_TECHNICAL_SCHEMA}.task_performance",
+    "quality_alerts": f"{SERVING_TECHNICAL_SCHEMA}.quality_alerts",
 }
 
 QUARANTINE_SCHEMA = f"{CATALOG}.{SCHEMAS['quarantine']}"
