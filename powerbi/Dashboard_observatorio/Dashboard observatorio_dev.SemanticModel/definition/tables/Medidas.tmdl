@@ -323,6 +323,100 @@ table Medidas
 		formatString: #,0.0 "min"
 		lineageTag: e72e586f-b6bd-44c4-8346-3a20efe6e802
 
+	measure 'Demanda mercado (GWh)' =
+			
+			SUM('demanda_mercado_diaria'[demanda_total_gwh])
+		formatString: #,0.00 "GWh"
+		lineageTag: 1b35e5fa-93ea-4bb8-a4c9-36b9f67f1142
+
+	measure 'Demanda mercado (TWh)' =
+			
+			DIVIDE([Demanda mercado (GWh)], 1000)
+		formatString: #,0.00 "TWh"
+		lineageTag: c0cfe42a-1c68-45e7-8a42-462aad381456
+
+	measure 'Demanda promedio mercado (MW)' =
+			
+			AVERAGEX(
+			    VALUES('demanda_mercado_diaria'[fecha]),
+			    CALCULATE(SUM('demanda_mercado_diaria'[demanda_promedio_mw]))
+			)
+		formatString: #,0 "MW"
+		lineageTag: b60ebbf5-4fde-48a1-aa1a-b30482e57926
+
+	measure 'Demanda pico mercado (MW)' =
+			
+			MAX('demanda_mercado_diaria'[demanda_pico_mw])
+		formatString: #,0 "MW"
+		lineageTag: f980778f-4308-474a-a9ce-a4385c8c4d10
+
+	measure 'Días demanda completa' =
+			
+			COUNTROWS(
+			    FILTER(
+			        VALUES('demanda_mercado_diaria'[fecha]),
+			        CALCULATE(MIN('demanda_mercado_diaria'[horas_con_datos])) = 24
+			    )
+		)
+		formatString: #,0
+		lineageTag: 90d16da7-29ea-46ca-a764-d9845d08cb1d
+
+	measure 'Energía embalsada última (GWh)' =
+			
+			VAR FechaUltima = MAX('energia_embalsada_diaria'[fecha])
+			RETURN
+			    CALCULATE(
+			        MAX('energia_embalsada_diaria'[energia_total_gwh]),
+			        'energia_embalsada_diaria'[fecha] = FechaUltima
+			    )
+		formatString: #,0.0 "GWh"
+		lineageTag: 9989c9d0-5ef6-4f38-b702-3d7f7f691934
+
+	measure 'Variación embalses última (GWh)' =
+			
+			VAR FechaUltima = MAX('energia_embalsada_diaria'[fecha])
+			RETURN
+			    CALCULATE(
+			        MAX('energia_embalsada_diaria'[variacion_diaria_gwh]),
+			        'energia_embalsada_diaria'[fecha] = FechaUltima
+			    )
+		formatString: #,0.0 "GWh";-#,0.0 "GWh";0.0 "GWh"
+		lineageTag: f09a11b0-5a36-4dc7-99e5-a2e406e2a2c7
+
+	measure 'Cobertura directa última (%)' =
+			
+			VAR FechaUltima = MAX('energia_embalsada_diaria'[fecha])
+			RETURN
+			    CALCULATE(
+			        MAX('energia_embalsada_diaria'[cobertura_asignacion_directa_pct]),
+			        'energia_embalsada_diaria'[fecha] = FechaUltima
+			    )
+		formatString: 0.0\ %
+		lineageTag: 875a15f2-5bca-4f88-a2c8-5036c2582b89
+
+	measure 'Plantas con medición última' =
+			
+			VAR FechaUltima = MAX('energia_embalsada_diaria'[fecha])
+			RETURN
+			    CALCULATE(
+			        MAX('energia_embalsada_diaria'[plantas_con_medicion]),
+			        'energia_embalsada_diaria'[fecha] = FechaUltima
+			    )
+		formatString: #,0
+		lineageTag: 55ea45f8-ea99-4ced-a014-04049d12c88d
+
+	measure 'Variación energía diaria (GWh)' =
+			
+			SUM('energia_embalsada_diaria'[variacion_diaria_gwh])
+		formatString: #,0.0 "GWh";-#,0.0 "GWh";0.0 "GWh"
+		lineageTag: ee87a612-aa48-4723-abfa-2522d23c9a85
+
+	measure 'Cobertura directa (%)' =
+			
+			AVERAGE('energia_embalsada_diaria'[cobertura_asignacion_directa_pct])
+		formatString: 0.0\ %
+		lineageTag: 5c0cd50d-16b0-4e38-835c-277f02189742
+
 	column Value
 		formatString: 0
 		lineageTag: 1d162040-7764-42f1-a4c2-42133995c051

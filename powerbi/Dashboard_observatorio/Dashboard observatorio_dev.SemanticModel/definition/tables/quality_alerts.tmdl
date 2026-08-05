@@ -96,3 +96,4 @@ table quality_alerts
 	annotation PBI_NavigationStepName = Navegación
 
 	annotation PBI_ResultType = Table
+

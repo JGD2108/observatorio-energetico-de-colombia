@@ -1,0 +1,135 @@
+{
+    "$schema":  "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+    "name":  "f7c7a0e1202608051103",
+    "position":  {
+                     "x":  1040,
+                     "y":  8,
+                     "z":  0,
+                     "height":  64,
+                     "width":  224,
+                     "tabOrder":  0
+                 },
+    "visual":  {
+                   "visualType":  "slicer",
+                   "query":  {
+                                 "queryState":  {
+                                                    "Values":  {
+                                                                   "projections":  [
+                                                                                       {
+                                                                                           "field":  {
+                                                                                                         "Column":  {
+                                                                                                                        "Expression":  {
+                                                                                                                                           "SourceRef":  {
+                                                                                                                                                             "Entity":  "DimFecha"
+                                                                                                                                                         }
+                                                                                                                                       },
+                                                                                                                        "Property":  "Date"
+                                                                                                                    }
+                                                                                                     },
+                                                                                           "queryRef":  "DimFecha.Date",
+                                                                                           "nativeQueryRef":  "Date",
+                                                                                           "active":  true
+                                                                                       }
+                                                                                   ]
+                                                               }
+                                                },
+                                 "sortDefinition":  {
+                                                        "sort":  [
+                                                                     {
+                                                                         "field":  {
+                                                                                       "Column":  {
+                                                                                                      "Expression":  {
+                                                                                                                         "SourceRef":  {
+                                                                                                                                           "Entity":  "DimFecha"
+                                                                                                                                       }
+                                                                                                                     },
+                                                                                                      "Property":  "Date"
+                                                                                                  }
+                                                                                   },
+                                                                         "direction":  "Ascending"
+                                                                     }
+                                                                 ],
+                                                        "isDefaultSort":  true
+                                                    }
+                             },
+                   "objects":  {
+                                   "data":  [
+                                                {
+                                                    "properties":  {
+                                                                       "mode":  {
+                                                                                    "expr":  {
+                                                                                                 "Literal":  {
+                                                                                                                 "Value":  "\u0027Between\u0027"
+                                                                                                             }
+                                                                                             }
+                                                                                }
+                                                                   }
+                                                }
+                                            ],
+                                   "general":  [
+
+                                               ],
+                                   "header":  [
+                                                  {
+                                                      "properties":  {
+                                                                         "text":  {
+                                                                                      "expr":  {
+                                                                                                   "Literal":  {
+                                                                                                                   "Value":  "\u0027Periodo analizado\u0027"
+                                                                                                               }
+                                                                                               }
+                                                                                  },
+                                                                         "textSize":  {
+                                                                                          "expr":  {
+                                                                                                       "Literal":  {
+                                                                                                                       "Value":  "17D"
+                                                                                                                   }
+                                                                                                   }
+                                                                                      },
+                                                                         "fontFamily":  {
+                                                                                            "expr":  {
+                                                                                                         "Literal":  {
+                                                                                                                         "Value":  "\u0027\u0027\u0027Arial Black\u0027\u0027\u0027"
+                                                                                                                     }
+                                                                                                     }
+                                                                                        },
+                                                                         "bold":  {
+                                                                                      "expr":  {
+                                                                                                   "Literal":  {
+                                                                                                                   "Value":  "true"
+                                                                                                               }
+                                                                                               }
+                                                                                  }
+                                                                     }
+                                                  }
+                                              ],
+                                   "pendingChangesIcon":  [
+                                                              {
+                                                                  "properties":  {
+                                                                                     "show":  {
+                                                                                                  "expr":  {
+                                                                                                               "Literal":  {
+                                                                                                                               "Value":  "false"
+                                                                                                                           }
+                                                                                                           }
+                                                                                              }
+                                                                                 }
+                                                              }
+                                                          ],
+                                   "slider":  [
+                                                  {
+                                                      "properties":  {
+                                                                         "show":  {
+                                                                                      "expr":  {
+                                                                                                   "Literal":  {
+                                                                                                                   "Value":  "false"
+                                                                                                               }
+                                                                                               }
+                                                                                  }
+                                                                     }
+                                                  }
+                                              ]
+                               },
+                   "drillFilterOtherVisuals":  true
+               }
+}

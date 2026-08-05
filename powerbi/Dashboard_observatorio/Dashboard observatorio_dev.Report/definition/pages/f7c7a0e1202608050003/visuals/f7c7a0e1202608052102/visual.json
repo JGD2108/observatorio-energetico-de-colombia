@@ -1,0 +1,52 @@
+{
+    "$schema":  "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+    "name":  "f7c7a0e1202608052102",
+    "position":  {
+                     "x":  24,
+                     "y":  62,
+                     "z":  8000,
+                     "height":  32,
+                     "width":  1000,
+                     "tabOrder":  6000
+                 },
+    "visual":  {
+                   "visualType":  "textbox",
+                   "objects":  {
+                                   "general":  [
+                                                   {
+                                                       "properties":  {
+                                                                          "paragraphs":  [
+                                                                                             {
+                                                                                                 "textRuns":  [
+                                                                                                                  {
+                                                                                                                      "value":  "Nivel energético, variación diaria y trazabilidad de asignación",
+                                                                                                                      "textStyle":  {
+                                                                                                                                        "fontSize":  "12pt",
+                                                                                                                                        "color":  "#566176"
+                                                                                                                                    }
+                                                                                                                  }
+                                                                                                              ]
+                                                                                             }
+                                                                                         ]
+                                                                      }
+                                                   }
+                                               ]
+                               },
+                   "visualContainerObjects":  {
+                                                  "background":  [
+                                                                     {
+                                                                         "properties":  {
+                                                                                            "transparency":  {
+                                                                                                                 "expr":  {
+                                                                                                                              "Literal":  {
+                                                                                                                                              "Value":  "100D"
+                                                                                                                                          }
+                                                                                                                          }
+                                                                                                             }
+                                                                                        }
+                                                                     }
+                                                                 ]
+                                              },
+                   "drillFilterOtherVisuals":  true
+               }
+}

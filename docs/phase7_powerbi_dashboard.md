@@ -12,10 +12,12 @@ Gold validado
   -> observatorio_dev.serving
        -> resumen del sistema
        -> análisis por planta
+       -> demanda y mercado
+       -> energía embalsada y cobertura
   -> observatorio_dev.serving_technical
        -> operación técnica
   -> modelo semántico Power BI (Import)
-  -> tres páginas del reporte
+  -> cinco páginas del reporte
 ```
 
 Power BI consume estas vistas estables:
@@ -26,6 +28,8 @@ Power BI consume estas vistas estables:
 | negocio | `operacion_planta_diaria` | desempeño y ranking de plantas |
 | negocio | `generacion_tecnologia_diaria` | mezcla y utilización por tecnología |
 | negocio | `estado_fuentes` | frescura y cumplimiento del SLA |
+| negocio | `demanda_mercado_diaria` | demanda regulada/no regulada, picos y cobertura horaria |
+| negocio | `energia_embalsada_diaria` | energía almacenada, variación diaria y cobertura de asignación |
 | técnica | `pipeline_health` | estado, duración y éxito de ejecuciones |
 | técnica | `task_performance` | rendimiento de tareas en 30 días |
 | técnica | `quality_alerts` | alertas abiertas e historial de calidad |
@@ -48,6 +52,12 @@ actualización, por lo que frescura y comparabilidad no se confunden.
 3. **Operación técnica**: estado y duración de la última ejecución, tasa de éxito
    reciente, alertas abiertas, duración histórica, tareas lentas y detalle de
    alertas.
+4. **Demanda y mercado**: demanda acumulada, demanda promedio y pico, detalle
+   diario de los mercados regulado y no regulado, y días con cobertura completa.
+   El pico se interpreta por mercado; no representa un pico nacional coincidente.
+5. **Embalses y cobertura**: nivel energético embalsado, variación diaria,
+   plantas con medición y porcentaje de energía con asignación directa. Sirve
+   para vigilar la evolución de la reserva hídrica y la trazabilidad del dato.
 
 ## Abrir y actualizar localmente
 
@@ -63,7 +73,7 @@ actualización, por lo que frescura y comparabilidad no se confunden.
 3. Si Power BI lo solicita, iniciar sesión en Databricks para el servidor
    `dbc-4c2404fa-9e73.cloud.databricks.com` y seleccionar autenticación OAuth.
 4. Elegir **Inicio > Actualizar** y esperar a que termine el modelo completo.
-5. Verificar las tres páginas y guardar. Este primer guardado también permite a
+5. Verificar las cinco páginas y guardar. Este primer guardado también permite a
    Power BI normalizar los metadatos TMDL heredados del archivo original.
 
 ## Publicar en Power BI Service
@@ -76,6 +86,7 @@ workspace del propietario, por eso no se automatiza desde el repositorio.
 
 ## Alcance pendiente
 
-La Fase 7 cubre operación, mercado, disponibilidad, plantas y salud técnica. Los
-indicadores de tarifas al usuario y calidad del servicio no se muestran porque
-todavía no existen contratos de datos certificados para esos dominios.
+La Fase 7 cubre operación, demanda, mercado, embalses, disponibilidad, plantas y
+salud técnica. Los indicadores de tarifas al usuario, restricciones de red y
+calidad del servicio no se muestran porque todavía no existen contratos de datos
+certificados para esos dominios.

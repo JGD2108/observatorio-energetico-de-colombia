@@ -66,11 +66,17 @@ table DimFecha
 		mode: import
 		source =
 				
+				VAR FechasDisponibles =
+				    UNION(
+				        SELECTCOLUMNS('vw_resumen_diario_sistema', "Fecha", 'vw_resumen_diario_sistema'[fecha]),
+				        SELECTCOLUMNS('vw_operacion_diaria_planta', "Fecha", 'vw_operacion_diaria_planta'[fecha]),
+				        SELECTCOLUMNS('vw_generacion_diaria_tipo', "Fecha", 'vw_generacion_diaria_tipo'[fecha]),
+				        SELECTCOLUMNS('demanda_mercado_diaria', "Fecha", 'demanda_mercado_diaria'[fecha]),
+				        SELECTCOLUMNS('energia_embalsada_diaria', "Fecha", 'energia_embalsada_diaria'[fecha])
+				    )
+				RETURN
 				ADDCOLUMNS(
-				    CALENDAR(
-				        MIN('vw_resumen_diario_sistema'[fecha]),
-				        MAX('vw_resumen_diario_sistema'[fecha])
-				    ),
+				    CALENDAR(MINX(FechasDisponibles, [Fecha]), MAXX(FechasDisponibles, [Fecha])),
 				    "Año", YEAR([Date]),
 				    "MesNumero", MONTH([Date]),
 				    "Mes", FORMAT([Date], "MMMM"),

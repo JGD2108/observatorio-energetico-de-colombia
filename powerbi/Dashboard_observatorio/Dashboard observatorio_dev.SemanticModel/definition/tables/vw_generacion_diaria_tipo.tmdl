@@ -4,6 +4,7 @@ table vw_generacion_diaria_tipo
 	column fecha
 		dataType: dateTime
 		formatString: Long Date
+		lineageTag: 5edf2523-240f-4e2b-83ba-3f7c75f9c034
 		summarizeBy: none
 		sourceColumn: fecha
 
@@ -11,18 +12,101 @@ table vw_generacion_diaria_tipo
 
 	column tipo_generacion
 		dataType: string
+		lineageTag: a575f3bd-b44d-4363-87cf-a13506f13592
 		summarizeBy: none
 		sourceColumn: tipo_generacion
 
 	column generacion_total_gwh
 		dataType: double
+		lineageTag: 52e2333d-5511-4c23-862e-10d5acc55a62
 		summarizeBy: sum
 		sourceColumn: generacion_total_gwh
 
 	column disponibilidad_total_gwh
 		dataType: double
+		lineageTag: 41ee10a8-6ad2-4612-bcd1-714fb4fa5c0e
 		summarizeBy: sum
 		sourceColumn: disponibilidad_total_gwh
+
+	column fecha_key
+		dataType: int64
+		formatString: 0
+		lineageTag: eb82c84f-a30d-4fa5-a635-e36c5ee37f23
+		summarizeBy: sum
+		sourceColumn: fecha_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column anio
+		dataType: int64
+		formatString: 0
+		lineageTag: 0a61556a-6fbf-43a7-b663-8c3aa4792758
+		summarizeBy: sum
+		sourceColumn: anio
+
+		annotation SummarizationSetBy = Automatic
+
+	column trimestre
+		dataType: int64
+		formatString: 0
+		lineageTag: e05778df-67c2-47a7-a590-2e8036fb4bf7
+		summarizeBy: sum
+		sourceColumn: trimestre
+
+		annotation SummarizationSetBy = Automatic
+
+	column mes_numero
+		dataType: int64
+		formatString: 0
+		lineageTag: d2edd94d-2b5f-4ad9-9542-d2bbf46b45fb
+		summarizeBy: sum
+		sourceColumn: mes_numero
+
+		annotation SummarizationSetBy = Automatic
+
+	column mes_nombre
+		dataType: string
+		lineageTag: 2e7f7208-55d4-4118-b6cb-31ea235b4a64
+		summarizeBy: none
+		sourceColumn: mes_nombre
+
+		annotation SummarizationSetBy = Automatic
+
+	column anio_mes
+		dataType: int64
+		formatString: 0
+		lineageTag: 0b570f36-58b9-41af-bfc8-b44683fba133
+		summarizeBy: sum
+		sourceColumn: anio_mes
+
+		annotation SummarizationSetBy = Automatic
+
+	column anio_mes_nombre
+		dataType: string
+		lineageTag: d59d20fa-12a4-4b6d-a2e1-c7c25cc5eda8
+		summarizeBy: none
+		sourceColumn: anio_mes_nombre
+
+		annotation SummarizationSetBy = Automatic
+
+	column plantas_con_datos
+		dataType: int64
+		formatString: 0
+		lineageTag: 2383b289-51bb-4a9b-967a-a2e61c56f8d4
+		summarizeBy: sum
+		sourceColumn: plantas_con_datos
+
+		annotation SummarizationSetBy = Automatic
+
+	column utilizacion_disponibilidad_pct
+		dataType: double
+		lineageTag: 39a5bafa-8945-48e8-88fd-5d67c1107574
+		summarizeBy: sum
+		sourceColumn: utilizacion_disponibilidad_pct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	partition vw_generacion_diaria_tipo = m
 		mode: import
@@ -38,3 +122,4 @@ table vw_generacion_diaria_tipo
 	annotation PBI_NavigationStepName = Navegación
 
 	annotation PBI_ResultType = Table
+

@@ -1,53 +1,53 @@
 {
-    "$schema":  "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
-    "name":  "f7c7a0e1202608050101",
-    "position":  {
-                     "x":  24,
-                     "y":  8,
-                     "z":  7000,
-                     "height":  64,
-                     "width":  1180,
-                     "tabOrder":  5000
-                 },
-    "visual":  {
-                   "visualType":  "textbox",
-                   "objects":  {
-                                   "general":  [
-                                                   {
-                                                       "properties":  {
-                                                                          "paragraphs":  [
-                                                                                             {
-                                                                                                 "textRuns":  [
-                                                                                                                  {
-                                                                                                                      "value":  "Operación y confiabilidad del pipeline",
-                                                                                                                      "textStyle":  {
-                                                                                                                                        "fontWeight":  "bold",
-                                                                                                                                        "fontSize":  "24pt",
-                                                                                                                                        "color":  "#0b1f3a"
-                                                                                                                                    }
-                                                                                                                  }
-                                                                                                              ]
-                                                                                             }
-                                                                                         ]
-                                                                      }
-                                                   }
-                                               ]
-                               },
-                   "visualContainerObjects":  {
-                                                  "background":  [
-                                                                     {
-                                                                         "properties":  {
-                                                                                            "transparency":  {
-                                                                                                                 "expr":  {
-                                                                                                                              "Literal":  {
-                                                                                                                                              "Value":  "100D"
-                                                                                                                                          }
-                                                                                                                          }
-                                                                                                             }
-                                                                                        }
-                                                                     }
-                                                                 ]
-                                              },
-                   "drillFilterOtherVisuals":  true
-               }
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "f7c7a0e1202608050101",
+  "position": {
+    "x": 24,
+    "y": 8,
+    "z": 7000,
+    "height": 64,
+    "width": 1180,
+    "tabOrder": 5000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Operación y confiabilidad del pipeline",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontSize": "24pt",
+                      "color": "#0b1f3a"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "100D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
 }

@@ -1,0 +1,153 @@
+{
+    "$schema":  "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+    "name":  "f7c7a0e1202608051401",
+    "position":  {
+                     "x":  16,
+                     "y":  492,
+                     "z":  11000,
+                     "height":  212,
+                     "width":  608,
+                     "tabOrder":  11000
+                 },
+    "visual":  {
+                   "visualType":  "clusteredBarChart",
+                   "query":  {
+                                 "queryState":  {
+                                                    "Category":  {
+                                                                     "projections":  [
+                                                                                         {
+                                                                                             "field":  {
+                                                                                                           "Column":  {
+                                                                                                                          "Expression":  {
+                                                                                                                                             "SourceRef":  {
+                                                                                                                                                               "Entity":  "demanda_mercado_diaria"
+                                                                                                                                                           }
+                                                                                                                                         },
+                                                                                                                          "Property":  "tipo_mercado"
+                                                                                                                      }
+                                                                                                       },
+                                                                                             "queryRef":  "demanda_mercado_diaria.tipo_mercado",
+                                                                                             "nativeQueryRef":  "tipo_mercado",
+                                                                                             "displayName":  "tipo_mercado"
+                                                                                         }
+                                                                                     ]
+                                                                 },
+                                                    "Y":  {
+                                                              "projections":  [
+                                                                                  {
+                                                                                      "field":  {
+                                                                                                    "Measure":  {
+                                                                                                                    "Expression":  {
+                                                                                                                                       "SourceRef":  {
+                                                                                                                                                         "Entity":  "Medidas"
+                                                                                                                                                     }
+                                                                                                                                   },
+                                                                                                                    "Property":  "Demanda mercado (GWh)"
+                                                                                                                }
+                                                                                                },
+                                                                                      "queryRef":  "Medidas.Demanda mercado (GWh)",
+                                                                                      "nativeQueryRef":  "Demanda mercado (GWh)",
+                                                                                      "displayName":  "Demanda mercado (GWh)"
+                                                                                  }
+                                                                              ]
+                                                          }
+                                                },
+                                 "sortDefinition":  {
+                                                        "sort":  [
+                                                                     {
+                                                                         "field":  {
+                                                                                       "Measure":  {
+                                                                                                       "Expression":  {
+                                                                                                                          "SourceRef":  {
+                                                                                                                                            "Entity":  "Medidas"
+                                                                                                                                        }
+                                                                                                                      },
+                                                                                                       "Property":  "Demanda mercado (GWh)"
+                                                                                                   }
+                                                                                   },
+                                                                         "direction":  "Descending"
+                                                                     }
+                                                                 ],
+                                                        "isDefaultSort":  true
+                                                    }
+                             },
+                   "objects":  {
+                                   "categoryAxis":  [
+                                                        {
+                                                            "properties":  {
+                                                                               "showAxisTitle":  {
+                                                                                                     "expr":  {
+                                                                                                                  "Literal":  {
+                                                                                                                                  "Value":  "false"
+                                                                                                                              }
+                                                                                                              }
+                                                                                                 }
+                                                                           }
+                                                        }
+                                                    ],
+                                   "labels":  [
+                                                  {
+                                                      "properties":  {
+                                                                         "show":  {
+                                                                                      "expr":  {
+                                                                                                   "Literal":  {
+                                                                                                                   "Value":  "true"
+                                                                                                               }
+                                                                                               }
+                                                                                  }
+                                                                     }
+                                                  }
+                                              ]
+                               },
+                   "visualContainerObjects":  {
+                                                  "title":  [
+                                                                {
+                                                                    "properties":  {
+                                                                                       "text":  {
+                                                                                                    "expr":  {
+                                                                                                                 "Literal":  {
+                                                                                                                                 "Value":  "\u0027Demanda acumulada por mercado\u0027"
+                                                                                                                             }
+                                                                                                             }
+                                                                                                },
+                                                                                       "alignment":  {
+                                                                                                         "expr":  {
+                                                                                                                      "Literal":  {
+                                                                                                                                      "Value":  "\u0027center\u0027"
+                                                                                                                                  }
+                                                                                                                  }
+                                                                                                     }
+                                                                                   }
+                                                                }
+                                                            ],
+                                                  "border":  [
+                                                                 {
+                                                                     "properties":  {
+                                                                                        "show":  {
+                                                                                                     "expr":  {
+                                                                                                                  "Literal":  {
+                                                                                                                                  "Value":  "true"
+                                                                                                                              }
+                                                                                                              }
+                                                                                                 },
+                                                                                        "width":  {
+                                                                                                      "expr":  {
+                                                                                                                   "Literal":  {
+                                                                                                                                   "Value":  "1D"
+                                                                                                                               }
+                                                                                                               }
+                                                                                                  },
+                                                                                        "radius":  {
+                                                                                                       "expr":  {
+                                                                                                                    "Literal":  {
+                                                                                                                                    "Value":  "10D"
+                                                                                                                                }
+                                                                                                                }
+                                                                                                   }
+                                                                                    }
+                                                                 }
+                                                             ]
+                                              },
+                   "drillFilterOtherVisuals":  true
+               }
+}

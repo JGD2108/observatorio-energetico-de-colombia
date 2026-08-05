@@ -56,13 +56,6 @@
       "data": [
         {
           "properties": {
-            "endDate": {
-              "expr": {
-                "Literal": {
-                  "Value": "datetime'2026-07-25T00:00:00'"
-                }
-              }
-            },
             "mode": {
               "expr": {
                 "Literal": {
@@ -73,48 +66,7 @@
           }
         }
       ],
-      "general": [
-        {
-          "properties": {
-            "filter": {
-              "filter": {
-                "Version": 2,
-                "From": [
-                  {
-                    "Name": "d",
-                    "Entity": "DimFecha",
-                    "Type": 0
-                  }
-                ],
-                "Where": [
-                  {
-                    "Condition": {
-                      "Comparison": {
-                        "ComparisonKind": 3,
-                        "Left": {
-                          "Column": {
-                            "Expression": {
-                              "SourceRef": {
-                                "Source": "d"
-                              }
-                            },
-                            "Property": "Date"
-                          }
-                        },
-                        "Right": {
-                          "Literal": {
-                            "Value": "datetime'2026-07-26T00:00:00'"
-                          }
-                        }
-                      }
-                    }
-                  }
-                ]
-              }
-            }
-          }
-        }
-      ],
+      "general": [],
       "header": [
         {
           "properties": {

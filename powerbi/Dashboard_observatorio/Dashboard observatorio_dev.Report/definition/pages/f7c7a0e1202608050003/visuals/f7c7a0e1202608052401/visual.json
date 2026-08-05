@@ -1,0 +1,153 @@
+{
+    "$schema":  "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+    "name":  "f7c7a0e1202608052401",
+    "position":  {
+                     "x":  16,
+                     "y":  492,
+                     "z":  11000,
+                     "height":  212,
+                     "width":  608,
+                     "tabOrder":  11000
+                 },
+    "visual":  {
+                   "visualType":  "clusteredBarChart",
+                   "query":  {
+                                 "queryState":  {
+                                                    "Category":  {
+                                                                     "projections":  [
+                                                                                         {
+                                                                                             "field":  {
+                                                                                                           "Column":  {
+                                                                                                                          "Expression":  {
+                                                                                                                                             "SourceRef":  {
+                                                                                                                                                               "Entity":  "energia_embalsada_diaria"
+                                                                                                                                                           }
+                                                                                                                                         },
+                                                                                                                          "Property":  "fecha"
+                                                                                                                      }
+                                                                                                       },
+                                                                                             "queryRef":  "energia_embalsada_diaria.fecha",
+                                                                                             "nativeQueryRef":  "fecha",
+                                                                                             "displayName":  "fecha"
+                                                                                         }
+                                                                                     ]
+                                                                 },
+                                                    "Y":  {
+                                                              "projections":  [
+                                                                                  {
+                                                                                      "field":  {
+                                                                                                    "Measure":  {
+                                                                                                                    "Expression":  {
+                                                                                                                                       "SourceRef":  {
+                                                                                                                                                         "Entity":  "Medidas"
+                                                                                                                                                     }
+                                                                                                                                   },
+                                                                                                                    "Property":  "Variación energía diaria (GWh)"
+                                                                                                                }
+                                                                                                },
+                                                                                      "queryRef":  "Medidas.Variación energía diaria (GWh)",
+                                                                                      "nativeQueryRef":  "Variación energía diaria (GWh)",
+                                                                                      "displayName":  "Variación energía diaria (GWh)"
+                                                                                  }
+                                                                              ]
+                                                          }
+                                                },
+                                 "sortDefinition":  {
+                                                        "sort":  [
+                                                                     {
+                                                                         "field":  {
+                                                                                       "Measure":  {
+                                                                                                       "Expression":  {
+                                                                                                                          "SourceRef":  {
+                                                                                                                                            "Entity":  "Medidas"
+                                                                                                                                        }
+                                                                                                                      },
+                                                                                                       "Property":  "Variación energía diaria (GWh)"
+                                                                                                   }
+                                                                                   },
+                                                                         "direction":  "Descending"
+                                                                     }
+                                                                 ],
+                                                        "isDefaultSort":  true
+                                                    }
+                             },
+                   "objects":  {
+                                   "categoryAxis":  [
+                                                        {
+                                                            "properties":  {
+                                                                               "showAxisTitle":  {
+                                                                                                     "expr":  {
+                                                                                                                  "Literal":  {
+                                                                                                                                  "Value":  "false"
+                                                                                                                              }
+                                                                                                              }
+                                                                                                 }
+                                                                           }
+                                                        }
+                                                    ],
+                                   "labels":  [
+                                                  {
+                                                      "properties":  {
+                                                                         "show":  {
+                                                                                      "expr":  {
+                                                                                                   "Literal":  {
+                                                                                                                   "Value":  "true"
+                                                                                                               }
+                                                                                               }
+                                                                                  }
+                                                                     }
+                                                  }
+                                              ]
+                               },
+                   "visualContainerObjects":  {
+                                                  "title":  [
+                                                                {
+                                                                    "properties":  {
+                                                                                       "text":  {
+                                                                                                    "expr":  {
+                                                                                                                 "Literal":  {
+                                                                                                                                 "Value":  "\u0027Variación diaria de energía\u0027"
+                                                                                                                             }
+                                                                                                             }
+                                                                                                },
+                                                                                       "alignment":  {
+                                                                                                         "expr":  {
+                                                                                                                      "Literal":  {
+                                                                                                                                      "Value":  "\u0027center\u0027"
+                                                                                                                                  }
+                                                                                                                  }
+                                                                                                     }
+                                                                                   }
+                                                                }
+                                                            ],
+                                                  "border":  [
+                                                                 {
+                                                                     "properties":  {
+                                                                                        "show":  {
+                                                                                                     "expr":  {
+                                                                                                                  "Literal":  {
+                                                                                                                                  "Value":  "true"
+                                                                                                                              }
+                                                                                                              }
+                                                                                                 },
+                                                                                        "width":  {
+                                                                                                      "expr":  {
+                                                                                                                   "Literal":  {
+                                                                                                                                   "Value":  "1D"
+                                                                                                                               }
+                                                                                                               }
+                                                                                                  },
+                                                                                        "radius":  {
+                                                                                                       "expr":  {
+                                                                                                                    "Literal":  {
+                                                                                                                                    "Value":  "10D"
+                                                                                                                                }
+                                                                                                                }
+                                                                                                   }
+                                                                                    }
+                                                                 }
+                                                             ]
+                                              },
+                   "drillFilterOtherVisuals":  true
+               }
+}

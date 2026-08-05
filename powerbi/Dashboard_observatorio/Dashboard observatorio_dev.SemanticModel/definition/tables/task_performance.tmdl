@@ -39,12 +39,13 @@ table task_performance
 		sourceColumn: duracion_promedio_segundos
 
 	column duracion_p95_segundos
-		dataType: double
+		dataType: int64
 		formatString: #,0.0
-		sourceProviderType: double
 		lineageTag: 405eb520-5d79-4d3f-b01e-2933cec896a6
-		summarizeBy: average
+		summarizeBy: sum
 		sourceColumn: duracion_p95_segundos
+
+		annotation SummarizationSetBy = Automatic
 
 	column tasa_exito_pct
 		dataType: double
@@ -62,6 +63,15 @@ table task_performance
 		summarizeBy: none
 		sourceColumn: ultima_ejecucion
 
+	column duracion_maxima_segundos
+		dataType: int64
+		formatString: 0
+		lineageTag: 85847f50-29b1-4368-b401-95899322a834
+		summarizeBy: sum
+		sourceColumn: duracion_maxima_segundos
+
+		annotation SummarizationSetBy = Automatic
+
 	partition task_performance = m
 		mode: import
 		source =
@@ -76,3 +86,4 @@ table task_performance
 	annotation PBI_NavigationStepName = Navegación
 
 	annotation PBI_ResultType = Table
+

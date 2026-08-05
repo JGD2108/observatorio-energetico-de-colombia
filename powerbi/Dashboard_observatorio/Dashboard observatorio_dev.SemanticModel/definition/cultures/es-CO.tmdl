@@ -126,6 +126,57 @@ cultureInfo es-CO
 			          "ConceptualProperty": "tipo_generacion"
 			        }
 			      },
+			      "State": "Generated"
+			    },
+			    "vw_dim_agente_powerbi.nombre_agente": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "vw_dim_agente_powerbi",
+			          "ConceptualProperty": "nombre_agente"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Agente": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "medidas.duración_ejecución_min": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Medidas",
+			          "ConceptualProperty": "Duración ejecución (min)"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Precio promedio diario": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "dimtecnologia.tipo_generacion": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "DimTecnologia",
+			          "ConceptualProperty": "tipo_generacion"
+			        }
+			      },
 			      "State": "Generated",
 			      "Terms": [
 			        {
@@ -140,17 +191,122 @@ cultureInfo es-CO
 			        }
 			      ]
 			    },
-			    "vw_dim_agente_powerbi.nombre_agente": {
+			    "task_performance.task_key": {
 			      "Definition": {
 			        "Binding": {
-			          "ConceptualEntity": "vw_dim_agente_powerbi",
-			          "ConceptualProperty": "nombre_agente"
+			          "ConceptualEntity": "task_performance",
+			          "ConceptualProperty": "task_key"
 			        }
 			      },
 			      "State": "Generated",
 			      "Terms": [
 			        {
-			          "Agente": {
+			          "Tarea": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "quality_alerts.severity": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "quality_alerts",
+			          "ConceptualProperty": "severity"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Severidad": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "quality_alerts.status": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "quality_alerts",
+			          "ConceptualProperty": "status"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Estado": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "quality_alerts.component": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "quality_alerts",
+			          "ConceptualProperty": "component"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Componente": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "quality_alerts.message": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "quality_alerts",
+			          "ConceptualProperty": "message"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Mensaje": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "quality_alerts.created_at": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "quality_alerts",
+			          "ConceptualProperty": "created_at"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Creada": {
 			            "State": "Suggested",
 			            "Source": {
 			              "Type": "External",

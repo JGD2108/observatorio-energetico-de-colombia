@@ -1,0 +1,58 @@
+table energia_embalsada_diaria
+	lineageTag: a786f156-4f89-4a0a-8796-8f04b49dac4d
+
+	column fecha
+		dataType: dateTime
+		formatString: Long Date
+		summarizeBy: none
+		sourceColumn: fecha
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column energia_total_gwh
+		dataType: double
+		summarizeBy: sum
+		sourceColumn: energia_total_gwh
+
+	column variacion_diaria_gwh
+		dataType: double
+		summarizeBy: sum
+		sourceColumn: variacion_diaria_gwh
+
+	column variacion_diaria_pct
+		dataType: double
+		summarizeBy: average
+		sourceColumn: variacion_diaria_pct
+
+	column cobertura_asignacion_directa_pct
+		dataType: double
+		summarizeBy: average
+		sourceColumn: cobertura_asignacion_directa_pct
+
+	column plantas_con_medicion
+		dataType: int64
+		summarizeBy: sum
+		sourceColumn: plantas_con_medicion
+
+	column fecha_maxima_disponible
+		dataType: dateTime
+		formatString: Long Date
+		summarizeBy: none
+		sourceColumn: fecha_maxima_disponible
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition energia_embalsada_diaria = m
+		mode: import
+		source =
+				let
+				    Origen = DatabricksMultiCloud.Catalogs("dbc-4c2404fa-9e73.cloud.databricks.com", "/sql/1.0/warehouses/049b881d5122f61a", [Catalog = "", Database = ""]),
+				    observatorio_dev_Database = Origen{[Name="observatorio_dev",Kind="Database"]}[Data],
+				    serving_Schema = observatorio_dev_Database{[Name="serving",Kind="Schema"]}[Data],
+				    energia_embalsada_diaria_View = serving_Schema{[Name="energia_embalsada_diaria",Kind="View"]}[Data]
+				in
+				    energia_embalsada_diaria_View
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table

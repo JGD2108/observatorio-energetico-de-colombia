@@ -130,60 +130,6 @@ table dim_planta
 
 		annotation SummarizationSetBy = Automatic
 
-	column numero_version
-		dataType: int64
-		formatString: 0
-		sourceProviderType: int
-		lineageTag: 0b791534-32a3-429f-b2a6-3f7c3a593340
-		summarizeBy: sum
-		sourceColumn: numero_version
-
-		annotation SummarizationSetBy = Automatic
-
-	column fecha_inicio
-		dataType: dateTime
-		formatString: Long Date
-		sourceProviderType: date
-		lineageTag: e917c018-e1b3-4d96-8771-7ac3826f5e90
-		summarizeBy: none
-		sourceColumn: fecha_inicio
-
-		variation Variación
-			isDefault
-			relationship: 3ce812a1-9c65-432b-9470-1b976bcdd377
-			defaultHierarchy: LocalDateTable_30fbfffb-2070-4180-be9a-1c66100fc58a.'Jerarquía de fechas'
-
-		annotation SummarizationSetBy = Automatic
-
-		annotation UnderlyingDateTimeDataType = Date
-
-	column fecha_fin
-		dataType: dateTime
-		formatString: Long Date
-		sourceProviderType: date
-		lineageTag: cf6f2c14-6c50-4d6b-b18f-7e96fac458b5
-		summarizeBy: none
-		sourceColumn: fecha_fin
-
-		variation Variación
-			isDefault
-			relationship: 76e2db2d-f36e-44da-8a6b-ccae3564f844
-			defaultHierarchy: LocalDateTable_90c4b901-2f2f-4344-999c-390913ccbd23.'Jerarquía de fechas'
-
-		annotation SummarizationSetBy = Automatic
-
-		annotation UnderlyingDateTimeDataType = Date
-
-	column es_actual
-		dataType: boolean
-		formatString: """TRUE"";""TRUE"";""FALSE"""
-		sourceProviderType: bit
-		lineageTag: 39fde5e4-e789-4dd6-80a4-16bad6e5cdc5
-		summarizeBy: none
-		sourceColumn: es_actual
-
-		annotation SummarizationSetBy = Automatic
-
 	column fecha_creacion
 		dataType: dateTime
 		formatString: General Date
@@ -213,6 +159,37 @@ table dim_planta
 			defaultHierarchy: LocalDateTable_40128c29-df24-4d6d-a565-f1f3fa858f7a.'Jerarquía de fechas'
 
 		annotation SummarizationSetBy = Automatic
+
+	column esta_en_maestro_actual
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 6d1ca28b-ea5e-491f-a8a3-1c4efa973f55
+		summarizeBy: none
+		sourceColumn: esta_en_maestro_actual
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha_primera_observacion
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: df0fc097-1fb2-4ca6-a1ee-cc7a247cd9d1
+		summarizeBy: none
+		sourceColumn: fecha_primera_observacion
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column fecha_ultima_observacion
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 0785e17a-8910-450b-9c95-8d52650e550c
+		summarizeBy: none
+		sourceColumn: fecha_ultima_observacion
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
 
 	partition dim_planta = m
 		mode: import

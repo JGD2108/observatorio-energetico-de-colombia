@@ -1,297 +1,297 @@
 {
-    "$schema":  "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
-    "name":  "f7c7a0e1202608050401",
-    "position":  {
-                     "x":  16,
-                     "y":  492,
-                     "z":  6000,
-                     "height":  212,
-                     "width":  1248,
-                     "tabOrder":  4000
-                 },
-    "visual":  {
-                   "visualType":  "tableEx",
-                   "query":  {
-                                 "queryState":  {
-                                                    "Values":  {
-                                                                   "projections":  [
-                                                                                       {
-                                                                                           "field":  {
-                                                                                                         "Column":  {
-                                                                                                                        "Expression":  {
-                                                                                                                                           "SourceRef":  {
-                                                                                                                                                             "Entity":  "quality_alerts"
-                                                                                                                                                         }
-                                                                                                                                       },
-                                                                                                                        "Property":  "severity"
-                                                                                                                    }
-                                                                                                     },
-                                                                                           "queryRef":  "quality_alerts.severity",
-                                                                                           "nativeQueryRef":  "Severidad",
-                                                                                           "displayName":  "Severidad"
-                                                                                       },
-                                                                                       {
-                                                                                           "field":  {
-                                                                                                         "Column":  {
-                                                                                                                        "Expression":  {
-                                                                                                                                           "SourceRef":  {
-                                                                                                                                                             "Entity":  "quality_alerts"
-                                                                                                                                                         }
-                                                                                                                                       },
-                                                                                                                        "Property":  "status"
-                                                                                                                    }
-                                                                                                     },
-                                                                                           "queryRef":  "quality_alerts.status",
-                                                                                           "nativeQueryRef":  "Estado",
-                                                                                           "displayName":  "Estado"
-                                                                                       },
-                                                                                       {
-                                                                                           "field":  {
-                                                                                                         "Column":  {
-                                                                                                                        "Expression":  {
-                                                                                                                                           "SourceRef":  {
-                                                                                                                                                             "Entity":  "quality_alerts"
-                                                                                                                                                         }
-                                                                                                                                       },
-                                                                                                                        "Property":  "component"
-                                                                                                                    }
-                                                                                                     },
-                                                                                           "queryRef":  "quality_alerts.component",
-                                                                                           "nativeQueryRef":  "Componente",
-                                                                                           "displayName":  "Componente"
-                                                                                       },
-                                                                                       {
-                                                                                           "field":  {
-                                                                                                         "Column":  {
-                                                                                                                        "Expression":  {
-                                                                                                                                           "SourceRef":  {
-                                                                                                                                                             "Entity":  "quality_alerts"
-                                                                                                                                                         }
-                                                                                                                                       },
-                                                                                                                        "Property":  "message"
-                                                                                                                    }
-                                                                                                     },
-                                                                                           "queryRef":  "quality_alerts.message",
-                                                                                           "nativeQueryRef":  "Mensaje",
-                                                                                           "displayName":  "Mensaje"
-                                                                                       },
-                                                                                       {
-                                                                                           "field":  {
-                                                                                                         "Column":  {
-                                                                                                                        "Expression":  {
-                                                                                                                                           "SourceRef":  {
-                                                                                                                                                             "Entity":  "quality_alerts"
-                                                                                                                                                         }
-                                                                                                                                       },
-                                                                                                                        "Property":  "created_at"
-                                                                                                                    }
-                                                                                                     },
-                                                                                           "queryRef":  "quality_alerts.created_at",
-                                                                                           "nativeQueryRef":  "Creada",
-                                                                                           "displayName":  "Creada"
-                                                                                       }
-                                                                                   ]
-                                                               }
-                                                }
-                             },
-                   "objects":  {
-                                   "columnHeaders":  [
-                                                         {
-                                                             "properties":  {
-                                                                                "alignment":  {
-                                                                                                  "expr":  {
-                                                                                                               "Literal":  {
-                                                                                                                               "Value":  "\u0027Auto\u0027"
-                                                                                                                           }
-                                                                                                           }
-                                                                                              },
-                                                                                "fontFamily":  {
-                                                                                                   "expr":  {
-                                                                                                                "Literal":  {
-                                                                                                                                "Value":  "\u0027\u0027\u0027Segoe UI Semibold\u0027\u0027, wf_segoe-ui_semibold, helvetica, arial, sans-serif\u0027"
-                                                                                                                            }
-                                                                                                            }
-                                                                                               },
-                                                                                "fontColor":  {
-                                                                                                  "solid":  {
-                                                                                                                "color":  {
-                                                                                                                              "expr":  {
-                                                                                                                                           "Literal":  {
-                                                                                                                                                           "Value":  "\u0027#334155\u0027"
-                                                                                                                                                       }
-                                                                                                                                       }
-                                                                                                                          }
-                                                                                                            }
-                                                                                              },
-                                                                                "wordWrap":  {
-                                                                                                 "expr":  {
-                                                                                                              "Literal":  {
-                                                                                                                              "Value":  "false"
-                                                                                                                          }
-                                                                                                          }
-                                                                                             }
-                                                                            }
-                                                         }
-                                                     ],
-                                   "total":  [
-                                                 {
-                                                     "properties":  {
-                                                                        "totals":  {
-                                                                                       "expr":  {
-                                                                                                    "Literal":  {
-                                                                                                                    "Value":  "false"
-                                                                                                                }
-                                                                                                }
-                                                                                   }
-                                                                    }
-                                                 }
-                                             ],
-                                   "values":  [
-                                                  {
-                                                      "properties":  {
-                                                                         "fontColorPrimary":  {
-                                                                                                  "solid":  {
-                                                                                                                "color":  {
-                                                                                                                              "expr":  {
-                                                                                                                                           "Literal":  {
-                                                                                                                                                           "Value":  "\u0027#475569\u0027"
-                                                                                                                                                       }
-                                                                                                                                       }
-                                                                                                                          }
-                                                                                                            }
-                                                                                              },
-                                                                         "fontColorSecondary":  {
-                                                                                                    "solid":  {
-                                                                                                                  "color":  {
-                                                                                                                                "expr":  {
-                                                                                                                                             "Literal":  {
-                                                                                                                                                             "Value":  "\u0027#334155\u0027"
-                                                                                                                                                         }
-                                                                                                                                         }
-                                                                                                                            }
-                                                                                                              }
-                                                                                                },
-                                                                         "wordWrap":  {
-                                                                                          "expr":  {
-                                                                                                       "Literal":  {
-                                                                                                                       "Value":  "false"
-                                                                                                                   }
-                                                                                                   }
-                                                                                      },
-                                                                         "backColorSecondary":  {
-                                                                                                    "solid":  {
-                                                                                                                  "color":  {
-                                                                                                                                "expr":  {
-                                                                                                                                             "ThemeDataColor":  {
-                                                                                                                                                                    "ColorId":  0,
-                                                                                                                                                                    "Percent":  -0.1
-                                                                                                                                                                }
-                                                                                                                                         }
-                                                                                                                            }
-                                                                                                              }
-                                                                                                }
-                                                                     }
-                                                  }
-                                              ]
-                               },
-                   "visualContainerObjects":  {
-                                                  "title":  [
-                                                                {
-                                                                    "properties":  {
-                                                                                       "show":  {
-                                                                                                    "expr":  {
-                                                                                                                 "Literal":  {
-                                                                                                                                 "Value":  "true"
-                                                                                                                             }
-                                                                                                             }
-                                                                                                },
-                                                                                       "text":  {
-                                                                                                    "expr":  {
-                                                                                                                 "Literal":  {
-                                                                                                                                 "Value":  "\u0027Alertas de calidad y seguimiento operativo\u0027"
-                                                                                                                             }
-                                                                                                             }
-                                                                                                },
-                                                                                       "fontFamily":  {
-                                                                                                          "expr":  {
-                                                                                                                       "Literal":  {
-                                                                                                                                       "Value":  "\u0027\u0027\u0027Segoe UI Semibold\u0027\u0027, wf_segoe-ui_semibold, helvetica, arial, sans-serif\u0027"
-                                                                                                                                   }
-                                                                                                                   }
-                                                                                                      },
-                                                                                       "fontSize":  {
-                                                                                                        "expr":  {
-                                                                                                                     "Literal":  {
-                                                                                                                                     "Value":  "12D"
-                                                                                                                                 }
-                                                                                                                 }
-                                                                                                    },
-                                                                                       "alignment":  {
-                                                                                                         "expr":  {
-                                                                                                                      "Literal":  {
-                                                                                                                                      "Value":  "\u0027left\u0027"
-                                                                                                                                  }
-                                                                                                                  }
-                                                                                                     },
-                                                                                       "fontColor":  {
-                                                                                                         "solid":  {
-                                                                                                                       "color":  {
-                                                                                                                                     "expr":  {
-                                                                                                                                                  "Literal":  {
-                                                                                                                                                                  "Value":  "\u0027#334155\u0027"
-                                                                                                                                                              }
-                                                                                                                                              }
-                                                                                                                                 }
-                                                                                                                   }
-                                                                                                     }
-                                                                                   }
-                                                                }
-                                                            ],
-                                                  "background":  [
-                                                                     {
-                                                                         "properties":  {
-                                                                                            "show":  {
-                                                                                                         "expr":  {
-                                                                                                                      "Literal":  {
-                                                                                                                                      "Value":  "true"
-                                                                                                                                  }
-                                                                                                                  }
-                                                                                                     }
-                                                                                        }
-                                                                     }
-                                                                 ],
-                                                  "border":  [
-                                                                 {
-                                                                     "properties":  {
-                                                                                        "show":  {
-                                                                                                     "expr":  {
-                                                                                                                  "Literal":  {
-                                                                                                                                  "Value":  "true"
-                                                                                                                              }
-                                                                                                              }
-                                                                                                 },
-                                                                                        "color":  {
-                                                                                                      "solid":  {
-                                                                                                                    "color":  {
-                                                                                                                                  "expr":  {
-                                                                                                                                               "Literal":  {
-                                                                                                                                                               "Value":  "\u0027#DCE3EA\u0027"
-                                                                                                                                                           }
-                                                                                                                                           }
-                                                                                                                              }
-                                                                                                                }
-                                                                                                  },
-                                                                                        "width":  {
-                                                                                                      "expr":  {
-                                                                                                                   "Literal":  {
-                                                                                                                                   "Value":  "8D"
-                                                                                                                               }
-                                                                                                               }
-                                                                                                  }
-                                                                                    }
-                                                                 }
-                                                             ]
-                                              },
-                   "drillFilterOtherVisuals":  true
-               }
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "f7c7a0e1202608050401",
+  "position": {
+    "x": 16,
+    "y": 492,
+    "z": 6000,
+    "height": 212,
+    "width": 1248,
+    "tabOrder": 4000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "quality_alerts"
+                    }
+                  },
+                  "Property": "severity"
+                }
+              },
+              "queryRef": "quality_alerts.severity",
+              "nativeQueryRef": "Severidad",
+              "displayName": "Severidad"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "quality_alerts"
+                    }
+                  },
+                  "Property": "status"
+                }
+              },
+              "queryRef": "quality_alerts.status",
+              "nativeQueryRef": "Estado",
+              "displayName": "Estado"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "quality_alerts"
+                    }
+                  },
+                  "Property": "component"
+                }
+              },
+              "queryRef": "quality_alerts.component",
+              "nativeQueryRef": "Componente",
+              "displayName": "Componente"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "quality_alerts"
+                    }
+                  },
+                  "Property": "message"
+                }
+              },
+              "queryRef": "quality_alerts.message",
+              "nativeQueryRef": "Mensaje",
+              "displayName": "Mensaje"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "quality_alerts"
+                    }
+                  },
+                  "Property": "created_at"
+                }
+              },
+              "queryRef": "quality_alerts.created_at",
+              "nativeQueryRef": "Creada",
+              "displayName": "Creada"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "alignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Auto'"
+                }
+              }
+            },
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'''Segoe UI Semibold'', wf_segoe-ui_semibold, helvetica, arial, sans-serif'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#334155'"
+                    }
+                  }
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "total": [
+        {
+          "properties": {
+            "totals": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "fontColorPrimary": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#475569'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontColorSecondary": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#334155'"
+                    }
+                  }
+                }
+              }
+            },
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "backColorSecondary": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 0,
+                      "Percent": -0.1
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Alertas de calidad y seguimiento operativo'"
+                }
+              }
+            },
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'''Segoe UI Semibold'', wf_segoe-ui_semibold, helvetica, arial, sans-serif'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            },
+            "alignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'left'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#334155'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#DCE3EA'"
+                    }
+                  }
+                }
+              }
+            },
+            "width": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
 }

@@ -1,0 +1,248 @@
+{
+    "$schema":  "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+    "name":  "f7c7a0e1202608052302",
+    "position":  {
+                     "x":  640,
+                     "y":  216,
+                     "z":  5000,
+                     "height":  260,
+                     "width":  624,
+                     "tabOrder":  3000
+                 },
+    "visual":  {
+                   "visualType":  "lineChart",
+                   "query":  {
+                                 "queryState":  {
+                                                    "Category":  {
+                                                                     "projections":  [
+                                                                                         {
+                                                                                             "field":  {
+                                                                                                           "Column":  {
+                                                                                                                          "Expression":  {
+                                                                                                                                             "SourceRef":  {
+                                                                                                                                                               "Entity":  "DimFecha"
+                                                                                                                                                           }
+                                                                                                                                         },
+                                                                                                                          "Property":  "Date"
+                                                                                                                      }
+                                                                                                       },
+                                                                                             "queryRef":  "DimFecha.Date",
+                                                                                             "nativeQueryRef":  "Date",
+                                                                                             "active":  true
+                                                                                         }
+                                                                                     ]
+                                                                 },
+                                                    "Y":  {
+                                                              "projections":  [
+                                                                                  {
+                                                                                      "field":  {
+                                                                                                    "Measure":  {
+                                                                                                                    "Expression":  {
+                                                                                                                                       "SourceRef":  {
+                                                                                                                                                         "Entity":  "Medidas"
+                                                                                                                                                     }
+                                                                                                                                   },
+                                                                                                                    "Property":  "Cobertura directa (%)"
+                                                                                                                }
+                                                                                                },
+                                                                                      "queryRef":  "Medidas.Cobertura directa (%)",
+                                                                                      "nativeQueryRef":  "Cobertura directa (%)",
+                                                                                      "displayName":  "Cobertura directa (%)"
+                                                                                  }
+                                                                              ]
+                                                          }
+                                                },
+                                 "sortDefinition":  {
+                                                        "sort":  [
+                                                                     {
+                                                                         "field":  {
+                                                                                       "Column":  {
+                                                                                                      "Expression":  {
+                                                                                                                         "SourceRef":  {
+                                                                                                                                           "Entity":  "DimFecha"
+                                                                                                                                       }
+                                                                                                                     },
+                                                                                                      "Property":  "Date"
+                                                                                                  }
+                                                                                   },
+                                                                         "direction":  "Ascending"
+                                                                     }
+                                                                 ],
+                                                        "isDefaultSort":  true
+                                                    }
+                             },
+                   "objects":  {
+                                   "lineStyles":  [
+                                                      {
+                                                          "properties":  {
+                                                                             "strokeShow":  {
+                                                                                                "expr":  {
+                                                                                                             "Literal":  {
+                                                                                                                             "Value":  "true"
+                                                                                                                         }
+                                                                                                         }
+                                                                                            },
+                                                                             "strokeWidth":  {
+                                                                                                 "expr":  {
+                                                                                                              "Literal":  {
+                                                                                                                              "Value":  "2D"
+                                                                                                                          }
+                                                                                                          }
+                                                                                             }
+                                                                         }
+                                                      }
+                                                  ],
+                                   "dataPoint":  [
+                                                     {
+                                                         "properties":  {
+                                                                            "fill":  {
+                                                                                         "solid":  {
+                                                                                                       "color":  {
+                                                                                                                     "expr":  {
+                                                                                                                                  "Literal":  {
+                                                                                                                                                  "Value":  "\u0027#079A9E\u0027"
+                                                                                                                                              }
+                                                                                                                              }
+                                                                                                                 }
+                                                                                                   }
+                                                                                     }
+                                                                        },
+                                                         "selector":  {
+                                                                          "metadata":  "Medidas.Cobertura directa (%)"
+                                                                      }
+                                                     }
+                                                 ],
+                                   "categoryAxis":  [
+                                                        {
+                                                            "properties":  {
+                                                                               "titleFontFamily":  {
+                                                                                                       "expr":  {
+                                                                                                                    "Literal":  {
+                                                                                                                                    "Value":  "\u0027\u0027\u0027Segoe UI\u0027\u0027, wf_segoe-ui_normal, helvetica, arial, sans-serif\u0027"
+                                                                                                                                }
+                                                                                                                }
+                                                                                                   },
+                                                                               "showAxisTitle":  {
+                                                                                                     "expr":  {
+                                                                                                                  "Literal":  {
+                                                                                                                                  "Value":  "false"
+                                                                                                                              }
+                                                                                                              }
+                                                                                                 }
+                                                                           }
+                                                        }
+                                                    ],
+                                   "valueAxis":  [
+                                                     {
+                                                         "properties":  {
+                                                                            "titleText":  {
+                                                                                              "expr":  {
+                                                                                                           "Literal":  {
+                                                                                                                           "Value":  "\u0027%\u0027"
+                                                                                                                       }
+                                                                                                       }
+                                                                                          },
+                                                                            "titleFontFamily":  {
+                                                                                                    "expr":  {
+                                                                                                                 "Literal":  {
+                                                                                                                                 "Value":  "\u0027\u0027\u0027Segoe UI\u0027\u0027, wf_segoe-ui_normal, helvetica, arial, sans-serif\u0027"
+                                                                                                                             }
+                                                                                                             }
+                                                                                                },
+                                                                            "titleColor":  {
+                                                                                               "solid":  {
+                                                                                                             "color":  {
+                                                                                                                           "expr":  {
+                                                                                                                                        "Literal":  {
+                                                                                                                                                        "Value":  "\u0027#64748B\u0027"
+                                                                                                                                                    }
+                                                                                                                                    }
+                                                                                                                       }
+                                                                                                         }
+                                                                                           },
+                                                                            "gridlineColor":  {
+                                                                                                  "solid":  {
+                                                                                                                "color":  {
+                                                                                                                              "expr":  {
+                                                                                                                                           "Literal":  {
+                                                                                                                                                           "Value":  "\u0027#E2E8F0\u0027"
+                                                                                                                                                       }
+                                                                                                                                       }
+                                                                                                                          }
+                                                                                                            }
+                                                                                              },
+                                                                            "gridlineTransparency":  {
+                                                                                                         "expr":  {
+                                                                                                                      "Literal":  {
+                                                                                                                                      "Value":  "35D"
+                                                                                                                                  }
+                                                                                                                  }
+                                                                                                     }
+                                                                        }
+                                                     }
+                                                 ]
+                               },
+                   "visualContainerObjects":  {
+                                                  "title":  [
+                                                                {
+                                                                    "properties":  {
+                                                                                       "text":  {
+                                                                                                    "expr":  {
+                                                                                                                 "Literal":  {
+                                                                                                                                 "Value":  "\u0027Cobertura de asignación directa\u0027"
+                                                                                                                             }
+                                                                                                             }
+                                                                                                },
+                                                                                       "alignment":  {
+                                                                                                         "expr":  {
+                                                                                                                      "Literal":  {
+                                                                                                                                      "Value":  "\u0027center\u0027"
+                                                                                                                                  }
+                                                                                                                  }
+                                                                                                     },
+                                                                                       "fontFamily":  {
+                                                                                                          "expr":  {
+                                                                                                                       "Literal":  {
+                                                                                                                                       "Value":  "\u0027\u0027\u0027Segoe UI Semibold\u0027\u0027, wf_segoe-ui_semibold, helvetica, arial, sans-serif\u0027"
+                                                                                                                                   }
+                                                                                                                   }
+                                                                                                      },
+                                                                                       "fontSize":  {
+                                                                                                        "expr":  {
+                                                                                                                     "Literal":  {
+                                                                                                                                     "Value":  "13D"
+                                                                                                                                 }
+                                                                                                                 }
+                                                                                                    },
+                                                                                       "italic":  {
+                                                                                                      "expr":  {
+                                                                                                                   "Literal":  {
+                                                                                                                                   "Value":  "false"
+                                                                                                                               }
+                                                                                                               }
+                                                                                                  },
+                                                                                       "bold":  {
+                                                                                                    "expr":  {
+                                                                                                                 "Literal":  {
+                                                                                                                                 "Value":  "false"
+                                                                                                                             }
+                                                                                                             }
+                                                                                                },
+                                                                                       "fontColor":  {
+                                                                                                         "solid":  {
+                                                                                                                       "color":  {
+                                                                                                                                     "expr":  {
+                                                                                                                                                  "Literal":  {
+                                                                                                                                                                  "Value":  "\u0027#334155\u0027"
+                                                                                                                                                              }
+                                                                                                                                              }
+                                                                                                                                 }
+                                                                                                                   }
+                                                                                                     }
+                                                                                   }
+                                                                }
+                                                            ]
+                                              },
+                   "drillFilterOtherVisuals":  true
+               }
+}

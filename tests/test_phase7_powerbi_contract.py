@@ -7,6 +7,8 @@ POWERBI = ROOT / "powerbi" / "Dashboard_observatorio"
 MODEL = POWERBI / "Dashboard observatorio_dev.SemanticModel" / "definition"
 REPORT = POWERBI / "Dashboard observatorio_dev.Report" / "definition"
 TECHNICAL_PAGE = "f7c7a0e1202608050001"
+MARKET_PAGE = "f7c7a0e1202608050002"
+RESERVOIR_PAGE = "f7c7a0e1202608050003"
 
 
 def test_powerbi_json_files_are_valid():
@@ -22,6 +24,17 @@ def test_business_tables_use_stable_serving_contracts():
         "vw_operacion_diaria_planta.tmdl": "operacion_planta_diaria",
         "vw_generacion_diaria_tipo.tmdl": "generacion_tecnologia_diaria",
         "vw_actualizacion_fuentes.tmdl": "estado_fuentes",
+    }
+    for filename, view_name in expected.items():
+        text = (MODEL / "tables" / filename).read_text(encoding="utf-8")
+        assert 'Name="serving"' in text or 'Name = "serving"' in text
+        assert view_name in text
+
+
+def test_market_and_reservoir_tables_use_stable_serving_contracts():
+    expected = {
+        "demanda_mercado_diaria.tmdl": "demanda_mercado_diaria",
+        "energia_embalsada_diaria.tmdl": "energia_embalsada_diaria",
     }
     for filename, view_name in expected.items():
         text = (MODEL / "tables" / filename).read_text(encoding="utf-8")
@@ -89,3 +102,36 @@ def test_generation_technology_uses_shared_date_dimension_only():
     relationships = (MODEL / "relationships.tmdl").read_text(encoding="utf-8")
     assert "LocalDateTable_375b8913-a637-4aec-aa65-a71b8c982897" not in model
     assert "LocalDateTable_375b8913-a637-4aec-aa65-a71b8c982897" not in relationships
+
+
+def test_market_and_reservoir_pages_use_real_contracts_and_shared_date_filter():
+    pages = json.loads((REPORT / "pages" / "pages.json").read_text(encoding="utf-8-sig"))
+    assert MARKET_PAGE in pages["pageOrder"]
+    assert RESERVOIR_PAGE in pages["pageOrder"]
+
+    checks = {
+        MARKET_PAGE: ("04 - Demanda y mercado", "demanda_mercado_diaria", "Demanda mercado (TWh)"),
+        RESERVOIR_PAGE: ("05 - Embalses y cobertura", "energia_embalsada_diaria", "Energía embalsada última (GWh)"),
+    }
+    for page_id, (name, entity, measure) in checks.items():
+        page_root = REPORT / "pages" / page_id
+        page = json.loads((page_root / "page.json").read_text(encoding="utf-8-sig"))
+        assert page["displayName"] == name
+        visual_text = "\n".join(
+            path.read_text(encoding="utf-8-sig")
+            for path in (page_root / "visuals").glob("*/visual.json")
+        )
+        assert entity in visual_text
+        assert measure in visual_text
+        assert '"Entity":  "DimFecha"' in visual_text
+
+
+def test_date_dimension_and_summary_slicer_cover_all_business_dates_without_fixed_end_date():
+    dim_date = (MODEL / "tables" / "DimFecha.tmdl").read_text(encoding="utf-8")
+    for table_name in ("demanda_mercado_diaria", "energia_embalsada_diaria"):
+        assert table_name in dim_date
+
+    slicer = REPORT / "pages" / "2d35f50cc70c0b3d126e" / "visuals" / "efc90567611775809d20" / "visual.json"
+    payload = json.loads(slicer.read_text(encoding="utf-8-sig"))
+    assert "endDate" not in payload["visual"]["objects"]["data"][0]["properties"]
+    assert payload["visual"]["objects"]["general"] == []

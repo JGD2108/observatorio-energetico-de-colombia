@@ -3,12 +3,16 @@ table vw_operacion_diaria_planta
 
 	column fecha_key
 		dataType: int64
-		summarizeBy: none
+		lineageTag: 4039442e-8b76-413b-b2af-d23c11eab0db
+		summarizeBy: sum
 		sourceColumn: fecha_key
+
+		annotation SummarizationSetBy = Automatic
 
 	column fecha
 		dataType: dateTime
 		formatString: Long Date
+		lineageTag: b46faf9b-f5ce-4a04-ae2f-9e7d9169be89
 		summarizeBy: none
 		sourceColumn: fecha
 
@@ -16,53 +20,190 @@ table vw_operacion_diaria_planta
 
 	column planta_key
 		dataType: int64
+		lineageTag: b7724284-e7ec-403f-9190-e4138791910f
 		summarizeBy: none
 		sourceColumn: planta_key
 
 	column codigo_planta
 		dataType: string
+		lineageTag: 8da23f85-92f3-49c6-9547-692ef7f59d12
 		summarizeBy: none
 		sourceColumn: codigo_planta
 
 	column nombre_planta
 		dataType: string
+		lineageTag: a4094bb4-c4e4-466b-b8eb-5b759477b4ff
 		summarizeBy: none
 		sourceColumn: nombre_planta
 
 	column codigo_sic_agente
 		dataType: string
+		lineageTag: e5c99942-bd03-4d6d-b7a7-3817f1cf266e
 		summarizeBy: none
 		sourceColumn: codigo_sic_agente
 
 	column tipo_generacion
 		dataType: string
+		lineageTag: 9a8febe8-6e13-4a1f-8209-8b590e7a542f
 		summarizeBy: none
 		sourceColumn: tipo_generacion
 
 	column cap_efectiva_neta
 		dataType: double
+		lineageTag: 5152d7a3-e76e-47d7-94a1-8a18ba27026e
 		summarizeBy: sum
 		sourceColumn: cap_efectiva_neta
 
 	column generacion_total_gwh
 		dataType: double
+		lineageTag: 5710c5b6-f4f6-4f99-b858-7b1d74a59b44
 		summarizeBy: sum
 		sourceColumn: generacion_total_gwh
 
 	column disponibilidad_total_gwh
 		dataType: double
+		lineageTag: d873f407-1c45-457b-909b-ad4153bf67c5
 		summarizeBy: sum
 		sourceColumn: disponibilidad_total_gwh
 
 	column disponibilidad_promedio_mw
 		dataType: double
+		lineageTag: e6c3a030-3a90-4b4e-b1ce-f164ebd2c6ef
 		summarizeBy: sum
 		sourceColumn: disponibilidad_promedio_mw
 
 	column horas_con_generacion
 		dataType: int64
+		lineageTag: dc15b97e-4f0a-45df-9ff5-bf485fe31465
 		summarizeBy: sum
 		sourceColumn: horas_con_generacion
+
+	column anio
+		dataType: int64
+		formatString: 0
+		lineageTag: 89e24062-29ad-40c7-aa41-3fcf9490f538
+		summarizeBy: sum
+		sourceColumn: anio
+
+		annotation SummarizationSetBy = Automatic
+
+	column trimestre
+		dataType: int64
+		formatString: 0
+		lineageTag: d540e59f-9926-4f46-b123-c9af635bb257
+		summarizeBy: sum
+		sourceColumn: trimestre
+
+		annotation SummarizationSetBy = Automatic
+
+	column mes_numero
+		dataType: int64
+		formatString: 0
+		lineageTag: b2e0eb84-c081-44c8-ad5a-774dd0621c38
+		summarizeBy: sum
+		sourceColumn: mes_numero
+
+		annotation SummarizationSetBy = Automatic
+
+	column mes_nombre
+		dataType: string
+		lineageTag: 8acdd925-9778-4677-9c13-9d3eef64727e
+		summarizeBy: none
+		sourceColumn: mes_nombre
+
+		annotation SummarizationSetBy = Automatic
+
+	column anio_mes
+		dataType: int64
+		formatString: 0
+		lineageTag: ae8e679d-262e-491f-9082-af762becfaa4
+		summarizeBy: sum
+		sourceColumn: anio_mes
+
+		annotation SummarizationSetBy = Automatic
+
+	column anio_mes_nombre
+		dataType: string
+		lineageTag: f0d9c4de-304f-4fed-b4ce-04e982655cf4
+		summarizeBy: none
+		sourceColumn: anio_mes_nombre
+
+		annotation SummarizationSetBy = Automatic
+
+	column es_registro_inferido
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: cda3be74-5174-4204-82b4-4c5b31661293
+		summarizeBy: none
+		sourceColumn: es_registro_inferido
+
+		annotation SummarizationSetBy = Automatic
+
+	column esta_en_maestro_actual
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 13372ed1-2668-4901-b331-87940e430f4f
+		summarizeBy: none
+		sourceColumn: esta_en_maestro_actual
+
+		annotation SummarizationSetBy = Automatic
+
+	column generacion_promedio_mw
+		dataType: double
+		lineageTag: e8b51ba0-75a3-460b-90e8-18a5ee420cff
+		summarizeBy: sum
+		sourceColumn: generacion_promedio_mw
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column generacion_pico_mw
+		dataType: double
+		lineageTag: 411d227a-e582-46e3-89e2-1444f1b2fb19
+		summarizeBy: sum
+		sourceColumn: generacion_pico_mw
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column disponibilidad_pico_mw
+		dataType: double
+		lineageTag: 472d0c15-474b-4a07-88c7-4b0d225fed11
+		summarizeBy: sum
+		sourceColumn: disponibilidad_pico_mw
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column horas_con_disponibilidad
+		dataType: int64
+		formatString: 0
+		lineageTag: 8909e181-2483-49fd-b1cc-2c9e61a310bd
+		summarizeBy: sum
+		sourceColumn: horas_con_disponibilidad
+
+		annotation SummarizationSetBy = Automatic
+
+	column utilizacion_disponibilidad_pct
+		dataType: double
+		lineageTag: 559794f7-bc7a-4d6b-a361-b278e5c2afc2
+		summarizeBy: sum
+		sourceColumn: utilizacion_disponibilidad_pct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column estado_consistencia
+		dataType: string
+		lineageTag: aff44bd8-8ed2-4c45-af37-9bfaeea12884
+		summarizeBy: none
+		sourceColumn: estado_consistencia
+
+		annotation SummarizationSetBy = Automatic
 
 	partition vw_operacion_diaria_planta = m
 		mode: import
@@ -78,3 +219,4 @@ table vw_operacion_diaria_planta
 	annotation PBI_NavigationStepName = Navegación
 
 	annotation PBI_ResultType = Table
+

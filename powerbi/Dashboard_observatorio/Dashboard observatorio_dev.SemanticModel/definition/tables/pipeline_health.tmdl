@@ -99,6 +99,23 @@ table pipeline_health
 		summarizeBy: none
 		sourceColumn: error_message
 
+	column catalog
+		dataType: string
+		lineageTag: ea5bd32a-5a0d-4339-ba07-1bbc056a6d15
+		summarizeBy: none
+		sourceColumn: catalog
+
+		annotation SummarizationSetBy = Automatic
+
+	column run_exitoso
+		dataType: int64
+		formatString: 0
+		lineageTag: dcd31257-593f-4a68-899f-c9b13db1a68f
+		summarizeBy: sum
+		sourceColumn: run_exitoso
+
+		annotation SummarizationSetBy = Automatic
+
 	partition pipeline_health = m
 		mode: import
 		source =
@@ -113,3 +130,4 @@ table pipeline_health
 	annotation PBI_NavigationStepName = Navegación
 
 	annotation PBI_ResultType = Table
+

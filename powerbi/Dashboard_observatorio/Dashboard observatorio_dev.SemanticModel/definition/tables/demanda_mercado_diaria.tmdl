@@ -1,0 +1,55 @@
+table demanda_mercado_diaria
+	lineageTag: 3d878139-8f24-42c8-a91f-615bda54d269
+
+	column fecha
+		dataType: dateTime
+		formatString: Long Date
+		summarizeBy: none
+		sourceColumn: fecha
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column tipo_mercado
+		dataType: string
+		summarizeBy: none
+		sourceColumn: tipo_mercado
+
+	column demanda_total_gwh
+		dataType: double
+		summarizeBy: sum
+		sourceColumn: demanda_total_gwh
+
+	column demanda_promedio_mw
+		dataType: double
+		summarizeBy: sum
+		sourceColumn: demanda_promedio_mw
+
+	column demanda_pico_mw
+		dataType: double
+		summarizeBy: sum
+		sourceColumn: demanda_pico_mw
+
+	column agentes_con_demanda
+		dataType: int64
+		summarizeBy: sum
+		sourceColumn: agentes_con_demanda
+
+	column horas_con_datos
+		dataType: int64
+		summarizeBy: sum
+		sourceColumn: horas_con_datos
+
+	partition demanda_mercado_diaria = m
+		mode: import
+		source =
+				let
+				    Origen = DatabricksMultiCloud.Catalogs("dbc-4c2404fa-9e73.cloud.databricks.com", "/sql/1.0/warehouses/049b881d5122f61a", [Catalog = "", Database = ""]),
+				    observatorio_dev_Database = Origen{[Name="observatorio_dev",Kind="Database"]}[Data],
+				    serving_Schema = observatorio_dev_Database{[Name="serving",Kind="Schema"]}[Data],
+				    demanda_mercado_diaria_View = serving_Schema{[Name="demanda_mercado_diaria",Kind="View"]}[Data]
+				in
+				    demanda_mercado_diaria_View
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table

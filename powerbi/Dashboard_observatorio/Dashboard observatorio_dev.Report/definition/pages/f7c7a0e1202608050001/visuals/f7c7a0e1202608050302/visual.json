@@ -1,153 +1,153 @@
 {
-    "$schema":  "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
-    "name":  "f7c7a0e1202608050302",
-    "position":  {
-                     "x":  640,
-                     "y":  216,
-                     "z":  11000,
-                     "height":  260,
-                     "width":  624,
-                     "tabOrder":  11000
-                 },
-    "visual":  {
-                   "visualType":  "clusteredBarChart",
-                   "query":  {
-                                 "queryState":  {
-                                                    "Category":  {
-                                                                     "projections":  [
-                                                                                         {
-                                                                                             "field":  {
-                                                                                                           "Column":  {
-                                                                                                                          "Expression":  {
-                                                                                                                                             "SourceRef":  {
-                                                                                                                                                               "Entity":  "task_performance"
-                                                                                                                                                           }
-                                                                                                                                         },
-                                                                                                                          "Property":  "task_key"
-                                                                                                                      }
-                                                                                                       },
-                                                                                             "queryRef":  "task_performance.task_key",
-                                                                                             "nativeQueryRef":  "Tarea",
-                                                                                             "displayName":  "Tarea",
-                                                                                             "active":  true
-                                                                                         }
-                                                                                     ]
-                                                                 },
-                                                    "Y":  {
-                                                              "projections":  [
-                                                                                  {
-                                                                                      "field":  {
-                                                                                                    "Measure":  {
-                                                                                                                    "Expression":  {
-                                                                                                                                       "SourceRef":  {
-                                                                                                                                                         "Entity":  "Medidas"
-                                                                                                                                                     }
-                                                                                                                                   },
-                                                                                                                    "Property":  "Duración promedio tarea (min)"
-                                                                                                                }
-                                                                                                },
-                                                                                      "queryRef":  "Medidas.Duración promedio tarea (min)",
-                                                                                      "nativeQueryRef":  "Duración promedio (min)"
-                                                                                  }
-                                                                              ]
-                                                          }
-                                                },
-                                 "sortDefinition":  {
-                                                        "sort":  [
-                                                                     {
-                                                                         "field":  {
-                                                                                       "Measure":  {
-                                                                                                       "Expression":  {
-                                                                                                                          "SourceRef":  {
-                                                                                                                                            "Entity":  "Medidas"
-                                                                                                                                        }
-                                                                                                                      },
-                                                                                                       "Property":  "Duración promedio tarea (min)"
-                                                                                                   }
-                                                                                   },
-                                                                         "direction":  "Descending"
-                                                                     }
-                                                                 ],
-                                                        "isDefaultSort":  true
-                                                    }
-                             },
-                   "objects":  {
-                                   "categoryAxis":  [
-                                                        {
-                                                            "properties":  {
-                                                                               "showAxisTitle":  {
-                                                                                                     "expr":  {
-                                                                                                                  "Literal":  {
-                                                                                                                                  "Value":  "false"
-                                                                                                                              }
-                                                                                                              }
-                                                                                                 }
-                                                                           }
-                                                        }
-                                                    ],
-                                   "labels":  [
-                                                  {
-                                                      "properties":  {
-                                                                         "show":  {
-                                                                                      "expr":  {
-                                                                                                   "Literal":  {
-                                                                                                                   "Value":  "true"
-                                                                                                               }
-                                                                                               }
-                                                                                  }
-                                                                     }
-                                                  }
-                                              ]
-                               },
-                   "visualContainerObjects":  {
-                                                  "title":  [
-                                                                {
-                                                                    "properties":  {
-                                                                                       "text":  {
-                                                                                                    "expr":  {
-                                                                                                                 "Literal":  {
-                                                                                                                                 "Value":  "\u0027Tareas con mayor duración promedio\u0027"
-                                                                                                                             }
-                                                                                                             }
-                                                                                                },
-                                                                                       "alignment":  {
-                                                                                                         "expr":  {
-                                                                                                                      "Literal":  {
-                                                                                                                                      "Value":  "\u0027center\u0027"
-                                                                                                                                  }
-                                                                                                                  }
-                                                                                                     }
-                                                                                   }
-                                                                }
-                                                            ],
-                                                  "border":  [
-                                                                 {
-                                                                     "properties":  {
-                                                                                        "show":  {
-                                                                                                     "expr":  {
-                                                                                                                  "Literal":  {
-                                                                                                                                  "Value":  "true"
-                                                                                                                              }
-                                                                                                              }
-                                                                                                 },
-                                                                                        "width":  {
-                                                                                                      "expr":  {
-                                                                                                                   "Literal":  {
-                                                                                                                                   "Value":  "1D"
-                                                                                                                               }
-                                                                                                               }
-                                                                                                  },
-                                                                                        "radius":  {
-                                                                                                       "expr":  {
-                                                                                                                    "Literal":  {
-                                                                                                                                    "Value":  "10D"
-                                                                                                                                }
-                                                                                                                }
-                                                                                                   }
-                                                                                    }
-                                                                 }
-                                                             ]
-                                              },
-                   "drillFilterOtherVisuals":  true
-               }
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "f7c7a0e1202608050302",
+  "position": {
+    "x": 640,
+    "y": 216,
+    "z": 11000,
+    "height": 260,
+    "width": 624,
+    "tabOrder": 11000
+  },
+  "visual": {
+    "visualType": "clusteredBarChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "task_performance"
+                    }
+                  },
+                  "Property": "task_key"
+                }
+              },
+              "queryRef": "task_performance.task_key",
+              "nativeQueryRef": "Tarea",
+              "displayName": "Tarea",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas"
+                    }
+                  },
+                  "Property": "Duración promedio tarea (min)"
+                }
+              },
+              "queryRef": "Medidas.Duración promedio tarea (min)",
+              "nativeQueryRef": "Duración promedio (min)"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Medidas"
+                  }
+                },
+                "Property": "Duración promedio tarea (min)"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "categoryAxis": [
+        {
+          "properties": {
+            "showAxisTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "labels": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Tareas con mayor duración promedio'"
+                }
+              }
+            },
+            "alignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'center'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "width": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
 }

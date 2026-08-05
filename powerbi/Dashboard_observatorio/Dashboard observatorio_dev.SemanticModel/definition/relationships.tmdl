@@ -14,6 +14,14 @@ relationship 23555842-9245-73b1-ac18-0ecb83104ed5
 	fromColumn: vw_operacion_diaria_planta.fecha
 	toColumn: DimFecha.Date
 
+relationship a6c09b40-112c-4e9c-9ca5-73c231078d7a
+	fromColumn: demanda_mercado_diaria.fecha
+	toColumn: DimFecha.Date
+
+relationship ba362e9b-8da9-4109-9a1a-616d19e94383
+	fromColumn: energia_embalsada_diaria.fecha
+	toColumn: DimFecha.Date
+
 relationship 8b373866-72de-1ad0-3f81-2ae16f6dfc37
 	fromColumn: vw_operacion_diaria_planta.codigo_sic_agente
 	toColumn: vw_dim_agente_powerbi.codigo_agente
@@ -58,16 +66,6 @@ relationship 661cec48-f30f-494b-a7b9-8a07721699c6
 	fromColumn: dim_planta.fpo
 	toColumn: LocalDateTable_bdcf8a10-4e90-4055-8165-137919ca379a.Date
 
-relationship 3ce812a1-9c65-432b-9470-1b976bcdd377
-	joinOnDateBehavior: datePartOnly
-	fromColumn: dim_planta.fecha_inicio
-	toColumn: LocalDateTable_30fbfffb-2070-4180-be9a-1c66100fc58a.Date
-
-relationship 76e2db2d-f36e-44da-8a6b-ccae3564f844
-	joinOnDateBehavior: datePartOnly
-	fromColumn: dim_planta.fecha_fin
-	toColumn: LocalDateTable_90c4b901-2f2f-4344-999c-390913ccbd23.Date
-
 relationship 4a248828-da76-4b5c-becf-e654c3e8545d
 	joinOnDateBehavior: datePartOnly
 	fromColumn: dim_planta.fecha_creacion
@@ -89,4 +87,14 @@ relationship 40c6687d-0784-4dc5-8e57-921be6f72f10
 relationship c648bf23-0806-47d3-a313-b9def97863ea
 	fromColumn: vw_generacion_diaria_tipo.tipo_generacion
 	toColumn: DimTecnologia.tipo_generacion
+
+relationship AutoDetected_507936b1-4478-4ecf-97a1-4353e3b03717
+	isActive: false
+	fromColumn: vw_operacion_diaria_planta.fecha_key
+	toColumn: vw_resumen_diario_sistema.fecha_key
+
+relationship AutoDetected_c870fd86-ccdb-4cbf-8c14-f6ea69b10c2a
+	isActive: false
+	fromColumn: vw_generacion_diaria_tipo.fecha_key
+	toColumn: vw_resumen_diario_sistema.fecha_key
 

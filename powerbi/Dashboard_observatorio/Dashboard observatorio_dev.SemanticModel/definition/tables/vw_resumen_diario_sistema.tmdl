@@ -4,6 +4,7 @@ table vw_resumen_diario_sistema
 	column fecha
 		dataType: dateTime
 		formatString: Long Date
+		lineageTag: d845486f-7e8f-4ee2-92e2-7f2eabc256a2
 		summarizeBy: none
 		sourceColumn: fecha
 
@@ -12,6 +13,7 @@ table vw_resumen_diario_sistema
 	column fecha_corte_comparable
 		dataType: dateTime
 		formatString: Long Date
+		lineageTag: 0d3356f1-e6e2-4fb8-8606-66f677b18509
 		summarizeBy: none
 		sourceColumn: fecha_corte_comparable
 
@@ -19,28 +21,250 @@ table vw_resumen_diario_sistema
 
 	column es_periodo_comparable
 		dataType: boolean
+		lineageTag: d4e60315-4b47-4c12-94a6-50bd8d6e21eb
 		summarizeBy: none
 		sourceColumn: es_periodo_comparable
 
 	column generacion_comparable_gwh
 		dataType: double
+		lineageTag: ec7d467e-55dc-4055-a679-83ebbb0ca237
 		summarizeBy: sum
 		sourceColumn: generacion_comparable_gwh
 
 	column demanda_comparable_gwh
 		dataType: double
+		lineageTag: 9e8bf793-4175-474d-be18-2364f0ef1348
 		summarizeBy: sum
 		sourceColumn: demanda_comparable_gwh
 
 	column disponibilidad_comparable_gwh
 		dataType: double
+		lineageTag: 38958f1a-174b-437d-a288-2a4aad93980f
 		summarizeBy: sum
 		sourceColumn: disponibilidad_comparable_gwh
 
 	column precio_comparable_cop_kwh
 		dataType: double
-		summarizeBy: average
+		lineageTag: a42c0a80-dc9b-42aa-9a29-44d60ee73dc2
+		summarizeBy: sum
 		sourceColumn: precio_comparable_cop_kwh
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha_key
+		dataType: int64
+		formatString: 0
+		lineageTag: fc506f6a-c55e-4e8d-afa4-d4b85e872744
+		summarizeBy: sum
+		sourceColumn: fecha_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column anio
+		dataType: int64
+		formatString: 0
+		lineageTag: d4c62294-376e-4b1e-a435-977ce47e5454
+		summarizeBy: sum
+		sourceColumn: anio
+
+		annotation SummarizationSetBy = Automatic
+
+	column mes_numero
+		dataType: int64
+		formatString: 0
+		lineageTag: 61e79902-fc56-45ae-9548-2566892ffb2c
+		summarizeBy: sum
+		sourceColumn: mes_numero
+
+		annotation SummarizationSetBy = Automatic
+
+	column generacion_gwh
+		dataType: double
+		lineageTag: cd86a580-d421-445d-b01f-6661c90b9951
+		summarizeBy: sum
+		sourceColumn: generacion_gwh
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column demanda_gwh
+		dataType: double
+		lineageTag: 267624b6-ed3c-475b-91f9-f31cb5b67269
+		summarizeBy: sum
+		sourceColumn: demanda_gwh
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column demanda_regulada_gwh
+		dataType: double
+		lineageTag: 3a76956f-0863-44f2-b35f-a1436dc8f289
+		summarizeBy: sum
+		sourceColumn: demanda_regulada_gwh
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column demanda_no_regulada_gwh
+		dataType: double
+		lineageTag: d2f290cd-e4c3-4a9b-874c-94a6a54248df
+		summarizeBy: sum
+		sourceColumn: demanda_no_regulada_gwh
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column disponibilidad_gwh
+		dataType: double
+		lineageTag: 907f0ca0-67b2-44bd-b5b8-34523f340494
+		summarizeBy: sum
+		sourceColumn: disponibilidad_gwh
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column balance_generacion_demanda_gwh
+		dataType: double
+		lineageTag: 138d226c-81b2-4287-9759-7c5c0d7980be
+		summarizeBy: sum
+		sourceColumn: balance_generacion_demanda_gwh
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column margen_disponibilidad_gwh
+		dataType: double
+		lineageTag: 72cebb0a-0faf-470b-a4fd-4188d250efa5
+		summarizeBy: sum
+		sourceColumn: margen_disponibilidad_gwh
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column utilizacion_disponibilidad_pct
+		dataType: double
+		lineageTag: b8bb0d01-b1bb-489e-88eb-82f94bf51334
+		summarizeBy: sum
+		sourceColumn: utilizacion_disponibilidad_pct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column precio_nacional_promedio_cop_kwh
+		dataType: double
+		lineageTag: ee8981a0-1a70-4d9b-bb0e-47fcf0579ab8
+		summarizeBy: sum
+		sourceColumn: precio_nacional_promedio_cop_kwh
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column precio_nacional_minimo_cop_kwh
+		dataType: double
+		lineageTag: 512560bb-cbce-43d1-9524-06e171027e6d
+		summarizeBy: sum
+		sourceColumn: precio_nacional_minimo_cop_kwh
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column precio_nacional_maximo_cop_kwh
+		dataType: double
+		lineageTag: fc54541a-c9cb-42b6-acc4-4f4d2b3a07d1
+		summarizeBy: sum
+		sourceColumn: precio_nacional_maximo_cop_kwh
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column precio_internacional_promedio_cop_kwh
+		dataType: double
+		lineageTag: ceb72739-de6e-43f8-9615-ae8b11bd89dc
+		summarizeBy: sum
+		sourceColumn: precio_internacional_promedio_cop_kwh
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column precio_tie_promedio_cop_kwh
+		dataType: double
+		lineageTag: c24f9ea4-8287-499f-8cf5-840f694230bd
+		summarizeBy: sum
+		sourceColumn: precio_tie_promedio_cop_kwh
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column horas_con_datos
+		dataType: int64
+		formatString: 0
+		lineageTag: 5b04d3e1-02ad-4ef5-9ddf-dca31f5837aa
+		summarizeBy: sum
+		sourceColumn: horas_con_datos
+
+		annotation SummarizationSetBy = Automatic
+
+	column generacion_media_7d_gwh
+		dataType: double
+		lineageTag: eb99b861-3c43-44a6-a2ed-4a68f0069bdc
+		summarizeBy: sum
+		sourceColumn: generacion_media_7d_gwh
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column demanda_media_7d_gwh
+		dataType: double
+		lineageTag: e3e1d6c0-7eb7-45b1-a730-dfb1fde81fae
+		summarizeBy: sum
+		sourceColumn: demanda_media_7d_gwh
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column precio_media_7d_cop_kwh
+		dataType: double
+		lineageTag: dd74ee6e-8b61-4aa0-9f29-cc8bffdcd7af
+		summarizeBy: sum
+		sourceColumn: precio_media_7d_cop_kwh
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column completitud_horaria_pct
+		dataType: double
+		lineageTag: e227f208-d620-43a6-9a3b-779635623fc2
+		summarizeBy: sum
+		sourceColumn: completitud_horaria_pct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column dias_desde_dato
+		dataType: int64
+		formatString: 0
+		lineageTag: 49c1a41b-15bd-4f0d-bec4-c06a33e91f82
+		summarizeBy: sum
+		sourceColumn: dias_desde_dato
+
+		annotation SummarizationSetBy = Automatic
 
 	partition vw_resumen_diario_sistema = m
 		mode: import
@@ -56,3 +280,4 @@ table vw_resumen_diario_sistema
 	annotation PBI_NavigationStepName = Navegación
 
 	annotation PBI_ResultType = Table
+
