@@ -4,83 +4,88 @@ interface Props {
 }
 
 const { kind } = Astro.props;
+const asset = (name: string) => `/presentation/${name}`;
 ---
 
-<div class={`video-visual video-visual--${kind}`} aria-label={`Visual de ${kind}`}>
+<div class={`video-visual video-visual--${kind}`} aria-label={`Evidencia real para ${kind}`}>
   {kind === 'sources' && (
     <>
-      <div class="video-visual__label">9 FUENTES PÚBLICAS</div>
-      <div class="source-orbit">
-        <span>SIMEM</span><span>XM</span><span>CREG</span><span>IDEAM</span><span>UPME</span><span>Datos.gov</span>
-        <strong>Decisión<br />explicable</strong>
+      <div class="video-visual__label">SECUENCIA REAL · PORTADA → DASHBOARD → REPOSITORIO</div>
+      <div class="evidence-intro">
+        <figure class="evidence-shot evidence-shot--wide"><img src={asset('powerbi-resumen.png')} alt="Resumen publicado del sistema eléctrico" /><figcaption>01 · Dashboard publicado</figcaption></figure>
+        <div class="repo-tree"><span>02 · REPOSITORIO</span><b>observatorio-energetico-de-colombia/</b><code>├─ Ingestion/<br />├─ Silver/<br />├─ Gold/<br />├─ Serving/<br />├─ Automation/<br />└─ powerbi/</code></div>
       </div>
-      <div class="video-visual__footer"><i></i><b>origen</b><i></i><b>fecha</b><i></i><b>unidad</b><i></i><b>linaje</b></div>
     </>
   )}
 
   {kind === 'lakehouse' && (
     <>
-      <div class="video-visual__label">ARQUITECTURA OPERATIVA</div>
-      <div class="medallion-flow"><span>SIMEM</span><i>→</i><span>LANDING</span><i>→</i><span class="bronze">BRONZE</span><i>→</i><span class="silver">SILVER</span><i>→</i><span class="gold">GOLD</span><i>→</i><span class="serving">SERVING</span><i>→</i><span>POWER BI</span></div>
-      <div class="video-visual__footer"><b>Auditoría</b><i></i><b>Delta</b><i></i><b>Unity Catalog</b></div>
+      <div class="video-visual__label">EVIDENCIA REAL · JOB COMPLETO EN VERDE</div>
+      <div class="medallion-ribbon"><span>SIMEM</span><i>→</i><span>LANDING</span><i>→</i><span>BRONZE</span><i>→</i><span>SILVER</span><i>→</i><span>GOLD</span><i>→</i><span>SERVING</span><i>→</i><span>POWER BI</span></div>
+      <figure class="evidence-shot evidence-shot--job"><img src={asset('databricks-job-success.png')} alt="Job de Databricks ejecutado correctamente" /><figcaption>Databricks Workflow · tareas completadas</figcaption></figure>
     </>
   )}
 
   {kind === 'ingestion' && (
     <>
-      <div class="video-visual__label">DOS MODOS · UNA TRAZABILIDAD</div>
-      <div class="ingestion-lanes">
-        <div><small>OPERACIÓN DIARIA</small><strong>INCREMENTAL</strong><p>Hoy − 45 días</p><em>ventana revisable</em></div>
-        <div><small>HISTÓRICO CONTROLADO</small><strong>BACKFILL</strong><p>fecha inicio → fecha fin</p><em>backfill_id + cobertura</em></div>
-      </div>
-      <div class="run-line"><span></span><b>run_id</b><span></span><b>métricas</b><span></span><b>resultado</b></div>
+      <div class="video-visual__label">EVIDENCIA REAL · PARÁMETROS Y EJECUCIÓN</div>
+      <figure class="evidence-shot evidence-shot--job evidence-shot--dim"><img src={asset('databricks-job-success.png')} alt="Flujo real del Job de Databricks" /></figure>
+      <div class="parameter-overlay"><span>execution_mode</span><b>INCREMENTAL</b><span>backfill_start_date</span><b>2026-01-01</b><span>backfill_end_date</span><b>2026-12-31</b><span>backfill_chunk_days</span><b>31</b></div>
+      <div class="video-visual__footer"><b>MERGE idempotente</b><i></i><b>backfill_id</b><i></i><b>cobertura validada</b></div>
     </>
   )}
 
   {kind === 'quality' && (
     <>
-      <div class="video-visual__label">PUERTA DE PUBLICACIÓN</div>
-      <div class="quality-console">
-        <div class="quality-score"><strong>100%</strong><span>checks críticos</span></div>
-        <ul><li><b>✓</b> esquema</li><li><b>✓</b> grano</li><li><b>✓</b> cobertura</li><li><b>✓</b> frescura</li><li><b>✓</b> relaciones</li></ul>
+      <div class="video-visual__label">RESULTADO REAL · GOLD INCREMENTAL</div>
+      <div class="quality-evidence">
+        <div class="quality-evidence__score"><strong>62</strong><span>validaciones</span></div>
+        <div class="quality-evidence__terminal"><p>Run ID: 263853691318294</p><p>Ventana: 2026-06-22 → 2026-08-05</p><p>Validaciones fallidas: <b>0</b></p><p>Bloqueantes fallidas: <b>0</b></p><strong>CONTROL DE CALIDAD APROBADO ✓</strong></div>
       </div>
-      <div class="quality-footer"><span>PASS</span><i></i><b>publicar</b><i></i><b>Power BI</b></div>
+      <div class="video-visual__footer"><b>esquema</b><i></i><b>grano</b><i></i><b>frescura</b><i></i><b>relaciones</b></div>
     </>
   )}
 
   {kind === 'serving' && (
     <>
-      <div class="video-visual__label">CONTRATOS DE CONSUMO</div>
-      <div class="contract-stack"><div><small>GOLD</small><strong>modelo interno</strong></div><i>→</i><div class="contract-stack__main"><small>SERVING</small><strong>9 vistas certificadas</strong><em>esquema · grano · SLA</em></div><i>→</i><div><small>POWER BI</small><strong>consumo estable</strong></div></div>
-      <div class="video-visual__footer"><b>vw_sistema_diario</b><i></i><b>vw_operacion_diaria_planta</b></div>
+      <div class="video-visual__label">EVIDENCIA REAL · CATÁLOGO ANALÍTICO</div>
+      <figure class="evidence-shot evidence-shot--catalog"><img src={asset('databricks-catalog.png')} alt="Catálogo analítico publicado en Databricks" /><span class="privacy-mask">OWNER OCULTO</span><figcaption>Vistas consumidas por el modelo semántico</figcaption></figure>
     </>
   )}
 
   {kind === 'dashboard' && (
     <>
-      <div class="video-visual__label">DASHBOARD PUBLICADO · POWER BI</div>
-      <div class="mini-dashboard">
-        <div class="mini-dashboard__header"><span>Resumen del sistema eléctrico</span><i>01/01/2026 — 25/07/2026</i></div>
-        <div class="mini-dashboard__kpis"><b>46,70<small>TWh generación</small></b><b>47,75<small>TWh demanda</small></b><b>374,94<small>COP/kWh</small></b></div>
-        <div class="mini-dashboard__chart"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="video-visual__label">RECORRIDO REAL · CINCO PÁGINAS DE POWER BI</div>
+      <div class="dashboard-filmstrip">
+        <figure><img src={asset('powerbi-resumen.png')} alt="Página resumen del sistema" /><figcaption>01 · Resumen</figcaption></figure>
+        <figure><img src={asset('powerbi-plantas.png')} alt="Página análisis por planta" /><figcaption>02 · Plantas</figcaption></figure>
+        <figure><img src={asset('powerbi-operacion.png')} alt="Página operación técnica" /><figcaption>03 · Operación</figcaption></figure>
+        <figure><img src={asset('powerbi-demanda.png')} alt="Página demanda y mercado" /><figcaption>04 · Mercado</figcaption></figure>
+        <figure><img src={asset('powerbi-embalses.png')} alt="Página embalses y cobertura" /><figcaption>05 · Embalses</figcaption></figure>
       </div>
-      <div class="video-visual__footer"><b>5 páginas</b><i></i><b>fecha común</b><i></i><b>KPI comparables</b></div>
     </>
   )}
 
   {kind === 'review' && (
     <>
-      <div class="video-visual__label">REVISIÓN OPERATIVA · FASE 9</div>
-      <div class="terminal-card"><p><span>$</span> python 96_manual_phase9_review.py</p><p>fuentes dentro del SLA <b>✓</b></p><p>última corrida correcta <b>✓</b></p><p>contratos Serving disponibles <b>✓</b></p><strong>APTO <em>sin hallazgos operativos</em></strong></div>
-      <div class="video-visual__footer"><b>solo lectura</b><i></i><b>sin alertas</b><i></i><b>evidencia</b></div>
+      <div class="video-visual__label">EVIDENCIA REAL · NOTEBOOK 96_MANUAL_PHASE9_REVIEW</div>
+      <div class="review-evidence">
+        <pre><code>review = assess(
+  stale_sources=0,
+  latest_pipeline_status="SUCCESS",
+  open_blocking_quality_alerts=0,
+  serving_views_ready=9
+)</code></pre>
+        <div><small>SALIDA</small><strong>REVISION FASE 9: APTO</strong><p>Sin hallazgos operativos.</p><span>solo lectura · sin escrituras · sin alertas automáticas</span></div>
+      </div>
     </>
   )}
 
   {kind === 'roadmap' && (
     <>
-      <div class="video-visual__label">EVOLUCIÓN CONTROLADA · FASE 10</div>
-      <div class="roadmap-steps"><div><span>HOY</span><b>Generación<br />Mercado<br />Embalses</b></div><i>→</i><div><span>DESPUÉS</span><b>Tarifas<br />Red<br />Calidad</b></div><i>→</i><div><span>CUANDO ESTÉ CERTIFICADO</span><b>Hidrología<br />Pronóstico</b></div></div>
-      <div class="video-visual__footer"><b>contratos</b><i></i><b>reconciliación</b><i></i><b>confianza</b></div>
+      <div class="video-visual__label">README · PRÓXIMA EVOLUCIÓN</div>
+      <div class="roadmap-steps"><div><span>HOY</span><b>Generación<br />Mercado<br />Embalses</b></div><i>→</i><div><span>FASE 10</span><b>Tarifas<br />Red<br />Calidad</b></div><i>→</i><div><span>CONTRATO CERTIFICADO</span><b>Hidrología<br />Pronóstico</b></div></div>
+      <div class="video-visual__footer"><b>fuente oficial</b><i></i><b>calidad</b><i></i><b>reconciliación</b><i></i><b>Serving</b></div>
     </>
   )}
 </div>
