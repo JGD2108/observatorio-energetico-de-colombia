@@ -1,4 +1,5 @@
 import json
+import re
 from pathlib import Path
 
 
@@ -123,7 +124,7 @@ def test_market_and_reservoir_pages_use_real_contracts_and_shared_date_filter():
         )
         assert entity in visual_text
         assert measure in visual_text
-        assert '"Entity":  "DimFecha"' in visual_text
+        assert re.search(r'"Entity"\s*:\s*"DimFecha"', visual_text)
 
 
 def test_date_dimension_and_summary_slicer_cover_all_business_dates_without_fixed_end_date():

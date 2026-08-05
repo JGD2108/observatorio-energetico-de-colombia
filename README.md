@@ -69,6 +69,7 @@ Dependencias fijadas:
 - [Fase 5: backfill y optimización](docs/phase5_backfill_optimization.md)
 - [Fase 6: consumo y operación](docs/phase6_consumption_operations.md)
 - [Fase 7: dashboard Power BI](docs/phase7_powerbi_dashboard.md)
+- [Fase 9: monitoreo manual y evolución](docs/phase9_monitoring_evolution.md)
 - [Clasificación de archivos](docs/file_classification.md)
 
 ## Limitaciones
