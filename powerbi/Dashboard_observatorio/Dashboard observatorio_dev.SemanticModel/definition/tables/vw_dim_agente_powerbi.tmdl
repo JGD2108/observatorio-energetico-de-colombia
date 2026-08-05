@@ -53,8 +53,8 @@ table vw_dim_agente_powerbi
 				let
 				    Origen = DatabricksMultiCloud.Catalogs("dbc-4c2404fa-9e73.cloud.databricks.com", "/sql/1.0/warehouses/049b881d5122f61a", null),
 				    observatorio_dev_Database = Origen{[Name="observatorio_dev",Kind="Database"]}[Data],
-				    gold_Schema = observatorio_dev_Database{[Name="gold",Kind="Schema"]}[Data],
-				    vw_dim_agente_powerbi_View = gold_Schema{[Name="vw_dim_agente_powerbi",Kind="View"]}[Data]
+				    analytics_Schema = observatorio_dev_Database{[Name="gold_analytics",Kind="Schema"]}[Data],
+				    vw_dim_agente_powerbi_View = analytics_Schema{[Name="vw_dim_agente_powerbi",Kind="View"]}[Data]
 				in
 				    vw_dim_agente_powerbi_View
 

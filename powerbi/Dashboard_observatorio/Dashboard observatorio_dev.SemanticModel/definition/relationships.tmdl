@@ -1,14 +1,5 @@
-relationship 48f25444-6dca-414e-b335-303be361cfaa
-	joinOnDateBehavior: datePartOnly
-	fromColumn: vw_sistema_horario.fecha_hora
-	toColumn: LocalDateTable_6933b2ff-fd20-4bb2-9467-9deafea6da36.Date
-
 relationship fa2c71da-bce9-782a-ac7f-b1d3432fa595
 	fromColumn: vw_resumen_diario_sistema.fecha
-	toColumn: DimFecha.Date
-
-relationship 3277047f-a6b2-fb0a-6233-4b5781a690fe
-	fromColumn: vw_sistema_horario.fecha
 	toColumn: DimFecha.Date
 
 relationship c7b847fa-5f31-503f-b1cb-ba13d92cf72c
@@ -25,18 +16,6 @@ relationship 23555842-9245-73b1-ac18-0ecb83104ed5
 
 relationship 8b373866-72de-1ad0-3f81-2ae16f6dfc37
 	fromColumn: vw_operacion_diaria_planta.codigo_sic_agente
-	toColumn: vw_dim_agente_powerbi.codigo_agente
-
-relationship a509bbe3-54d7-5358-2a73-d964d9dc3129
-	fromColumn: 'vw_operacion_diaria_planta (2)'.fecha
-	toColumn: DimFecha.Date
-
-relationship 438ca3bc-7bab-579f-3560-998e2f708d93
-	fromColumn: 'vw_operacion_diaria_planta (2)'.planta_key
-	toColumn: dim_planta.planta_key
-
-relationship 2836e799-6799-bf42-de80-0c604ad3607d
-	fromColumn: 'vw_operacion_diaria_planta (2)'.codigo_sic_agente
 	toColumn: vw_dim_agente_powerbi.codigo_agente
 
 relationship 934d624a-362a-410c-bb71-4bed9afef5f2

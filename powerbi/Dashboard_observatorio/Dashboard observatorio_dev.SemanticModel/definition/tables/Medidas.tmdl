@@ -128,7 +128,7 @@ table Medidas
 			        VALUES('vw_operacion_diaria_planta'[planta_key]),
 			        CALCULATE(
 			            MAX(
-			                'vw_operacion_diaria_planta'[capacidad_efectiva_neta_mw]
+				                'vw_operacion_diaria_planta'[cap_efectiva_neta]
 			            )
 			        )
 			    ),
@@ -163,7 +163,7 @@ table Medidas
 			    SUMX(
 			        FILTER(
 			            'vw_operacion_diaria_planta',
-			            'vw_operacion_diaria_planta'[capacidad_efectiva_neta_mw] > 0
+				            'vw_operacion_diaria_planta'[cap_efectiva_neta] > 0
 			        ),
 			        COALESCE(
 			            'vw_operacion_diaria_planta'[generacion_total_gwh],
@@ -175,9 +175,9 @@ table Medidas
 			    SUMX(
 			        FILTER(
 			            'vw_operacion_diaria_planta',
-			            'vw_operacion_diaria_planta'[capacidad_efectiva_neta_mw] > 0
+				            'vw_operacion_diaria_planta'[cap_efectiva_neta] > 0
 			        ),
-			        'vw_operacion_diaria_planta'[capacidad_efectiva_neta_mw] * 24
+				        'vw_operacion_diaria_planta'[cap_efectiva_neta] * 24
 			    )
 			
 			RETURN
@@ -240,12 +240,8 @@ table Medidas
 	measure 'Utilización disponibilidad por tipo (%)' =
 			
 			DIVIDE(
-			    SUM(
-			        'vw_generacion_diaria_tipo'[generacion_comparable_gwh]
-			    ),
-			    SUM(
-			        'vw_generacion_diaria_tipo'[disponibilidad_comparable_gwh]
-			    )
+				SUM('vw_generacion_diaria_tipo'[generacion_total_gwh]),
+				SUM('vw_generacion_diaria_tipo'[disponibilidad_total_gwh])
 			)
 		formatString: 0.0%
 		lineageTag: 6fcc45cd-0523-4aa9-b3bf-329d56f62054

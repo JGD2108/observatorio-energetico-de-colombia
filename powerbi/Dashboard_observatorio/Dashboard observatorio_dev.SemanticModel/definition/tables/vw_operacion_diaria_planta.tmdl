@@ -3,406 +3,78 @@ table vw_operacion_diaria_planta
 
 	column fecha_key
 		dataType: int64
-		formatString: 0
-		sourceProviderType: int
-		lineageTag: 87c16a03-7c4d-4671-ae04-17b1e62ba0c4
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: fecha_key
-
-		annotation SummarizationSetBy = Automatic
 
 	column fecha
 		dataType: dateTime
 		formatString: Long Date
-		sourceProviderType: date
-		lineageTag: 8d2aa8bc-25f5-48d0-b211-2791e405cb45
 		summarizeBy: none
 		sourceColumn: fecha
 
-		annotation SummarizationSetBy = Automatic
-
 		annotation UnderlyingDateTimeDataType = Date
-
-	column anio
-		dataType: int64
-		formatString: 0
-		sourceProviderType: smallint
-		lineageTag: 0698b882-fd85-4a8b-bcae-0b1144da7e1c
-		summarizeBy: sum
-		sourceColumn: anio
-
-		annotation SummarizationSetBy = Automatic
-
-	column trimestre
-		dataType: int64
-		formatString: 0
-		sourceProviderType: tinyint
-		lineageTag: 6d66b0da-f571-4b59-b59e-87c0ee807093
-		summarizeBy: sum
-		sourceColumn: trimestre
-
-		annotation SummarizationSetBy = Automatic
-
-	column mes_numero
-		dataType: int64
-		formatString: 0
-		sourceProviderType: tinyint
-		lineageTag: 5c6748c8-3acf-445d-a2b2-58323cae662f
-		summarizeBy: sum
-		sourceColumn: mes_numero
-
-		annotation SummarizationSetBy = Automatic
-
-	column mes_nombre
-		dataType: string
-		sourceProviderType: nvarchar(65535)
-		lineageTag: a317a415-100d-413b-9372-5d6357517d6d
-		summarizeBy: none
-		sourceColumn: mes_nombre
-
-		annotation SummarizationSetBy = Automatic
-
-	column anio_mes
-		dataType: int64
-		formatString: 0
-		sourceProviderType: int
-		lineageTag: 430a9948-15fa-4caf-a1d3-95d272ac1445
-		summarizeBy: sum
-		sourceColumn: anio_mes
-
-		annotation SummarizationSetBy = Automatic
-
-	column anio_mes_nombre
-		dataType: string
-		sourceProviderType: nvarchar(65535)
-		lineageTag: 55f1210b-43a3-4849-a2c6-4e830fc753ef
-		summarizeBy: none
-		sourceColumn: anio_mes_nombre
-
-		annotation SummarizationSetBy = Automatic
-
-	column semana_anio
-		dataType: int64
-		formatString: 0
-		sourceProviderType: tinyint
-		lineageTag: f07bb1b1-8eaa-404a-9c98-bb9ddd73c4b4
-		summarizeBy: sum
-		sourceColumn: semana_anio
-
-		annotation SummarizationSetBy = Automatic
-
-	column dia_semana_numero
-		dataType: int64
-		formatString: 0
-		sourceProviderType: tinyint
-		lineageTag: 604f91c3-32ca-412d-ac1c-49616105d9e4
-		summarizeBy: sum
-		sourceColumn: dia_semana_numero
-
-		annotation SummarizationSetBy = Automatic
-
-	column dia_semana_nombre
-		dataType: string
-		sourceProviderType: nvarchar(65535)
-		lineageTag: 49c1c5bb-6171-4567-bb85-a8efef9bf232
-		summarizeBy: none
-		sourceColumn: dia_semana_nombre
-
-		annotation SummarizationSetBy = Automatic
-
-	column es_fin_semana
-		dataType: boolean
-		formatString: """TRUE"";""TRUE"";""FALSE"""
-		sourceProviderType: bit
-		lineageTag: 4c2d8792-f3f7-4c2b-b178-38a2992b0069
-		summarizeBy: none
-		sourceColumn: es_fin_semana
-
-		annotation SummarizationSetBy = Automatic
 
 	column planta_key
 		dataType: int64
-		formatString: 0
-		sourceProviderType: bigint
-		lineageTag: 49b62777-5f2d-4620-9532-3d482436dcc9
 		summarizeBy: none
 		sourceColumn: planta_key
 
-		annotation SummarizationSetBy = Automatic
-
 	column codigo_planta
 		dataType: string
-		sourceProviderType: nvarchar(65535)
-		lineageTag: 5ce614cd-2887-4460-8157-18b7e5c7434f
 		summarizeBy: none
 		sourceColumn: codigo_planta
 
-		annotation SummarizationSetBy = Automatic
-
 	column nombre_planta
 		dataType: string
-		sourceProviderType: nvarchar(65535)
-		lineageTag: 8c4c9c28-0327-4e54-b115-9640083048a3
 		summarizeBy: none
 		sourceColumn: nombre_planta
 
-		annotation SummarizationSetBy = Automatic
-
 	column codigo_sic_agente
 		dataType: string
-		sourceProviderType: nvarchar(65535)
-		lineageTag: 8145640a-772f-449e-bf37-39e556790dbd
 		summarizeBy: none
 		sourceColumn: codigo_sic_agente
 
-		annotation SummarizationSetBy = Automatic
-
-	column capacidad_efectiva_neta_kw
-		dataType: double
-		sourceProviderType: decimal(18, 4)
-		lineageTag: 641c6a2e-ad7e-446b-986c-f69ed26d57f9
-		summarizeBy: sum
-		sourceColumn: capacidad_efectiva_neta_kw
-
-		annotation SummarizationSetBy = Automatic
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
-	column capacidad_efectiva_neta_mw
-		dataType: double
-		sourceProviderType: decimal(23, 9)
-		lineageTag: f53ff050-9984-450b-acba-561098dd411a
-		summarizeBy: sum
-		sourceColumn: capacidad_efectiva_neta_mw
-
-		annotation SummarizationSetBy = Automatic
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
-	column codigo_area_operativa
-		dataType: string
-		sourceProviderType: nvarchar(65535)
-		lineageTag: 0354abac-138d-4bef-9093-ef6838126714
-		summarizeBy: none
-		sourceColumn: codigo_area_operativa
-
-		annotation SummarizationSetBy = Automatic
-
-	column codigo_sub_area_operativa
-		dataType: string
-		sourceProviderType: nvarchar(65535)
-		lineageTag: ff33d7ac-cf3c-4497-9a18-99790e938167
-		summarizeBy: none
-		sourceColumn: codigo_sub_area_operativa
-
-		annotation SummarizationSetBy = Automatic
-
-	column tipo_despacho_recurso
-		dataType: string
-		sourceProviderType: nvarchar(65535)
-		lineageTag: 4cf74e4d-3e1d-4c3c-ad4e-42fb053ecf5f
-		summarizeBy: none
-		sourceColumn: tipo_despacho_recurso
-
-		annotation SummarizationSetBy = Automatic
-
-	column tipo_clasificacion
-		dataType: string
-		sourceProviderType: nvarchar(65535)
-		lineageTag: 9bfbc395-0dd1-4ad1-9932-f1615f6cbdb3
-		summarizeBy: none
-		sourceColumn: tipo_clasificacion
-
-		annotation SummarizationSetBy = Automatic
-
 	column tipo_generacion
 		dataType: string
-		sourceProviderType: nvarchar(65535)
-		lineageTag: a49fea55-7483-466b-86ec-30acb61a8681
 		summarizeBy: none
 		sourceColumn: tipo_generacion
 
-		annotation SummarizationSetBy = Automatic
-
-	column es_registro_inferido
-		dataType: boolean
-		formatString: """TRUE"";""TRUE"";""FALSE"""
-		sourceProviderType: bit
-		lineageTag: 2b270b18-4e6a-42d0-9a4e-95085cc1bf3f
-		summarizeBy: none
-		sourceColumn: es_registro_inferido
-
-		annotation SummarizationSetBy = Automatic
+	column cap_efectiva_neta
+		dataType: double
+		summarizeBy: sum
+		sourceColumn: cap_efectiva_neta
 
 	column generacion_total_gwh
 		dataType: double
-		sourceProviderType: decimal(38, 12)
-		lineageTag: d13470fa-bc4e-4bea-a91e-7ee33529127f
 		summarizeBy: sum
 		sourceColumn: generacion_total_gwh
 
-		annotation SummarizationSetBy = Automatic
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
 	column disponibilidad_total_gwh
 		dataType: double
-		sourceProviderType: decimal(38, 12)
-		lineageTag: b8baf868-acdf-4b64-8af4-851597453ec1
 		summarizeBy: sum
 		sourceColumn: disponibilidad_total_gwh
 
-		annotation SummarizationSetBy = Automatic
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
-	column generacion_promedio_mw
-		dataType: double
-		sourceProviderType: decimal(29, 13)
-		lineageTag: 8ae1c099-70b2-4d8c-989c-686335e735f2
-		summarizeBy: sum
-		sourceColumn: generacion_promedio_mw
-
-		annotation SummarizationSetBy = Automatic
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
-	column generacion_pico_mw
-		dataType: double
-		sourceProviderType: decimal(25, 9)
-		lineageTag: 6d6da55e-f9bf-4375-93cd-60c3bac3d7be
-		summarizeBy: sum
-		sourceColumn: generacion_pico_mw
-
-		annotation SummarizationSetBy = Automatic
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
 	column disponibilidad_promedio_mw
 		dataType: double
-		sourceProviderType: decimal(29, 13)
-		lineageTag: a09148c9-d3a2-4e49-b223-3fd350e5d6f6
 		summarizeBy: sum
 		sourceColumn: disponibilidad_promedio_mw
 
-		annotation SummarizationSetBy = Automatic
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
-	column disponibilidad_pico_mw
-		dataType: double
-		sourceProviderType: decimal(25, 9)
-		lineageTag: 51e73e19-32a9-4265-a4be-44a353f7c224
-		summarizeBy: sum
-		sourceColumn: disponibilidad_pico_mw
-
-		annotation SummarizationSetBy = Automatic
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
 	column horas_con_generacion
 		dataType: int64
-		formatString: 0
-		sourceProviderType: bigint
-		lineageTag: 324c0361-2995-473f-acf2-89a119f922e6
 		summarizeBy: sum
 		sourceColumn: horas_con_generacion
-
-		annotation SummarizationSetBy = Automatic
-
-	column horas_con_disponibilidad
-		dataType: int64
-		formatString: 0
-		sourceProviderType: bigint
-		lineageTag: 5108e3f8-87a6-46c6-9b4a-9c941a0cdafd
-		summarizeBy: sum
-		sourceColumn: horas_con_disponibilidad
-
-		annotation SummarizationSetBy = Automatic
-
-	column margen_disponibilidad_gwh
-		dataType: double
-		sourceProviderType: decimal(38, 11)
-		lineageTag: 7b5f5c4b-842d-4960-bf4c-8643c1c0db8d
-		summarizeBy: sum
-		sourceColumn: margen_disponibilidad_gwh
-
-		annotation SummarizationSetBy = Automatic
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
-	column utilizacion_disponibilidad_pct
-		dataType: double
-		sourceProviderType: decimal(38, 6)
-		lineageTag: e62e9a4a-270e-43aa-9a4e-e610ab0702cc
-		summarizeBy: sum
-		sourceColumn: utilizacion_disponibilidad_pct
-
-		annotation SummarizationSetBy = Automatic
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
-	column factor_capacidad_aproximado_pct
-		dataType: double
-		sourceProviderType: decimal(38, 6)
-		lineageTag: fedde30c-24ef-40b7-a95d-9a08e412c80d
-		summarizeBy: sum
-		sourceColumn: factor_capacidad_aproximado_pct
-
-		annotation SummarizationSetBy = Automatic
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
-	column estado_cobertura
-		dataType: string
-		sourceProviderType: nvarchar(65535)
-		lineageTag: 7243f08f-8864-4d1e-8b34-d3531e3e9cd9
-		summarizeBy: none
-		sourceColumn: estado_cobertura
-
-		annotation SummarizationSetBy = Automatic
-
-	column es_comparable_disponibilidad
-		dataType: boolean
-		formatString: """TRUE"";""TRUE"";""FALSE"""
-		sourceProviderType: bit
-		lineageTag: dbcfd78d-6eb7-4d25-ac33-8e48d59f7cd7
-		summarizeBy: none
-		sourceColumn: es_comparable_disponibilidad
-
-		annotation SummarizationSetBy = Automatic
-
-	column estado_consistencia
-		dataType: string
-		sourceProviderType: nvarchar(65535)
-		lineageTag: 901d4513-1bb9-46f0-9090-67f4d5c9192d
-		summarizeBy: none
-		sourceColumn: estado_consistencia
-
-		annotation SummarizationSetBy = Automatic
-
-	column generacion_supera_disponibilidad
-		dataType: boolean
-		formatString: """TRUE"";""TRUE"";""FALSE"""
-		sourceProviderType: bit
-		lineageTag: 04257403-c48f-404f-a04c-231911a165fa
-		summarizeBy: none
-		sourceColumn: generacion_supera_disponibilidad
-
-		annotation SummarizationSetBy = Automatic
 
 	partition vw_operacion_diaria_planta = m
 		mode: import
 		source =
 				let
-				    Origen = DatabricksMultiCloud.Catalogs("dbc-4c2404fa-9e73.cloud.databricks.com", "/sql/1.0/warehouses/049b881d5122f61a", null),
+				    Origen = DatabricksMultiCloud.Catalogs("dbc-4c2404fa-9e73.cloud.databricks.com", "/sql/1.0/warehouses/049b881d5122f61a", [Catalog = "", Database = ""]),
 				    observatorio_dev_Database = Origen{[Name="observatorio_dev",Kind="Database"]}[Data],
 				    serving_Schema = observatorio_dev_Database{[Name="serving",Kind="Schema"]}[Data],
-				    vw_operacion_diaria_planta_View = serving_Schema{[Name="operacion_planta_diaria",Kind="View"]}[Data]
+				    operacion_planta_diaria_View = serving_Schema{[Name="operacion_planta_diaria",Kind="View"]}[Data]
 				in
-				    vw_operacion_diaria_planta_View
+				    operacion_planta_diaria_View
 
 	annotation PBI_NavigationStepName = Navegación
 
 	annotation PBI_ResultType = Table
-

@@ -36,19 +36,6 @@
         },
         {
           "location": {
-            "x": 568,
-            "y": 0
-          },
-          "nodeIndex": "vw_sistema_horario",
-          "nodeLineageTag": "0d8b2496-3a9d-420f-8c00-f0c4164b2c2c",
-          "size": {
-            "height": 300,
-            "width": 234
-          },
-          "zIndex": 7
-        },
-        {
-          "location": {
             "x": 1112.7421072140596,
             "y": 907.41274888067
           },
@@ -111,19 +98,6 @@
             "width": 234
           },
           "zIndex": 1
-        },
-        {
-          "location": {
-            "x": 2281.320950621925,
-            "y": 482.99439650149304
-          },
-          "nodeIndex": "vw_operacion_diaria_planta (2)",
-          "nodeLineageTag": "c1e5a3ae-fee1-4f0f-91ce-4d2d9a2921f0",
-          "size": {
-            "height": 778.0537277169484,
-            "width": 234
-          },
-          "zIndex": 2
         },
         {
           "location": {

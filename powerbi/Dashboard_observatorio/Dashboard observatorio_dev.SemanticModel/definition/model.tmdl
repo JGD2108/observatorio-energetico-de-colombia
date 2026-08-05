@@ -8,22 +8,19 @@ model Model
 
 annotation __PBI_TimeIntelligenceEnabled = 0
 
-annotation PBI_QueryOrder = ["vw_resumen_diario_sistema","vw_actualizacion_fuentes","vw_sistema_horario","vw_operacion_diaria_planta","dim_agente","dim_planta","vw_dim_agente_powerbi","vw_operacion_diaria_planta (2)","vw_generacion_diaria_tipo","pipeline_health","task_performance","quality_alerts","DimTecnologia"]
+annotation PBI_QueryOrder = ["vw_resumen_diario_sistema","vw_actualizacion_fuentes","vw_operacion_diaria_planta","dim_agente","dim_planta","vw_dim_agente_powerbi","vw_generacion_diaria_tipo","pipeline_health","task_performance","quality_alerts","DimTecnologia"]
 
 annotation PBI_ProTooling = ["DevMode"]
 
 ref table vw_resumen_diario_sistema
 ref table vw_actualizacion_fuentes
-ref table vw_sistema_horario
 ref table DateTableTemplate_601c35bd-70d8-4902-9b6a-c56802afa15d
-ref table LocalDateTable_6933b2ff-fd20-4bb2-9467-9deafea6da36
 ref table DimFecha
 ref table Medidas
 ref table vw_operacion_diaria_planta
 ref table dim_agente
 ref table dim_planta
 ref table vw_dim_agente_powerbi
-ref table 'vw_operacion_diaria_planta (2)'
 ref table vw_generacion_diaria_tipo
 ref table pipeline_health
 ref table task_performance

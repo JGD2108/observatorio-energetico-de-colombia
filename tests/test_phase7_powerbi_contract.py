@@ -63,3 +63,22 @@ def test_technology_slicer_uses_shared_dimension_without_fixed_selection():
     projection = payload["visual"]["query"]["queryState"]["Values"]["projections"][0]
     assert projection["queryRef"] == "DimTecnologia.tipo_generacion"
     assert payload["visual"]["objects"]["general"] == []
+
+
+def test_refresh_model_excludes_legacy_hourly_and_duplicate_plant_queries():
+    model = (MODEL / "model.tmdl").read_text(encoding="utf-8")
+    relationships = (MODEL / "relationships.tmdl").read_text(encoding="utf-8")
+    for legacy_table in ("vw_sistema_horario", "vw_operacion_diaria_planta (2)"):
+        assert legacy_table not in model
+        assert legacy_table not in relationships
+
+
+def test_agent_slicer_reads_the_existing_analytics_view():
+    agent_table = (MODEL / "tables" / "vw_dim_agente_powerbi.tmdl").read_text(encoding="utf-8")
+    assert 'Name="gold_analytics"' in agent_table
+
+
+def test_plant_fact_only_declares_columns_available_in_serving_contract():
+    plant_table = (MODEL / "tables" / "vw_operacion_diaria_planta.tmdl").read_text(encoding="utf-8")
+    assert "cap_efectiva_neta" in plant_table
+    assert "capacidad_efectiva_neta_mw" not in plant_table
