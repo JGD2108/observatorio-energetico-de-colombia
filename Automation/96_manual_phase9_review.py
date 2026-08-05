@@ -11,7 +11,7 @@ if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
 from config.project_config import AUDIT_TABLES, CATALOG, SERVING_VIEWS  # noqa: E402
-from operations.manual_review import assess, optional_float  # noqa: E402
+from operations.manual_review import assess  # noqa: E402
 
 
 spark.sql(f"USE CATALOG `{CATALOG}`")
@@ -57,7 +57,11 @@ summary = spark.createDataFrame(
         f"{review.contratos_serving_listos}/{review.contratos_serving_esperados}",
         latest_run["run_id"] if latest_run else None,
         latest_run["finished_at"] if latest_run else None,
-        optional_float(latest_run["tasa_exito_ultimas_10_pct"]) if latest_run else None,
+        (
+            float(latest_run["tasa_exito_ultimas_10_pct"])
+            if latest_run and latest_run["tasa_exito_ultimas_10_pct"] is not None
+            else None
+        ),
     )],
     "estado string, detalle string, fuentes_fuera_sla int, maximo_rezago_dias int, "
     "ultima_corrida_exitosa boolean, alertas_calidad_abiertas int, contratos_serving string, "

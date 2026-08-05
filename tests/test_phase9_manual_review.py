@@ -45,3 +45,9 @@ def test_phase9_notebook_is_read_only_and_does_not_create_notifications():
 def test_spark_decimal_is_normalized_for_double_schema():
     assert optional_float(Decimal("75.000000")) == 75.0
     assert optional_float(None) is None
+
+
+def test_notebook_does_not_import_optional_float_from_workspace_branch():
+    notebook = (ROOT / "Automation" / "96_manual_phase9_review.py").read_text(encoding="utf-8")
+    assert "import assess, optional_float" not in notebook
+    assert 'float(latest_run["tasa_exito_ultimas_10_pct"])' in notebook
