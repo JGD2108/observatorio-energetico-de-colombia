@@ -82,3 +82,10 @@ def test_plant_fact_only_declares_columns_available_in_serving_contract():
     plant_table = (MODEL / "tables" / "vw_operacion_diaria_planta.tmdl").read_text(encoding="utf-8")
     assert "cap_efectiva_neta" in plant_table
     assert "capacidad_efectiva_neta_mw" not in plant_table
+
+
+def test_generation_technology_uses_shared_date_dimension_only():
+    model = (MODEL / "model.tmdl").read_text(encoding="utf-8")
+    relationships = (MODEL / "relationships.tmdl").read_text(encoding="utf-8")
+    assert "LocalDateTable_375b8913-a637-4aec-aa65-a71b8c982897" not in model
+    assert "LocalDateTable_375b8913-a637-4aec-aa65-a71b8c982897" not in relationships

@@ -78,12 +78,6 @@ relationship 46fed83d-f89e-4c33-b68d-0c5d2af67266
 	fromColumn: dim_planta.fecha_actualizacion
 	toColumn: LocalDateTable_40128c29-df24-4d6d-a565-f1f3fa858f7a.Date
 
-relationship 0d6c6afa-f7fb-4ecf-b6d2-ced7554759ff
-	isActive: false
-	joinOnDateBehavior: datePartOnly
-	fromColumn: vw_generacion_diaria_tipo.fecha
-	toColumn: LocalDateTable_375b8913-a637-4aec-aa65-a71b8c982897.Date
-
 relationship d738ee22-bb90-4c18-a70f-d0b183d31c24
 	fromColumn: vw_generacion_diaria_tipo.fecha
 	toColumn: DimFecha.Date
