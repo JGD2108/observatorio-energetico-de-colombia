@@ -329,6 +329,40 @@ html[data-lang="en"] .lang-en { display: revert !important; }
   .presentation-mode main > section { padding: 36px 22px; }
 }
 
+/* Video presentation deck — two deliberate acts: short series, then LinkedIn cut. */
+.video-slide { display: none; position: relative; min-height: 100vh; overflow: hidden; color: #e8f3f3; background: radial-gradient(circle at 82% 20%, rgba(82,221,211,.13), transparent 30%), radial-gradient(circle at 8% 88%, rgba(241,184,78,.1), transparent 28%), #071821; }
+.video-slide::before { position: absolute; inset: 22px; border: 1px solid rgba(150,194,198,.13); border-radius: 24px; content: ''; pointer-events: none; }
+.video-slide::after { position: absolute; top: 12%; right: 7%; width: 260px; height: 260px; border: 1px solid rgba(82,221,211,.18); border-radius: 50%; box-shadow: 0 0 0 28px rgba(82,221,211,.03), 0 0 0 56px rgba(82,221,211,.025); content: ''; pointer-events: none; }
+.presentation-mode .video-slide { display: none; padding: clamp(68px, 8vh, 108px) clamp(28px, 8vw, 128px); }
+.presentation-mode main > section.video-slide.presentation-current { display: block; }
+.video-slide__eyebrow { position: relative; z-index: 1; display: flex; justify-content: space-between; gap: 20px; max-width: 1180px; margin: 0 auto 10vh; color: var(--cyan); font: 600 10px var(--mono); letter-spacing: .16em; text-transform: uppercase; }
+.video-slide__group { color: #8aa8ae; font-weight: 500; letter-spacing: .07em; text-align: right; }
+.video-slide__grid { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(300px, .7fr); gap: clamp(36px, 7vw, 120px); align-items: end; max-width: 1180px; min-height: 58vh; margin: 0 auto; }
+.video-slide--short .video-slide__grid { border-left: 3px solid var(--cyan); padding-left: clamp(22px, 3vw, 52px); }
+.video-slide--long .video-slide__grid { border-left: 3px solid var(--gold); padding-left: clamp(22px, 3vw, 52px); }
+.video-slide h2 { max-width: 860px; margin: 0; color: #f4fbfa; font: 500 clamp(42px, 7vw, 100px)/.95 var(--serif); letter-spacing: -.045em; }
+.video-slide--long h2 { max-width: 760px; }
+.video-slide__lead { max-width: 720px; margin: 30px 0 0; color: #a9c0c4; font-size: clamp(18px, 2vw, 27px); line-height: 1.35; }
+.video-slide__brief { position: relative; padding: 26px 28px 24px; border: 1px solid rgba(82,221,211,.2); border-radius: 16px; background: rgba(3,15,22,.68); box-shadow: 16px 20px 0 rgba(82,221,211,.035); }
+.video-slide--long .video-slide__brief { border-color: rgba(241,184,78,.28); box-shadow: 16px 20px 0 rgba(241,184,78,.035); }
+.video-slide__brief strong { display: block; margin: 17px 0 7px; color: var(--cyan); font: 600 9px var(--mono); letter-spacing: .15em; text-transform: uppercase; }
+.video-slide--long .video-slide__brief strong { color: var(--gold); }
+.video-slide__brief strong:first-child { margin-top: 0; }
+.video-slide__brief p { margin: 0 0 10px; color: #d1e0e0; font-size: 13px; line-height: 1.55; }
+.video-slide__brief code { color: var(--cyan); font: 500 11px var(--mono); }
+.video-slide--long .video-slide__brief code { color: var(--gold); }
+.presentation-mode .video-slide .eyebrow { margin-bottom: 18px; color: var(--gold); }
+.presentation-mode .video-slide--long .eyebrow { color: var(--cyan); }
+
+@media (max-width: 760px) {
+  .video-slide::before { inset: 12px; border-radius: 16px; }
+  .video-slide__eyebrow { margin-bottom: 7vh; font-size: 8px; }
+  .video-slide__grid { grid-template-columns: 1fr; min-height: auto; align-items: start; gap: 30px; }
+  .video-slide h2 { font-size: clamp(42px, 12vw, 72px); }
+  .video-slide__lead { margin-top: 20px; font-size: 18px; }
+  .video-slide__brief { max-width: 560px; }
+}
+
 /* Presentation-ready editorial system */
 ::selection { color: var(--navy); background: var(--cyan); }
 :focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }

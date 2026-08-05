@@ -6,7 +6,9 @@
   const navToggle = document.querySelector('[data-nav-toggle]');
   const sideNav = document.querySelector('[data-side-nav]');
   const navLinks = [...document.querySelectorAll('[data-nav-link]')];
-  const sections = [...document.querySelectorAll('main > section[id]')];
+  const contentSections = [...document.querySelectorAll('main > section[id]:not([data-presentation-slide])')];
+  const presentationSections = [...document.querySelectorAll('main > section[data-presentation-slide]')];
+  const sections = presentationSections.length ? presentationSections : contentSections;
   const currentSectionLabel = document.querySelector('[data-current-section]');
   const backToTop = document.querySelector('[data-back-to-top]');
   const toast = document.querySelector('[data-toast]');
@@ -29,7 +31,7 @@
   };
 
   const syncCurrentSectionLabel = () => {
-    const activeSection = sections.find((section) => section.id === activeSectionId);
+    const activeSection = contentSections.find((section) => section.id === activeSectionId);
     if (currentSectionLabel && activeSection) currentSectionLabel.textContent = getSectionTitle(activeSection);
   };
 
@@ -102,10 +104,12 @@
     const entering = !body.classList.contains('presentation-mode');
     body.classList.toggle('presentation-mode', entering);
     if (entering) {
-      const visibleIndex = sections.findIndex((section) => {
-        const rect = section.getBoundingClientRect();
-        return rect.top <= window.innerHeight * 0.42 && rect.bottom >= window.innerHeight * 0.42;
-      });
+      const visibleIndex = presentationSections.length
+        ? 0
+        : contentSections.findIndex((section) => {
+          const rect = section.getBoundingClientRect();
+          return rect.top <= window.innerHeight * 0.42 && rect.bottom >= window.innerHeight * 0.42;
+        });
       showPresentationSection(visibleIndex >= 0 ? visibleIndex : 0);
       showToast(html.dataset.lang === 'es' ? 'Use ← → para navegar · Esc para salir' : 'Use ← → to navigate · Esc to exit');
     } else {
@@ -145,7 +149,7 @@
       .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
     if (visible && !body.classList.contains('presentation-mode')) setActiveSection(visible.target.id);
   }, { rootMargin: '-18% 0px -64% 0px', threshold: [0, 0.1, 0.4] });
-  sections.forEach((section) => sectionObserver.observe(section));
+  contentSections.forEach((section) => sectionObserver.observe(section));
 
   document.querySelectorAll('.copy-code').forEach((button) => {
     button.addEventListener('click', async () => {
