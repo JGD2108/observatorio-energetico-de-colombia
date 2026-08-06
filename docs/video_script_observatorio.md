@@ -357,16 +357,20 @@ la reserva energética?”. Cambiar un filtro para demostrar interacción real.
 **Decisión que debe quedar clara:** automatizar también significa saber cuándo
 reintentar, cuándo bloquear y cuándo solicitar revisión humana.
 
-> El workflow orquesta catálogo, auditoría, ingestión, Bronze, Silver, Gold,
-> calidad, Serving y cierre operativo. Los reintentos son acotados para no
-> convertir una falla externa en tráfico indefinido. El backfill verifica
-> cobertura antes de aprobarse y la revisión de Fase 9 es de solo lectura. Como
-> decidí no activar alertas automáticas, el control devuelve APTO o REVISAR con
-> evidencia para que el responsable actúe. El estado validado fue APTO, sin
+> El workflow coordina el producto completo, no solamente la revisión final.
+> Empieza creando catálogo y auditoría; lanza nueve ingestas independientes en
+> paralelo; las hace converger en Bronze; y solo después habilita Silver, Gold,
+> calidad, Analytics y Serving. Estas barreras evitan que una capa consuma datos
+> incompletos. Los reintentos son acotados para no convertir una falla externa en
+> tráfico indefinido y el backfill verifica cobertura antes de aprobarse. La Fase
+> 9 es el último control: una revisión de solo lectura que devuelve APTO o
+> REVISAR con evidencia para el responsable. El estado validado fue APTO, sin
 > hallazgos operativos.
 
-**Mostrar:** workflow completo y salida `REVISION FASE 9: APTO`. Señalar que un
-pipeline verde es evidencia operativa, no una garantía absoluta del mercado.
+**Mostrar:** workflow completo. Señalar primero las nueve ingestas paralelas,
+luego las barreras `bronze_daily` y `gold_daily`, después calidad y Serving, y
+cerrar con `REVISION FASE 9: APTO`. Un pipeline verde es evidencia operativa,
+no una garantía absoluta del mercado.
 
 **5:30–6:45 — Resultado, límites y siguiente decisión**
 

@@ -1,6 +1,6 @@
 ---
 interface Props {
-  kind: 'sources' | 'lakehouse' | 'ingestion' | 'quality' | 'serving' | 'dashboard' | 'review' | 'roadmap';
+  kind: 'sources' | 'lakehouse' | 'ingestion' | 'quality' | 'serving' | 'dashboard' | 'workflow' | 'review' | 'roadmap';
 }
 
 const { kind } = Astro.props;
@@ -62,6 +62,22 @@ const asset = (name: string) => `/presentation/${name}`;
         <figure><img src={asset('powerbi-demanda.png')} alt="Página demanda y mercado" /><figcaption>04 · Mercado</figcaption></figure>
         <figure><img src={asset('powerbi-embalses.png')} alt="Página embalses y cobertura" /><figcaption>05 · Embalses</figcaption></figure>
       </div>
+    </>
+  )}
+
+  {kind === 'workflow' && (
+    <>
+      <div class="video-visual__label">ORQUESTACIÓN REAL · DEPENDENCIAS, PARALELISMO Y PUBLICACIÓN</div>
+      <div class="workflow-evidence">
+        <figure class="evidence-shot evidence-shot--workflow"><img src={asset('databricks-job-success.png')} alt="Workflow completo del Observatorio en Databricks" /></figure>
+        <div class="workflow-evidence__steps">
+          <div><span>01 · PREPARAR</span><b>Catálogo y auditoría</b><small>setup_catalog · audit_start</small></div>
+          <div><span>02 · PARALELO</span><b>9 ingestas independientes</b><small>fuentes sincronizadas</small></div>
+          <div><span>03 · BARRERAS</span><b>Bronze → Silver → Gold</b><small>ninguna capa consume incompleta</small></div>
+          <div><span>04 · PUBLICAR</span><b>Calidad → Serving → cierre</b><small>Fase 9 valida la operación final</small></div>
+        </div>
+      </div>
+      <div class="video-visual__footer"><b>grafo de dependencias</b><i></i><b>tareas paralelas</b><i></i><b>barreras de capa</b><i></i><b>APTO al cierre</b></div>
     </>
   )}
 
